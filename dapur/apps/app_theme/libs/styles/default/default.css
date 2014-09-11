@@ -1,0 +1,103 @@
+/* PHP File Tree Default Theme
+
+	By Cory LaViska (http://abeautifulsite.net/)
+	Featuring the Silk Icon Set from famfamfam (http://www.famfamfam.com/lab/icons/silk/)
+
+*/
+
+.php-file-tree {
+	padding: 6px 0 0 10px;
+	font-size: .9em;
+	letter-spacing: 1px;line-height: 1.5;
+font-family: arial, sans-serif;
+}
+
+	.php-file-tree A {
+		top: 0.5px;
+		color: #333;
+		text-decoration: none;
+	}
+	
+	.php-file-tree A:hover {
+		color: #666666;
+	}
+
+	.php-file-tree .open {
+		font-style: italic;
+	}
+	
+	.php-file-tree .closed {
+		font-style: normal;
+	}
+	
+	.php-file-tree .pft-directory {
+		background-image : url(images/directory.png);
+	}
+	
+	/* Default file */
+	.php-file-tree LI.pft-file { background-image : url(images/file.png); }
+	/* Additional file types */
+	.php-file-tree LI.ext-3gp { background-image : url(images/film.png); }
+	.php-file-tree LI.ext-afp { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-afpa { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-asp { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-aspx { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-avi { background-image : url(images/film.png); }
+	.php-file-tree LI.ext-bat { background-image : url(images/application.png); }
+	.php-file-tree LI.ext-bmp { background-image : url(images/picture.png); }
+	.php-file-tree LI.ext-c { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-cfm { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-cgi { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-com { background-image : url(images/application.png); }
+	.php-file-tree LI.ext-cpp { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-css { background-image : url(images/css.png); }
+	.php-file-tree LI.ext-doc { background-image : url(images/doc.png); }
+	.php-file-tree LI.ext-exe { background-image : url(images/application.png); }
+	.php-file-tree LI.ext-gif { background-image : url(images/picture.png); }
+	.php-file-tree LI.ext-fla { background-image : url(images/flash.png); }
+	.php-file-tree LI.ext-h { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-htm { background-image : url(images/html.png); }
+	.php-file-tree LI.ext-html { background-image : url(images/html.png); }
+	.php-file-tree LI.ext-jar { background-image : url(images/java.png); }
+	.php-file-tree LI.ext-jpg { background-image : url(images/picture.png); }
+	.php-file-tree LI.ext-jpeg { background-image : url(images/picture.png); }
+	.php-file-tree LI.ext-js { background-image : url(images/script.png); }
+	.php-file-tree LI.ext-lasso { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-log { background-image : url(images/txt.png); }
+	.php-file-tree LI.ext-m4p { background-image : url(images/music.png); }
+	.php-file-tree LI.ext-mov { background-image : url(images/film.png); }
+	.php-file-tree LI.ext-mp3 { background-image : url(images/music.png); }
+	.php-file-tree LI.ext-mp4 { background-image : url(images/film.png); }
+	.php-file-tree LI.ext-mpg { background-image : url(images/film.png); }
+	.php-file-tree LI.ext-mpeg { background-image : url(images/film.png); }
+	.php-file-tree LI.ext-ogg { background-image : url(images/music.png); }
+	.php-file-tree LI.ext-pcx { background-image : url(images/picture.png); }
+	.php-file-tree LI.ext-pdf { background-image : url(images/pdf.png); }
+	.php-file-tree LI.ext-php { background-image : url(images/php.png); }
+	.php-file-tree LI.ext-png { background-image : url(images/picture.png); }
+	.php-file-tree LI.ext-ppt { background-image : url(images/ppt.png); }
+	.php-file-tree LI.ext-psd { background-image : url(images/psd.png); }
+	.php-file-tree LI.ext-pl { background-image : url(images/script.png); }
+	.php-file-tree LI.ext-py { background-image : url(images/script.png); }
+	.php-file-tree LI.ext-rb { background-image : url(images/ruby.png); }
+	.php-file-tree LI.ext-rbx { background-image : url(images/ruby.png); }
+	.php-file-tree LI.ext-rhtml { background-image : url(images/ruby.png); }
+	.php-file-tree LI.ext-rpm { background-image : url(images/linux.png); }
+	.php-file-tree LI.ext-ruby { background-image : url(images/ruby.png); }
+	.php-file-tree LI.ext-sql { background-image : url(images/db.png); }
+	.php-file-tree LI.ext-swf { background-image : url(images/flash.png); }
+	.php-file-tree LI.ext-tif { background-image : url(images/picture.png); }
+	.php-file-tree LI.ext-tiff { background-image : url(images/picture.png); }
+	.php-file-tree LI.ext-txt { background-image : url(images/txt.png); }
+	.php-file-tree LI.ext-vb { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-wav { background-image : url(images/music.png); }
+	.php-file-tree LI.ext-wmv { background-image : url(images/film.png); }
+	.php-file-tree LI.ext-xls { background-image : url(images/xls.png); }
+	.php-file-tree LI.ext-xml { background-image : url(images/code.png); }
+	.php-file-tree LI.ext-zip { background-image : url(images/zip.png); }
+	.php-file-tree LI { background-repeat: no-repeat; 
+padding: 1px 2px 3px 21px;
+background-position: left 1px;
+list-style: none;}
+	/* You can add millions of these... */
+

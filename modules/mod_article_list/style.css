@@ -1,0 +1,50 @@
+/* Fiyo Comment */
+.mod-article-list {
+	margin:0;
+	padding: 0 0 3px 18px;
+}
+.mod-article-list li {
+	margin-left: 10px;
+	line-height: 2em;
+}
+.mod-article-list li.no-list {		
+	display: inline-block;
+	position: relative;
+	clear: both;
+	list-style: none;
+	width: 100%;
+	margin-left: -15px;
+	margin-bottom: 5px;
+}
+.mod-article-date {
+	float: left;
+	width:35px;
+	margin: 0 10px 0 0;
+	font-size: 1.2em;
+	text-align:center;
+	border: 1px solid #ccc;
+	overflow:hidden;
+	background: #f9f9f9;
+	border-radius:5px;
+	line-height: 1.6em;
+}
+.mod-article-date span {
+	line-height: 1.5em;
+	padding: 0;
+	font-size: 65%;
+	float: left;
+	width:35px;
+	text-align:center;
+	background: #eee;
+	border-top:1px solid #e3e3e3;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+.mod-article-list .title {
+	margin-top: 0 !important;
+	line-height: 1.5em;
+	padding: 2px 0;
+}
+.mod-article-list a {
+	display: block;
+}

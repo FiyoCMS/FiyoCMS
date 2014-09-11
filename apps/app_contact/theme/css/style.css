@@ -1,0 +1,239 @@
+/* Contact */
+.contactForm {
+	border: 1px solid rgb(221, 221, 221);
+	background-color: rgb(250, 250, 250);
+	padding: 10px 0px;
+	display: block;
+	margin: 4px 0;
+	z-index: 999;
+}
+.contactButton {
+	padding: 8px 15px;
+	cursor: pointer;
+	background-color: rgb(250, 250, 250);
+	border: 1px solid rgb(204, 204, 204);
+	display: inline;
+	cursor:pointer;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.btn-bottom {
+	border-bottom : #fafafa 1px solid;
+	-webkit-border-bottom-right-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
+	-moz-border-radius-bottomright: 0;
+	-moz-border-radius-bottomleft: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+.contactEms {
+	margin : 10px 5px;
+}
+#contact .group{
+	border-collapse:collapse;
+	border: 0px solid #333;
+	width:100%;
+}
+#contact .group td{
+}
+#contact .group th{
+	padding: 5px 10px;
+}
+#contact td {
+	padding: 2px 5px;
+}
+#contact .group tr.head{
+	background: #333;
+	color : #eee;
+}
+#contact .group tr.ganjil{
+	background: #fefefe;
+}
+#contact .group tr.genap{
+	background: #f6f6f6;
+}
+#contact table .link img {
+	width:16px;
+	height:16px;
+	margin:3px 3px 3px 0;
+}
+
+label.error {
+	border-radius: 5px;
+	margin: 5px 0 0 -10px;
+	position: absolute;
+	padding: 1px 5px;
+	color: #fff;
+	background: #D81414;
+	display: inline-block;
+}
+/* Article Pagging */
+.contact-paging { padding : 3em 0 10px ; }
+ul.paging,ul.tags {list-style:none; text-align: center;}
+ul.paging li,ul.tags li {display:inline; margin:0 2px; }
+
+#contact .contact-photo {
+	width: 45%;
+	float:left;
+}
+
+#contact h1 {
+	margin-bottom: .8em;
+}
+#contact .group-contact {
+	width: 49%;
+	display: inline-block;
+	vertical-align: top;
+	line-height: 1.6em;
+}
+
+@media (max-width: 800px) {
+		
+	#contact .group-contact {
+		width: 100%;
+		display: inline-block;
+		vertical-align: top;
+		margin-top: 20px
+	}
+}
+
+#contact .group-contact > div {
+	display: inline;
+	float: left;
+	margin-left: 10px;
+}
+
+#contact .group-contact img{
+	max-width: 100px;
+	display: inline;
+	border: 1px solid #eee;
+}
+#contact .group-contact .address{
+	margin-top:3px;
+}
+#contact .group-contact .links img{
+	max-width: 18px;
+	border: 0;
+	margin-right: 1px;
+}
+
+#contact .contact-detail .links img{
+	margin: 5px 3px 0 0;
+	border: 0;
+}
+#contact .group-contact span{
+	font-style: italic;
+	opacity: .7;
+}
+#contact .group-contact span + span:before{
+	content: " // ";
+	opacity: .4;
+}
+#contact .group-detail-contact {
+	width: -moz-calc(100% - 120px);
+    width: -webkit-calc(100% - 120px);
+    width: calc(100% - 120px);
+	margin-top: 4px;
+}
+
+#contact .group-detail-contact .links {
+	margin-top: 5px;
+}
+
+.contact-photo {
+}
+.contact-photo img{
+	margin: 3px;
+	max-width:95%;
+}
+#contact .contact-detail {
+	width: 54%;
+	float: right;
+	position: relative;
+}
+#contact label {
+	display: inline;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#contact .contact-detail > div {
+	margin-bottom: 1.8em;
+}
+
+#contact .about-me {		
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 40%;
+}
+#contact .about-me div {		
+	padding: 10px;
+	background: #f6f6f6;
+}
+#contact .about-me.max-about-me {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+}
+
+#contact iframe {
+	width: 100%;
+	box-sizing: border-box;
+}
+ #contact input {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 7px 5px;
+	height: auto;
+	min-width: 0;
+}
+#contact .office-c > div{
+	margin-bottom: 1em;
+}
+#contact .office-a{
+	padding: 2px;
+	margin-bottom: 2em;
+	display: inline-table;
+	width : 49%;
+	float : left;
+}
+#contact .office-c{
+	padding: 2px;
+	margin-bottom: 2em;
+	display: inline-table;
+	width : 49%;
+	float : right;
+}
+#contact .office-c:last-child{
+	margin-bottom: 1em;
+}
+#contact .office-contact > .office-address{
+	width: 100%;
+	display: inline-block;
+	float: left;
+}
+#contact .office-contact > .office-address + .office-address {
+	padding-top: 2em;
+}
+#contact .office-contact > .office-form{
+	width: 100%;
+	display: inline-block;
+}
+#contact .office-contact .office-form #input-personal-data > div {
+	width: 35%;
+	display: inline-block;
+	box-sizing: border-box;
+	float: left;
+	padding-right: 10px;
+}
+
+#contact .office-contact .office-form #input-personal-data > div:last-child {
+	width: 30%;
+	display: inline-block;
+	box-sizing: border-box;
+	float: left;
+	padding-right: 0;
+	}

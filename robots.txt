@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /dapur/
+Disallow: /apps/
+Disallow: /system/
+Disallow: /media/
+Disallow: /modules/
+Disallow: /plugins/
+Disallow: /libs/
+Disallow: /tmp/
+Disallow: /themes/

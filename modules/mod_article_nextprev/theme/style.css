@@ -1,0 +1,54 @@
+/**
+* @version		1.0.0
+* @package		Article NextPrev
+* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @license		GNU/GPL, see LICENSE.txt
+*/
+
+.article-nextprev {
+	position : relative; display: block;  width: 100%; overflow: hidden;
+	margin-top: -1px;
+}
+.article-nextprev div {
+	width: 50%; 
+}
+.article-nextprev .prev {
+	float: left; text-align: left;
+}
+.article-nextprev .next {
+	float: right; text-align: right;
+}
+.article-nextprev a{
+	padding: 15px 10px;
+	display: block;
+	background: #fafafa;
+	font-weight: bold;
+	border-right: 1px dotted #ccc;
+	border-bottom: 1px dotted #ccc;
+	border-top: 1px dotted #ccc;
+	line-height: 1.4em;
+	vertical-align: middle;
+	height: 100%;
+	font-size: 110%;
+	position: relative;
+}
+
+.article-nextprev .next a{
+	border-left: 0;
+	border-right: 0;
+	opacity: 1;
+}
+.article-nextprev a:hover{
+	background: #eee;
+	text-decoration: none;
+	opacity: 0.9;
+}
+.article-nextprev span{
+	margin-top: 1px;
+	font-weight: normal;
+	font-size:70%;
+	color : #999;
+}
+.article-nextprev a:hover span{
+	color : #888;
+}

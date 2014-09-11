@@ -1,0 +1,73 @@
+/* user login */
+#user {
+
+}
+#user div{
+	margin: 2px 0 0;
+}
+#user div > div{
+	margin: 2px 0 0;
+}
+#user form div > div{
+	margin: 0 0 0 132px;
+}
+#user form img{
+	margin: 4px 0;
+	display: block;
+}
+
+#user span{
+	float: left;
+	width: 130px;
+}
+#user input[type="text"], #user input[type="password"] {
+	min-width:200px;
+}
+#user .security {
+	min-width:100px !important;
+	width:140px !important;
+}
+
+#user .user-link a{
+	font-size:80%;
+	margin: 0 0 0 10px;
+}
+#user .alert {
+	margin-bottom: 15px;
+}
+.profile-box {
+	border: 1px solid #ccc;
+	padding:10px;
+	margin: 0 0 20px;
+}
+form#user { 
+	overflow:hidden; 
+	border-top:1px solid #ccc; 
+	margin:5px 0;
+	padding:5px 0;}
+form#user div { overflow:hidden; margin:5px;}
+form#user span { width:100px; float:left}
+form#user .input{ margin-right:40px;}
+
+/* -- !Password Strength Meter -- */ 
+    #psr_score {
+		margin-left:5px;
+		padding: 0;
+		width: 150px;
+		position: absolute;
+    }    
+	.psr_Weak,.psr_Medium,.psr_Strong, .psr_Excellent {
+		background: transparent url(images/toolbar/bg-password-strength.png) no-repeat -20px 0;
+		display: block;
+		margin: 2p 0 0.2em 5px;
+		padding: 6px 0;
+	}	
+	.psr_Medium {
+		background-position:-30px -50px;
+	}	
+	.psr_Strong {
+		background-position:-30px -100px;
+	}	
+	.psr_Excellent {
+		background-position:-30px -150px;
+	}

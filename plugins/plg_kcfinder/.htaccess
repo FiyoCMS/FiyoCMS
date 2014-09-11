@@ -1,0 +1,19 @@
+############# SEF for KCFinder - Fiyo CMS #################
+RewriteEngine On
+RewriteRule ^(.*)\$ index.php?&link=$1
+
+<ifmodule mod_deflate.c>
+<filesmatch ".(js|css|ico|txt|htm|html|php)$">
+SetOutputFilter DEFLATE
+</filesmatch>
+</ifmodule>
+
+## Speed up caching
+FileETag MTime Size
+
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|xml|gz)$">
+    Header append Vary Accept-Encoding
+  </FilesMatch>
+</IfModule>

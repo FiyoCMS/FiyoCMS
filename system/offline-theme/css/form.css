@@ -1,0 +1,268 @@
+@font-face {  
+  font-family:Lobster;  
+  src: url(Lobster.otf) format("opentype");  
+}  
+
+body {
+	background:#fefefe url(../images/1.jpg);	
+	font:1em arial;}
+
+#content{
+    margin:15px auto;
+    text-align:center;
+    width:400px;
+    position:relative;
+    height:100%;  margin:0px;
+    padding:0px;
+}
+
+h1 {	margin:100 30px 20px;
+	font-family:lobster;
+	text-align:center;
+    color:#fff;
+    font-size:32px;
+    text-shadow:2px 2px 0 #333;
+    font-weight:normal;
+
+}
+#wrapper{
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+    border:3px solid #404040;
+    width:400px;
+    overflow:hidden;   
+	margin:0 auto;
+    padding:0px;
+	background:#fcfcfc;
+    background:
+        -webkit-gradient(
+        linear,
+        left bottom,
+        left top,       
+        color-stop(0.90, #fefefe),
+        color-stop(0.70, #fcfcfc),
+        color-stop(0.30, #ececec)
+        );
+    background:
+        -moz-linear-gradient(
+        center top,
+        #fefefe 10%,
+        #fcfcfc 20%,
+        #ccc 200%
+        );	
+}
+#steps{
+    width:400px;
+	/*height:320px;*/
+    overflow:hidden;  
+	margin:0px;
+    padding:0px;
+}
+
+.step{
+    float:left;
+    width:400px;
+	/*height:320px;*/  margin:0px;
+    padding:0px;
+}
+#navigation{
+    padding:0px;
+}
+#navigation ul{
+    list-style:none;
+	float:left;
+	margin-left:22px; margin:0px 0px 10px;
+
+}
+#navigation ul li{
+    position:relative;
+	margin:0px 2px;
+	left:-15px;
+}
+#navigation ul li a{
+	font-size:12px;	
+    color:#777;
+    text-decoration:none;
+	text-shadow:1px 1px 0 #fff;
+}
+#navigation ul li.selected a{
+    color:#666;
+    text-shadow:1px 1px 0 #fff;
+	display:none;
+}
+#navigation ul li span{line-height:10px; font-size:15px}
+/*---------------------------------------------------------*/
+
+span.checked{
+    background:transparent url(../images/checked.png) no-repeat top left;
+    position:absolute;
+    top:0px;
+    left:1px;
+    width:20px;
+    height:20px;
+}
+
+#form2 { margin-top:-20px}
+#steps form fieldset{
+    border:none;
+}
+#steps form fieldset{
+    border:none;
+}
+#steps form legend{
+    text-align:left;
+    background:#404040;
+    color:#eee;
+    font-size:18px;
+    float:left;
+    width:590px;
+    padding:8px 0px 8px 10px;
+    margin-bottom:30px;
+	margin-top:-2px;
+    border-bottom:1px solid #fff;
+    border-top:1px solid #d9d9d9;
+	
+} 
+#steps form not{
+    text-align:left;
+    background: url(../image/notice-alert.png) center left no-repeat  #FFCCCD;
+    color:#CC0000;
+    font-size:14px;
+    text-shadow:1px 1px 1px #fff;
+    font-weight:bold;
+    float:left;
+    width:590px;
+    padding:5px;
+    margin:10px 0px;
+    border-bottom:3px solid #CC0000; padding-left:40px; padding-top:10px;
+    border-top:3px solid #CC0000; height:25px;
+}
+#steps form p{
+    float:left;
+    clear:both;
+    margin:5px 0px;
+	background:#f3f3f3;
+    background:
+        -webkit-gradient(
+        linear,
+        left bottom,
+        left top,       
+        color-stop(0.90, #fefefe),
+        color-stop(0.50, #f6f6f6),
+        color-stop(0.20, #eee)
+        );
+    background:
+        -moz-linear-gradient(
+        top center,
+        #fefefe 10%,
+        #f6f6f6 50%,
+        #eee 100%
+        );	
+    border:1px solid #fff;
+    width:300px;
+    padding:10px;
+    margin-left:40px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow:0px 0px 3px #aaa;
+    -webkit-box-shadow:0px 0px 3px #aaa;
+    box-shadow:0px 0px 3px #aaa;
+	color:#666;
+    text-shadow:1px 1px 1px #fff;
+     font-family:verdana; font-size:11px;
+}
+
+#label { font-size:31px; }
+
+#steps form  label{
+    width:100px;
+    float:left;
+    text-align:right;
+    margin-right:15px;
+    line-height:33px;
+    color:#666;
+    text-shadow:1px 1px 0 #fff;
+    font-family:verdana; font-size:11px;
+}
+#steps form input:not([type=radio]),
+#steps form textarea,
+#steps form select{
+    background: #fff!important;
+    border: 1px solid #ddd;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    outline: none;
+    padding: 5px;
+    width: 150px;
+    float:right;
+}
+#steps form input:focus{
+    -moz-box-shadow:0px 0px 5px #39f;
+    -webkit-box-shadow:0px 0px 5px #39f;
+    box-shadow:0px 0px 5px #39f;
+    background:#DEF0FF !important;
+}
+#steps form p.submit{
+    background:none;
+    border:none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+    box-shadow:none; 
+}
+#steps form button {
+	border:1px solid #fff;
+	outline:none;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    display: block;
+    cursor:pointer;
+    margin:0px;
+    padding:0px;
+    clear:both;
+    padding: 7px 15px;
+    font-family:"Century Gothic", Helvetica, sans-serif;
+    font-size:14px;
+    -moz-box-shadow:0px 0px 3px #aaa;
+    -webkit-box-shadow:0px 0px 3px #aaa;
+    box-shadow:0px 0px 3px #aaa;
+   background:
+        -webkit-gradient(
+        linear,
+        left bottom,
+        left top,       
+        color-stop(0.90, rgb(245,245,245)),
+        color-stop(0.70, rgb(240,240,240)),
+        color-stop(0.19, rgb(230,230,230))
+        );
+    background:
+        -moz-linear-gradient(
+        center bottom,
+        rgb(230,230,230) 10%,
+        rgb(240,240,240) 60%,
+        rgb(245,245,245) 90%
+        );	
+    color: #444;
+	text-shadow:1px 1px 0 #fff;
+	float:right;
+	position:relative;
+}
+#steps form button:hover {
+	
+	-moz-box-shadow:0px 0px 8px #39f;
+    -webkit-box-shadow:0px 0px 8px #39f;
+    box-shadow:0px 0px 8px #39f;
+}
+#steps form button:active{
+	top:2px
+}
+a { cursor:pointer}
+
+.errorfly,.infofly {display:block;  margin:0 auto;padding:10px 0 10px 50px; font-size:13px; font-weight:bold; position:absolute;left: 36%;right: 36%; top:50px; }
+
+.errorfly { border:1px  solid #CC0000; color:#CC0000; background:url(../images/toolbar/notice-alert.png) no-repeat #FFDFDF 10px; box-shadow:0 0 10px #F2D0D0; border-radius:5px}
+
+.infofly{ border:1px  solid #578fd3; color:#578fd3; box-shadow:0 0 20px #578fd3; background:url(../images/toolbar/notice-info.png) no-repeat #c0d2e8 10px;  border-radius:5px}

@@ -1,0 +1,46 @@
+############### SET Rewrite ON ##################
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule (.*) index.php?&link=$1 [L]
+
+############### SET Keep-Alive ##################
+<ifModule mod_headers.c>
+    Header set Connection keep-alive
+</ifModule>
+
+############### SET COOKIES DOMAIN ##################
+# Use Mod_deflate to compress static files
+<ifmodule mod_deflate.c>
+	<filesmatch ".(js|css|ico|txt|htm|html|php)$">
+	SetOutputFilter DEFLATE
+	</filesmatch>
+</ifmodule>
+
+
+###### Speed up caching
+FileETag MTime Size
+
+## EXPIRES CACHING ##
+<IfModule mod_expires.c>
+	ExpiresActive On
+	
+	ExpiresByType image/jpg "access 1 month"
+	ExpiresByType image/jpeg "access 1 month"
+	ExpiresByType image/gif "access 1 month"
+	ExpiresByType image/png "access 1 month"
+	ExpiresByType image/x-icon "access 1 month"
+	ExpiresByType text/css "access 1 week"
+	ExpiresByType text/html "access 1 week"
+	ExpiresByType application/pdf "access 1 month"
+	ExpiresByType text/x-javascript "access 1 month"
+	ExpiresByType application/x-shockwave-flash "access 1 month"
+	
+	ExpiresDefault "access 1 month"
+</IfModule>
+## EXPIRES CACHING ##
+
+
+RewriteCond %{HTTP_USER_AGENT} libwww [NC,OR]
+RewriteCond %{QUERY_STRING} ^(.*)=http [NC]
+RewriteRule ^(.*)$ – [F,L]

@@ -1,0 +1,51 @@
+/**
+* @version		1.5.0
+* @package		Related Article
+* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @license		GNU/GPL, see LICENSE.txt
+*/
+
+ul#article-related {
+	overflow: hidden;
+	padding:5px 0 20px;
+	margin: 0;
+}
+
+
+ul#article-related li {
+	margin: 0 20px;
+	position: relative;
+	padding: 5px 0;
+}
+
+ul#article-related li img{
+	box-shadow: 0 0 3px #aaa;
+	border : 4px solid #fafafa;
+	position: relative;
+	width: 92%;
+	max-height: 100%;
+	margin: 0 0 3px;
+	padding: 0;
+}
+ul#article-related a{
+	display: block;
+}
+ul#article-related a img{
+	-webkit-transition-duration:0.5s;
+	-moz-transition-duration:0.5s;
+	-o-transition-duration:0.5s;
+}
+ul#article-related a:hover img{
+	}
+
+
+ul#article-related .related-title {
+	font-weight:bold;
+}
+
+ul#article-related li.related-img{
+	display:inline;
+	margin: 0 5px;
+	position: relative;
+	float: left;
+}

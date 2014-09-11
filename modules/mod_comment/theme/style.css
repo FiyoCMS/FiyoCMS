@@ -1,0 +1,24 @@
+/* Fiyo Comment */
+
+.mod-avatar-comment { 
+	margin:2px 0 0 3px;
+	float: left;
+}
+.mod-right-comment { 
+	 margin: 0 1px 10px 47px;
+	line-height: 1.7em;
+}
+.mod-right-comment em{ 
+	font-size:85%;
+}
+.mod-right-comment  span{ 
+	font-weight: bold;
+}
+.admin-comment  span{ 
+	color : #333;
+}
+.mod-right-comment.u3{ 
+	 margin: 0 1px 10px 6px;
+}
+	
+

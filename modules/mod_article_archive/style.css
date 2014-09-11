@@ -1,0 +1,33 @@
+.mod-article-archive {
+
+}
+.mod-article-archive  li {
+	font-weight:normal;
+}
+.mod-article-archive ul li {
+	font-weight:normal;
+	padding: 0 !important; 
+}
+.mod-article-archive  li.acc {
+	font-weight: bold;
+}
+.archive-list {
+	display: none;
+	margin-top: 10px;
+}
+a.active .archive-list.open {
+	display: block !important;
+}
+.archive-list {
+	margin: 5px 0 0;
+}
+
+.archive-list.open {
+	display: block;
+	margin: 0;
+}
+
+.archive-list li a.active{
+	font-weight: bold;
+	font-size: 110%;
+}

@@ -1,0 +1,39 @@
+/* CSS Document */
+.article-panel {	
+	border-bottom: dotted 1px #eee;
+}
+.article-main {	
+	padding: 5px 0 10px;
+}
+
+.article-box h2.title {
+	padding: 0 0 2px;
+}
+.article-box {
+	margin: 10px 0 20px;
+	border-bottom: dotted 1px #ccc;
+	overflow: hidden;
+}
+.pagination {
+	margin-top: 30px;
+}
+#app-search .alert, .notice {
+	margin-top: 10px !important;
+}
+/* pagging */
+ul.paging {
+	
+	list-style:none; 
+	text-align:center
+}
+ul.paging li {
+	margin: 0 2px;
+	display:inline; 
+}
+
+.notice{ 
+	text-shadow: 0 0 0 #fff;
+	margin: 5px 0 10px;
+	font-size: 110%;
+	font-weight: normal;
+}
