@@ -27,7 +27,3 @@ RewriteRule ^(.*)\$ index.php?&link=$1
 
 ## Speed up caching
 FileETag MTime Size
-
-## Set upload and post size ##
-php_value upload_max_filesize 8M
-php_value post_max_size 8M
