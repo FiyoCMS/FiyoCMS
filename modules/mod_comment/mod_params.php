@@ -127,13 +127,13 @@ $(document).ready( function(){
 			<tr>
 				<td class="row-title"><span class="tips" title='Limit text comments' >Limit Words</span></td>
 				<td>	
-					<input type="text" value="<?php echo $param6; ?>" name="param6" size="7" class="spinner numeric"  />
+					<input type="text" value="<?php echo $param6; ?>" name="param6" size="1" class="spinner numeric"  />
 				</td>
 			</tr>	
 			<tr>
 				<td class="row-title"><span class="tips" title='Num of comments' >Limit Item</span></td>
 				<td>	
-					<input type="text" value="<?php echo $param7; ?>" name="param7" size="7" class="spinner numeric" />
+					<input type="text" value="<?php echo $param7; ?>" name="param7" size="1" class="spinner numeric" />
 				</td>
 			</tr>		
 		</table>					

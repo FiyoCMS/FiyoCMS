@@ -21,7 +21,7 @@ if($qr['status']==0) {$ck2="checked";}
 <input type="hidden" name="id" value="<?php echo $qr['id']; ?>">
 	<div id="app_header">
 		<div class="warp_app_header">		
-			<div class="app_title"><?=Edit_Permalink;?></div>
+			<div class="app_title"><?php echo Edit_Permalink;?></div>
 			<div class="app_link">
 				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply"><i class="icon-ok"></i> <?php echo Save; ?></button>	
 				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="save"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>				

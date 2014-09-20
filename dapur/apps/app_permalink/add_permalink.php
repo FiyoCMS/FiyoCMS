@@ -13,7 +13,7 @@ $qr = null;
 <form method="post" action="">
 	<div id="app_header">
 		<div class="warp_app_header">		
-			<div class="app_title"><?=New_Permalink;?></div>
+			<div class="app_title"><?php echo New_Permalink;?></div>
 			<div class="app_link">
 				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply_new"><i class="icon-ok"></i> <?php echo Save; ?></button>	
 				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="save_new"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>			
@@ -31,12 +31,12 @@ $qr = null;
 					<tr>
 						<td class="row-title"><span class="tips" title="<?php echo permalink_link_tip; ?>" width="20%">Permalink</span></td>
 						<td>
-						<input type="text" <?=formRefill('permalink');?>  name="permalink" size="50" autocomplete="off" required></td>
+						<input type="text" <?php echo formRefill('permalink');?>  name="permalink" size="50" autocomplete="off" required></td>
 					</tr>
 				
 					<tr>
 						<td class="row-title"><span class="tips" title="<?php echo original_link_tip; ?>. ex:'?app=forum'">Original Link</span></td>
-						<td><input type="text" name="link" <?=formRefill('link');?> size="50"  autocomplete="off" required></td>
+						<td><input type="text" name="link" <?php echo formRefill('link');?> size="50"  autocomplete="off" required></td>
 					</tr>
 					<tr>
 						<td class="row-title"><span class="tips" title="<?php echo lock_permalink_tip; ?>">Lock Permalink</span></td>

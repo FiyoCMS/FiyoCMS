@@ -1,8 +1,8 @@
 <?php
 /**
-* @version		1.5.0
+* @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 * @description	
 **/
@@ -10,11 +10,10 @@
 defined('_FINDEX_') or die('Access Denied');		
 	if(isset($_POST['upload']) or isset($_POST['copy'])) {	
 		$c = false;
-		if(isset($_POST['upload'])  AND !empty($_POST['zip'])) {
+		if(isset($_POST['upload'])  AND !empty($_FILES['zip'])) {
 			$path_file = $_FILES['zip']['tmp_name'];
-			$type_file = $_FILES['zip']['type'];
 			$name_file = $_FILES['zip']['name'];
-			$name_file = md5($name_file);
+			$name_file = md5($path_file);
 			$_SESSION['file'] = $path_file;
 			$c = true;
 		} else if(isset($_POST['copy']) AND !empty($_POST['url'])) {
@@ -25,10 +24,10 @@ defined('_FINDEX_') or die('Access Denied');
 			$path_file = "../tmp/$name_file.zip";
 			$c = @copy($url_file, $path_file);
 		}
-		
+			echo $path_file;
 		if(!empty($path_file) AND $c) {
 			if(extractZip($path_file,"../tmp/$name_file")) {
-				if(file_exists("../tmp/$name_file/installer.php")) {
+			if(file_exists("../tmp/$name_file/installer.php")) {				
 					include("../tmp/$name_file/installer.php");
 					
 					//Modules Installer
@@ -44,7 +43,7 @@ defined('_FINDEX_') or die('Access Denied');
 					}
 					//Apps Installer
 					else if($addons['type'] == 'apps'){					
-						if($addons['app_type'] > 0) { 
+						if($addons['app_type'] > 0) {
 							insert_new_apps($addons['name'],$addons['folder'],$addons['author'],$addons['app_type']);
 							$folback = siteConfig('backend_folder');
 							if($addons['app_type'] == 3 or $addons['app_type'] == 1)
@@ -54,8 +53,8 @@ defined('_FINDEX_') or die('Access Denied');
 						}
 					}
 					//Themes Installer
-					else if($addons['type'] == 'themes'){
-						$folder	= "../plugins/$addons[folder]";	
+					else if($addons['type'] == 'themes'){					
+						$folder	= "../themes/$addons[folder]";	
 						$copy = @copy_directory("../tmp/$name_file","../themes/$addons[folder]");
 					}
 					//Admin Themes installer
@@ -72,25 +71,29 @@ defined('_FINDEX_') or die('Access Denied');
 							@copy_directory("../dapur","../$dapur",true);
 					} else {
 						$fail = true;						
-						alert('error',File_uploaded_not_valid);					
+						alert('error',File_uploaded_not_valid,true);			
 					}
 					
 					if(!isset($fail)) {
 						if(isset($folder) AND file_exists("$folder/installer.php"))
-							@unlink("$folder/installer.php");
+							@unlink("$folder/installer.php",true);
 						if($copy)
 							alert('info',AddOns_installed);
-						if(isset($addons['info']))
-							echo "<div class='install_info'>$addons[info]</div>";
+						if(isset($addons['info'])) {
+							$_SESSION['INSTALL_NOTICE'][0] = 3;
+							$_SESSION['INSTALL_NOTICE'][1] = "<div class='install_info panel box'><h2>$addons[name] ".successfully_installed."</h2>
+							$addons[info]</div>";
+							refresh();
+						}
 						delete_directory('../tmp');	
 					}
 				}
 				else {
-					alert('error',File_uploaded_not_valid);
+					alert('error',File_uploaded_not_valid,true);
 				}
 			}
 			else{
-				alert('error',File_not_support);
+				alert('error',File_not_support,true);
 			}
 		}
 		else if(!$c) {
@@ -117,7 +120,7 @@ $(document).ready(function() {
 		
 		if(extension == 'zip') {
 			var size = $(".zip")[0].files[0].size;
-			var maxsize = "<?php echo siteConfig('file_size'); ?>";
+			var maxsize = "<?php echo format_byte(ini_get("upload_max_filesize")); ?>";
 			size = size / 1024;
 			if(size < maxsize) 				
 				$('.zip_error').hide();
@@ -210,7 +213,7 @@ $(document).ready(function() {
 			data: "patching=true",
 			method: "POST",
 			cache:false,
-			timeout:5000,  
+			timeout: 10000,  
 			error:function(){ 
 				$(".update-info-update").html("Error!") ;
 				$(".modal-footer-update").show();
@@ -233,7 +236,7 @@ $(document).ready(function() {
 	}); 
 });
 </script>
-<form method="post" id="form" enctype="multipart/form-data" typeion="" target="">
+<form method="post" id="form" enctype="multipart/form-data" target="">
 	<div id="app_header">
 		<div class="warp_app_header">		
 			<div class="app_title">Install & Update</div>
@@ -242,6 +245,16 @@ $(document).ready(function() {
 			</div>			
 		</div>
 	</div>	   	
+	<?php 
+		if(isset($_SESSION['INSTALL_NOTICE'])) {
+			$_SESSION['INSTALL_NOTICE'][0] -= 1;
+			if($_SESSION['INSTALL_NOTICE'][0] == 1) {
+				echo $_SESSION['INSTALL_NOTICE'][1];
+				$_SESSION['INSTALL_NOTICE'] = null;
+			}
+			echo $_SESSION['INSTALL_NOTICE'][0];
+		}	
+	?>
 	<div class="panel box"> 		
 		<header>
 			<h5>Install</h5>
@@ -288,9 +301,7 @@ $(document).ready(function() {
         <div class="update-info-update"><?php echo Sure_want_update; ?></div>
       </div>
       <div class="modal-footer modal-footer-update">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Close; ?></button>
-        <button type="button" class="btn btn-primary btn-grad updater try-again"><?php echo Try_Again; ?></button>
-        <button type="button" class="btn btn-metis-2 btn-grad update-confirm" id="confirm"><?php echo Update; ?></button>
+        <button type="button" class="btn btn-default btn-close" data-dismiss="modal"><?php echo Close; ?></button><button type="button" class="btn btn-primary btn-grad updater try-again"><?php echo Try_Again; ?></button><button type="button" class="btn btn-metis-2 btn-grad update-confirm" id="confirm"><?php echo Update; ?></button>
       </div>
     </div>
   </div>

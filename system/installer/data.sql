@@ -574,10 +574,10 @@ INSERT INTO `db_prefix_setting` (`id`, `name`, `value`) VALUES
 (20, 'member_registration', '1'),
 (21, 'member_activation', '2'),
 (22, 'member_group', '5'),
-(23, 'version', '2.0'),
+(23, 'version', '2.0 1.0'),
 (24, 'lang', 'id'),
 (25, 'timezone', 'Asia/Jakarta'),
-(26, 'web_disk', '500'),
+(26, 'api_key', '500'),
 (27, 'disk_space', '500');
 --
 

@@ -1,5 +1,14 @@
+<?php
+/**
+* @version		2.0
+* @package		Fiyo CMS
+* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @license		GNU/GPL, see LICENSE.txt
+* @description	
+**/
 
-
+defined('_FINDEX_') or die('Access Denied');
+?>
 	<div id='helper'><h3>About Fi SiteMap</h3><p>Modified by Fiyo Developers to become Fiyo Apps.</p><br/><p>Special tanks and Original Script by <a class='outlink' target='_blank' href='http://enarion.net/google/'>enarion.net</a></p><p> This script is licensed under GPL.</p></p>
 							
 			<div align="left"><p>

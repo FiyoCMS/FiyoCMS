@@ -6,9 +6,9 @@
 * @license		GNU/GPL, see LICENSE.
 **/
 
-define('_FINDEX_',1);
 session_start();
 if(!isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] > 2) die ();
+define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
 $db = new FQuery();  

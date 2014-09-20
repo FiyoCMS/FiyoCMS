@@ -6,9 +6,10 @@
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
-define('_FINDEX_',1);
 session_start();
-if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 3 or !isset($_POST['url'])) die();
+if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 5 or !isset($_POST['url'])) die();
+define('_FINDEX_','BACK');
+
 require_once ('../../../system/jscore.php');
 
 ?>
@@ -35,11 +36,11 @@ require_once ('../../../system/jscore.php');
 			$read_article = Read;
 			$edit_article = Edit;
 			if($no%2==0) $class = 'clr'; else 	$class = 'cln';		
-			echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$qr[title]
+			echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$qr[title] <a class='tooltips icon-bar-chart' title='$info' data-placement='right'></a> 
 			<div class='tool-box'>
 				<a href='$read' target='_blank'  class='btn btn-tools tips' title='$read_article'>$read_article</a>";				
 			$editor_level 	= mod_param('editor_level',$qr['parameter']);
-			if($editor_level >= USER_LEVEL or empty($editor_level)) echo "<a href='$edit' class='btn btn-tools tips' title='$edit_article'>$edit_article</a>";
+			if($editor_level >= USER_LEVEL or empty($editor_level)) echo "<a href='$edit' class='btn btn-tools tips' title='$edit_article'>$edit_article</a> ";
 			echo "</div></td></tr>";
 			$no++;	
 		}		

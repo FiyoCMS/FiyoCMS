@@ -13,14 +13,17 @@ defined('_FINDEX_') or die('Access Denied');
 $(document).ready(function() {
 	$(".activator label").click(function(){ 
 		var parent = $(this).parents('.switch');
-		var id = $('.number',parent).attr('value');	
-		var value = $('.type',parent).attr('value');
+		var id = $('.number',parent).val();	
+		var value = $('.type',parent).val();
 		if(value == 1) value = 0; else value = 1;
 		$.ajax({
 			url: "apps/app_module/controller/status.php",
 			data: "stat="+value+"&id="+id,
-			success: function(data){
-				$('#type',parent).attr('value',0);					
+			success: function(data){	
+				if(value == 1)
+					$('.type',parent).val("0");
+				else 
+					$('.type',parent).val("1");				
 				notice(data);		
 			}
 		});
@@ -34,7 +37,10 @@ $(document).ready(function() {
 			url: "apps/app_module/controller/status.php",
 			data: "name="+value+"&id="+id,
 			success: function(data){
-				$('#type',parent).attr('value',0);					
+				if(value == 1)
+					$('.type',parent).val("1");
+				else 
+					$('.type',parent).val("0");				
 				notice(data);		
 			}
 		});
@@ -102,7 +108,7 @@ $(document).ready(function() {
 			<?php
 			$db = new FQuery();  
 			$db ->connect(); 
-			$sql = $db->select(FDBPrefix.'module','*','','status DESC, name ASC');
+			$sql = $db->select(FDBPrefix.'module','*','','`position` DESC, `short` ASC, `name` ASC');
 			$no=1;
 			while($qr=mysql_fetch_array($sql)){	
 				if($qr['status']==1)

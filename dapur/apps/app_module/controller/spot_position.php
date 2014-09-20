@@ -7,7 +7,7 @@
 **/
 
 //set single flag file
-define('_FINDEX_',1);
+define('_FINDEX_','BACK');
 
 //load query and function files
 require_once ('../../../system/jscore.php');

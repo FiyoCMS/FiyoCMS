@@ -10,7 +10,7 @@ defined('_FINDEX_') or die('Access Denied');
 
 ?>
 <?php if(empty($_SESSION['host']) AND empty($_SESSION['success'])) { ?>
-<?=printAlert();?>
+<?php printAlert();?>
 <form method="post" action="">
 	<div class="panel box"> 		
 		<header>
@@ -32,7 +32,7 @@ defined('_FINDEX_') or die('Access Denied');
 				</tr>
 				<tr>
 					<td class="row-title">Database User</td>
-					<td><div><input type="text" name="user" size="20" autocomplete="off" <?=formRefill('user');?>  required></div>
+					<td><div><input type="text" name="user" size="20" autocomplete="off" required <?php formRefill('user');?>  ></div>
 					<p>Nama pengguna yang berhak untuk mengakses database.</p>
 					<p>Username who has the privilege to access the database.</p>
 					
@@ -47,7 +47,7 @@ defined('_FINDEX_') or die('Access Denied');
 				</tr>
 				<tr>
 					<td class="row-title">Database Name</td>
-					<td><div><input type="text" name="dbase" <?=formRefill('dbase');?> id="database" size="30"  autocomplete="off" required><span id="db_alert"></span></div>
+					<td><div><input type="text" name="dbase" <?php formRefill('dbase');?> id="database" size="30"  autocomplete="off" required><span id="db_alert"></span></div>
 					
 					<?php if($_SERVER['SERVER_ADDR'] == '127.0.0.1' or $_SERVER['SERVER_ADDR'] == '::1' ) : ?>
 						<div>
@@ -68,7 +68,7 @@ defined('_FINDEX_') or die('Access Denied');
 				<tr>
 					<td class="row-title">Table Prefix</td>
 					<td>
-						<div><input type="text" name="prefix" autocomplete="off" value="fiyo<?=rand(10,99);?>_" required></div>
+						<div><input type="text" name="prefix" autocomplete="off" value="fiyo<?php echo rand(10,99);?>_" required></div>
 						<p>Nama depan tabel untuk meningkatkan keamanan database.</p>
 						<p>Prefix name table for improve the security of the database.</p>
 						
@@ -121,7 +121,7 @@ $(function() {
 });
 	
 </script>
-<?=printAlert();?>
+<?php printAlert();?>
 <form method="post" action="">
 	<div class="panel box"> 		
 		<header>
@@ -136,12 +136,12 @@ $(function() {
 				<tr>
 					<td class="row-title">Website Title</td>
 					<td>
-						<div><div><input type="text" name="site" <?=formRefill('site');?> size="53" autocomplete="off" required></div>
+						<div><div><input type="text" name="site" <?php formRefill('site');?> size="53" autocomplete="off" required></div>
 					</td>
 				</tr>
 				<tr>
 					<td class="row-title">Website Description</td>
-					<td><div><textarea rows="3" cols="55" name="desc" <?=formRefill('desc');?> size="30" autocomplete="off"></textarea></div>
+					<td><div><textarea rows="3" cols="55" name="desc" <?php formRefill('desc');?> size="30" autocomplete="off"></textarea></div>
 					<p>Deskripsi website juga berpengaruh pada hasil pencarian di mesin pencari.</p>
 					<p>Description of the website also affects the search results in search engines.</p>
 					
@@ -149,7 +149,7 @@ $(function() {
 				</tr>
 				<tr>
 					<td class="row-title">Administrator Username</td>
-					<td><div><input type="text" name="username" <?=formRefill('username');?> id="adminpass" size="20" autocomplete="off" required></div>
+					<td><div><input type="text" name="username" <?php formRefill('username');?> id="adminpass" size="20" autocomplete="off" required></div>
 					<p>Nama pengguna yang akan digunakan untuk mengakses AdminPanel.</p>
 					<p>Username that will be used to privilege access in AdminPanel.</p>
 					
@@ -172,7 +172,7 @@ $(function() {
 				<tr>
 					<td class="row-title">Administrator Email</td>
 					<td>
-						<div><input type="email" name="email" size="30" <?=formRefill('email');?> value="" required></div>
+						<div><input type="email" name="email" size="30" <?php formRefill('email');?> value="" required></div>
 						<p>Isi dengan email aktif untuk fitur penting yang membutuhkan konfirmasi email.</p>
 						<p>Fill with active email for important features that need email confirmation.</p>
 						

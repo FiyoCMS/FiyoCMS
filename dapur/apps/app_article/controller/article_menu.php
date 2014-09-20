@@ -9,13 +9,13 @@
 session_start();
 
 if(isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] < 3 AND isset($_GET['access'])) :
-define('_FINDEX_',1);
+define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
 addJs('../plugins/plg_jquery_ui/datatables.js');
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
-	$(".ctselect").click(function() {
+	$(".select").click(function() {
 		$("#selectArticle").modal('hide');
         var id = $(this).attr('rel');	
         var name = $(this).attr('name');	
@@ -24,7 +24,12 @@ $(document).ready(function() {
 	});
 	oTable = $('.data').dataTable({
 			"bJQueryUI": true,
-			"sPaginationType": "full_numbers", "bLengthChange": false
+			"sPaginationType": "full_numbers",
+			"bLengthChange": false,			
+			"fnDrawCallback": function( oSettings ) {
+		$('.tips').tooltip();
+			
+			}
 		});
 		if ($.isFunction($.fn.chosen) ) {
 			$("select").chosen({disable_search_threshold: 10});
@@ -33,15 +38,13 @@ $(document).ready(function() {
 });
 </script>
 <form method="post">	
-        <table id="dataTable" class="data table-bordered">
+        <table id="dataTable" class="data">
 		<thead>
 			<tr>								  
-				<th style="width:3% !important;" class="no">#</th>	
 				<th style="width:40% !important;">Article's Title</th>
-				<th style="width:15% !important;" class="no">Category</th>
-				<th style="width:15% !important;" class="no">Author</th>
-				<th style="width:10% !important;" class="no">Date</th>
-				<th style="width:4% !important;">ID</th>
+				<th style="width:15% !important; text-align: center;">Category</th>
+				<th style="width:15% !important; text-align: center;">Author</th>
+				<th style="width:15% !important; text-align: center;">Date</th>
 			</tr>
 		</thead>
 		
@@ -62,9 +65,9 @@ $(document).ready(function() {
 				$author = $aut['name'];
 				if(!empty($qr['author'])) $author=$qr['author'];
 					
-				$name ="<a class='tips ctselect' title='Click to select article \"$qr[title]\"'  rel='$qr[id]' name='$qr[title]'>$qr[title]</a>";
+				$name ="<a class='tips select' title='".Choose."' data-placement='right' rel='$qr[id]' name='$qr[title]'>$qr[title]</a>";
 				$date = substr($qr['date'],0,10);
-				echo "<tr><td>$no</td><td>$name</td><td  align='center'>$category</td><td>$author</td><td>$date</td><td align='center'>$qr[id]</td></tr>";
+				echo "<tr><td>$name</td><td  align='center'>$category</td><td align='center'>$author</td><td align='center'>$qr[date]</td></tr>";
 				$no++;	
 				}
 			?>				

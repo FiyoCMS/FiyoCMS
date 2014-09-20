@@ -9,6 +9,7 @@
 if(!isset($_POST['email'])) die('Access Denied!');
 session_start();
 define('_FINDEX_',1);
+
 require('../../../system/jscore.php');
 if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){		
 	echo "{ \"status\":\"0\" , \"alert\":\"".alert('error',Email_Invalid)."\"}";

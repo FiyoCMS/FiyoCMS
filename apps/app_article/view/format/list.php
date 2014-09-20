@@ -94,5 +94,5 @@ if(isset($article-> category)) :
 	<?php if(defined('Apps_Title')) : ?>
 			<h2><?php echo Apps_Title; ?></h2>
 	<?php endif; ?>
-	<h3><?=Category_is_empty;?></h3>
+	<h3><?php echo Category_is_empty;?></h3>
 <?php endif; ?>

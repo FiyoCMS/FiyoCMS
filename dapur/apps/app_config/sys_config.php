@@ -2,7 +2,7 @@
 /**
 * @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
@@ -77,6 +77,7 @@ if(isset($_POST['config_save'])) {
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[title_divider]"),"name='title_divider'");
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[lang]"),"name='lang'");		
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[follow_link]"),"name='follow_link'");	
+		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[disk_space]"),"name='disk_space'");	
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[member_registration]"),"name='member_registration'");		
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[member_activation]"),"name='member_activation'");	
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[member_group]"),"name='member_group'");	
@@ -109,4 +110,22 @@ if(isset($_POST['config_save'])) {
 		}
 		$_SESSION['media_theme'] = $_POST['media_theme'];
 	}		
+}
+
+
+function insert_new_apps($name, $folder, $author, $type, $icon = null, $style = null) {
+	$db = new FQuery();  
+	$qr = $db->insert(FDBPrefix.'apps',array("","$name","$folder","$author","$type"));  
+	$fl = str_replace("app_","",$folder);
+	$pi = FQuery('menu', "category = 'adminpanel' AND sub_name='apps'",'id');
+	if(!FQuery('menu', "category = 'adminpanel' AND link = '?app=$fl' AND parent_id > 0 "))
+	$db->insert(FDBPrefix.'menu',array("","adminpanel","$name","?app=$fl","$folder","$pi","1","0", "3","0", "","1","$fl","$icon","$style","",""));
+	
+	$qr = $db->insert(FDBPrefix.'apps',array("","$name","$folder","$author","$type")); 
+	return $qr;
+}
+function insert_new_plg($folder,$param = null) {
+	$db = new FQuery();  
+	$qr = $db->insert(FDBPrefix.'plugin',array("","$folder","1","$param")); 
+	return $qr;
 }

@@ -75,7 +75,10 @@ function iniTable () {
 						url: "apps/app_article/controller/article_status.php",
 						data: "stat="+value+"&id="+id,
 						success: function(data){
-							$('.type',parent).attr('value',0);					
+						if(value == 1)
+							$('.type',parent).val("1");
+						else 
+							$('.type',parent).val("0");				
 							notice(data);	
 						}
 					});
@@ -90,7 +93,10 @@ function iniTable () {
 						url: "apps/app_article/controller/article_status.php",
 						data: "fp="+value+"&id="+id,
 						success: function(data){
-							$('.type',parent).attr('value',0);					
+						if(value == 1)
+							$('.type',parent).val("1");
+						else 
+							$('.type',parent).val("0");					
 							notice(data);		
 						}
 					});
@@ -147,7 +153,7 @@ function iniTable () {
 				<input type="hidden" value="true" name="delete_confirm"  style="display:none" />
 						
 				<span class="filter-table">
-				<?=Category; ?>:
+				<?php echo Category; ?>:
 				<select name="cat" class="category filter" chosen-select" data-placeholder="<?php echo Choose_category; ?>" style="min-width:120px;">
 				<option value="">All</option>
 					<?php	
@@ -164,7 +170,7 @@ function iniTable () {
 						}						
 					?>
 				</select>
-				<?=Author; ?>:
+				<?php echo Author; ?>:
 				<select name="user"  class="user filter"  placeholder="">
 				<option value="">All</option>
 					<?php
@@ -180,7 +186,7 @@ function iniTable () {
 						}
 					?>
 					</select>
-				<?=Access_Level; ?>:
+				<?php echo Access_Level; ?>:
 				<select name="level" class="level filter" placeholder="">
 				<option value="">All</option>
 					<?php
@@ -204,15 +210,15 @@ function iniTable () {
 	</div>
 	
 	<!-- div class="category-table-option">
-	<?=Category; ?>:
+	<?php echo Category; ?>:
 	<select class="data-table-option">
 		<option value="2" id="">All Aasdasdas asd asd</option>
 	</select>
-	<?=Author; ?>:
+	<?php echo Author; ?>:
 	<select class="data-table-option">
 		<option value="2" id="">All</option>
 	</select>
-	<?=Access_Level; ?>:
+	<?php echo Access_Level; ?>:
 	<select class="data-table-option">
 		<option value="2" id="">All</option>
 	</select>

@@ -9,13 +9,12 @@
 session_start();
 
 if(isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] < 3 AND isset($_GET['access'])) :
-define('_FINDEX_',1);
+define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
 addJs('../plugins/plg_jquery_ui/datatables.js');
 ?>
 
 <script type="text/javascript">
-
 $(document).ready(function() {
 	$(".ctselect").click(function() {
 		$("#selectArticle").modal('hide');

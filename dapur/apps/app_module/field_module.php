@@ -131,7 +131,7 @@ $(function() {
 			</tr>
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Order_tip; ?>"><?php echo Module_Order; ?></span></td>
-				<td><input value="<?php echo $qr['short'] ; ?>" type="number" name="short" size="10" id="order" class="numeric spinner" style="width: 50px"  min="0"></td>
+				<td><input value="<?php echo $qr['short'] ; ?>" type="number" name="short" size="5" id="order" class="numeric spinner" style="width: 50px"  min="0"></td>
 			</tr>
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Access_tip; ?>"><?php echo Access_Level; ?></span></td>
@@ -148,7 +148,7 @@ $(function() {
 							echo "<option value='$qrs[level]'>$qrs[group_name]</option>";
 						}
 					}
-					if($qr[level]==99 or !$id) $s="selected";else $s="";
+					if($qr['level']==99 or !$id) $s="selected";else $s="";
 					echo "<option value='99' $s>"._Public."</option>"
 				?>
 				</select></td>

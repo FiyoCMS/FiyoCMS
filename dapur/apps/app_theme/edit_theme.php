@@ -95,8 +95,10 @@ endif;
 	
 <div class="app_link tabs">		
 	<div class="app_link">		
-		<a class="add btn btn-default <?php echo $a; ?>" href="?app=theme&folder=<?php echo $folder;?>"><i class="icon-magic"></i> <?php echo Information; ?></a>			
-		<a class="add btn btn-default <?php echo $b; ?>" href="?app=theme&folder=<?php echo $folder;?>&type=files"><i class="icon-file-text-alt"></i> Files</a>			
+		<a class="add btn btn-default <?php echo $a; ?>" href="?app=theme&folder=<?php echo $folder;?>"><i class="icon-magic"></i> <?php echo Information; ?></a>
+		<?php if(USER_LEVEL == 1) : ?>
+		<a class="add btn btn-default <?php echo $b; ?>" href="?app=theme&folder=<?php echo $folder;?>&type=files"><i class="icon-file-text-alt"></i> Files</a>		
+		<?php endif; ?>	
 		<a class="back-theme" href="?app=theme"><i class="icon-reply" style="padding: 2px;" ></i><?php echo Back;?></a>	
 	</div>		
 </div>

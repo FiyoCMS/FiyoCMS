@@ -6,7 +6,7 @@
 * @license		GNU/GPL, see LICENSE.
 **/
 
-define('_FINDEX_',1);
+define('_FINDEX_','BACK');
 session_start();
 if(!isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] > 2) die ();
 

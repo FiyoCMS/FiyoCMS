@@ -334,7 +334,7 @@ if(isset($_POST['save_comment']) or isset($_POST['apply_comment'])){
 		"id=$_POST[id]");
 		if($qr AND isset($_POST['save_comment'])){	
 			notice('success',Comment_Updated);
-			redirect('?app=comment',2);
+			redirect('?app=article&view=comment');
 		}
 		else if($qr AND isset($_POST['apply_comment'])){ 
 			notice('success',Comment_Updated);

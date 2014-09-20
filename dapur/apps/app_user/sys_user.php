@@ -47,7 +47,7 @@ if(isset($_POST['add_group']) or isset($_POST['apply_group'])){
 if(isset($_POST['check']) or isset($_POST['delete_confirm'])){
 	$source = @$_POST['check'];
 	$source = multipleSelect($source);
-	$delete = multipleDelete('user_group',$source,'user','level');		
+	$delete = multipleDelete('user_group',$source,'user','level','','','1,2,3,4');		
 	if($delete == 'noempty') {
 		notice('error',User_Group_Not_Empty);
 		refresh();		

@@ -27,8 +27,7 @@ function reloadCaptcha() {
 	<form method="post" action="">	
 	<input type="hidden" id="url" value="<?php echo FUrl; ?>" />
 		<?php if(userNotice != 'need_admin_activation' AND userNotice != 'need_email_activation') : ?>	
-		<?php echo userNotice; ?>	
-		<?php if($_SESSION['num']) echo $_SESSION['num']; ?>		
+		<?php echo userNotice; ?>		
 		<div>
 			<span>Username</span><input <?php formRefill('user'); ?> type="text" autocomplete="off" name="user" placeholder="Username"/> min.3 character
 		</div>

@@ -1,6 +1,6 @@
 <?php 
 /**
-* @version		1.5.0
+* @version		2.0
 * @package		Fiyo CMS
 * @copyright	Copyright (C) 2012 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
@@ -9,6 +9,7 @@
 //set session start
 session_start();
 ob_start();
+
 //flag for main file
 define( '_FINDEX_', 1 );
 

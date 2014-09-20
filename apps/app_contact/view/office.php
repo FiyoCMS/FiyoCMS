@@ -11,10 +11,9 @@ defined('_FINDEX_') or die('Access Denied');
 
 $id = app_param('id');
 $contact = new Contact() or die;  
-
+echo Page_ID;
 //$contact -> send(@$_POST['name'],@$_POST['email'],@$_POST['text'],@$_POST['send'],@$_POST['to']);
-
-	$param = menuInfo('parameter');
+	$param = menuInfo('parameter','?app=contact','',true);
 	$email = parse_param('office_email',$param);
 	$ph1	= parse_param('office_phone1',$param);
 	$ph2 = parse_param('office_phone2',$param);
@@ -22,6 +21,10 @@ $contact = new Contact() or die;
 	$text = parse_param('office_text',$param);
 	$fax = parse_param('office_fax',$param);
 	$map = parse_param('office_map',$param);
+	$x = explode(";",$param);
+	$i = 0;
+	
+
 ?>
 
 <script>
@@ -42,19 +45,19 @@ $(function() {
 		t.html("Loading...").attr('disabled','');
 		$.ajax({
 			type : "POST",
-			data: "send=true&name="+name+"&email="+email+"&subject="+subject+"&text="+encodeURIComponent(text)+"&captcha="+captcha+"&phone="+phone+"&to=<?=$email;?>",
+			data: "send=true&name="+name+"&email="+email+"&subject="+subject+"&text="+encodeURIComponent(text)+"&captcha="+captcha+"&phone="+phone+"&to=<?php echo $email;?>",
 			url: "<?php echo FUrl; ?>apps/app_contact/controller/send_mail.php",
 			timeout: 5000, 
 			error:function(data){	
 				alert("Send Message Error!");
-				t.html("<?=Send_Message;?>").removeAttr('disabled');
+				t.html("<?php echo Send_Message;?>").removeAttr('disabled');
 			},
 			success: function(data){
 				var json = $.parseJSON(data);
 				$(".alert, .notice").remove();
 				$(".form-contact").before(json.alert);
 				if(json.status == '1')	$("#contact-text").val("");
-				t.html("<?=Send_Message;?>").removeAttr('disabled');
+				t.html("<?php echo Send_Message;?>").removeAttr('disabled');
 				reloadCaptcha();
 			}
 		});
@@ -72,15 +75,18 @@ $(function() {
 		<?php endif; ?>
 		
 		<div class="office-address">
+		<?php if(!empty($map)) : ?> 
 		<h2>Contact Info</h2>
+		<?php endif; ?>
+		
 		<?php if(!empty($text)) : ?> 
 			<div class="office-text">
-			<?= $text;?>
+			<?php echo  $text;?>
 			</div>			
 		<?php endif; ?>
 		
 		<div class="office-a">
-			<label><?=Address;?></label>
+			<label><?php echo Address;?></label>
 			<div><?php echo str_replace("\n","<br>",$addr);?></div>
 		</div>
 		

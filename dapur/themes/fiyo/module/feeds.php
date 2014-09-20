@@ -1,23 +1,19 @@
-<?php
+<?php 
 /**
 * @version		2.0
 * @package		Fiyo CMS
 * @copyright	Copyright (C) 2014 Fiyo CMS.
-* @license		GNU/GPL, see LICENSE.
+* @license		GNU/GPL, see LICENSE.txt
 **/
 
-define('_FINDEX_',1);
 session_start();
-if(!isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] > 5) die ();
+if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 5 ) die();
+define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
-
-
 ?>
-
 <table class="table table-striped tools">
-  <tbody>
-
+<tbody>
 <?php
 $url = 'http://update.fiyo.org/';
 $xml = @simplexml_load_file($url);
@@ -41,8 +37,6 @@ if($xml) {
 else {
 	echo "<tr><td style='text-align:center; padding: 40px 0; color: #ccc; font-size: 1.5em'>".Failed_to_connect_server."</td></tr>";
 }
-?>
-	
-    </tbody>			
+?></tbody>			
 </table>
 <script>$(function() {$('.tooltips').tooltip();});</script>

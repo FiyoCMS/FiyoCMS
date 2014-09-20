@@ -93,7 +93,8 @@ class Contact {
 		$db = new FQuery();  
 		$db->connect(); 
 		
-		$param 		= oneQuery('menu','id',Page_ID,'parameter');
+		$param 		= menuInfo('parameter',getLink());
+		
 		$show_panel	= mod_param('show_name',$param);
 		$read_more  = mod_param('read_more',$param);
 		$per_page	= mod_param('per_page',$param);
@@ -190,7 +191,7 @@ class Contact {
 /****************************************/
 $view  = app_param('view');
 $id  = app_param('id');
-if(defined('SEF_URL')){
+if(SEF_URL){
 	if($view == 'person') {
 		$item = oneQuery('contact','id',$id,'name');
 		$vcat = oneQuery('contact','id',$id,'group_id');

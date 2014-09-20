@@ -23,18 +23,19 @@ defined('_FINDEX_') or die('Access Denied');
 
 	<script type="text/javascript">
 	<?php if(!isset($_SESSION['USER_ID']) AND isset($_GET['theme'])) : ?>
-		window.location.replace(location.href);
+		location.reload();
 	<?php endif; ?>							
 	$(function() {
 		$(".name").focus();
-		$(".submit").click(function(e) {	
-			$(".notice, .alert").fadeOut('slow');
+		$(".submit").click(function(e) {				
+			$(".alert").fadeOut('slow');
 			var name = $(".name").val();
 			var pass = $(".pass").val();
 			var url = $(".url").val();
 			var t = $(this);
 			if(pass !== '' && name !== '') {
 				$(this).html("Loading...");	
+				$(this).attr("disabled","disabled");	
 				e.preventDefault();	
 				$.ajax({
 					url: "<?php echo AdminPath; ?>/module/login.php",
@@ -44,15 +45,24 @@ defined('_FINDEX_') or die('Access Denied');
 					error: function(data){
 						$(t).html("Login");	
 					},	
-					success: function(data){						
+					success: function(data){
+					try {
 						var json = $.parseJSON(data);
 						if(json.status == '0') {
+							$(t).removeAttr("disabled");			
 							$(t).html("Login");		
 							$("#content").prepend(json.alert);						
-						} else {
+						} else if(json.status == '1') {
 							$("#content").prepend(json.alert);	
-							window.location.replace(location.href);
-						}						
+							location.reload();
+						} else {
+							$(t).removeAttr("disabled");						
+							$(t).html("Login");		
+							$("#content").prepend("Login Error!");	
+						}
+					} catch (e) {
+						alert(data);
+					}
 						setTimeout(function(){
 							$(".notice, .alert").fadeOut('slow');
 						}, 10000);	
@@ -123,23 +133,24 @@ defined('_FINDEX_') or die('Access Denied');
 			$("button").toggle();			
 		});
 		
-		$(".notice").click(function() {	
+		$(".alert-error").click(function() {	
+			alert();
 			$(this).fadeOut();
 		});
 		setTimeout(function(){
-			$('.notice').fadeOut(2000, function() {
+			$('.alert').fadeOut(2000, function() {
 			});				
-		}, 3000);	
+		}, 2200);	
 	});	
 	</script>	
 </head>
 
-<body style="background-image: url(<?=$PARAM['background'];?>)";>        
+<body style="background-image: url(<?php echo $PARAM['background'];?>)";>        
 	<div id="content">
         <div id="steps">
              <form id="formElem" method="post">
                 <fieldset class="step">
-                    <p class="legend"><img src="<?=$PARAM['logo'];?>" width="190"></p>
+                    <p class="legend"><img src="<?php echo $PARAM['logo'];?>" width="190"></p>
                     <p>
                         <input name="user" autocomplete="OFF" type="text" class="name" placeholder="Username" />                    
                         <input name="email" autocomplete="OFF" type="email" class="email femail" placeholder="Email" />
@@ -149,8 +160,8 @@ defined('_FINDEX_') or die('Access Denied');
                         <input name="url" type="hidden" class="url"/>
                     </p>
                     <p class="button">
-                        <button id="registerButton" type="submit" name="fiyo_login" class="submit flogin" style="background: <?=$PARAM['button_color'];?>">Login</button>
-                        <button id="registerButton" type="submit" name="forgot_password" class="send-mail femail" style="margin-top: -10px; background: <?=$PARAM['button_color'];?>">Send</button>
+                        <button id="registerButton" type="submit" name="fiyo_login" class="submit flogin" style="background: <?php echo $PARAM['button_color'];?>">Login</button>
+                        <button id="registerButton" type="submit" name="forgot_password" class="send-mail femail" style="margin-top: -10px; background: <?php echo $PARAM['button_color'];?>">Send</button>
                     </p>
 					<p style="width: 100%; text-align: center; margin-top: 10px;">
 						<span class="lost-password flogin">Lost Password?</span>

@@ -499,6 +499,7 @@ function writeSitemap($FILE) {
 
 	// function defination to convert array to xml
 	function array_to_xml($student_info, &$xml_student_info) { $no =0;
+		if(is_array($student_info))
 		foreach($student_info as $key => $value) {
 			if(is_array($value)) {
 				if(!is_numeric($key)){
@@ -553,6 +554,7 @@ function writeSitemapUserinput() {
  // create the sitemap file
 	$filesGot = $_REQUEST['FILE'];
 	$files = array();
+	if(is_array($filesGot))
 	foreach ($filesGot as $key => $value) {
 		$files[$key] = array();
 		$files[$key][PSNG_FILE_ENABLED] = isset($value[PSNG_FILE_ENABLED]) ? '1' : '';

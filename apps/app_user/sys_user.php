@@ -328,7 +328,7 @@ if(!defined("userNotice")) define("userNotice","");
 		
 
 //App User SEF Controller
-if('SEF_URL'){
+if(SEF_URL){
 	$view = app_param('view');
 	if(!empty($key) or !empty($res)) {
 	

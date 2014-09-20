@@ -8,6 +8,9 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
+if(file_exists('installer.php'))
+	unlink('installer.php');
+	
 if(isset($_POST['install'])) {
 	$zip = new ZipArchive;
     $res = $zip->open('system/installer.zip');

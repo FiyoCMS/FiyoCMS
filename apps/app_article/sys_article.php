@@ -9,6 +9,7 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
+
 function loadComment() {
 	include_once ('apps/app_comment/index.php');
 }
@@ -536,7 +537,7 @@ class Article {
 			$this -> desc[$no]		= clearXMLString("$content");
 			$this -> ftitle[$no] 	= clearXMLString($qr['title']);
 			$this -> content[$no] 	= $content;	
-
+			
 			if(defined('SEF_URL')) {		
 				$link = link_paging('?');
 				if (strpos(getUrl(),'&') > 0)  {			
@@ -613,7 +614,7 @@ else{
 
 
 if($a){ 
-	if(defined('SEF_URL') AND !checkHomePage()){
+	if(SEF_URL AND !checkHomePage()){
 		if($view == 'item') {
 			$icat = articleInfo('category');
 			$ncat = categoryInfo('name');

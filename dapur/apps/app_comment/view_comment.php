@@ -10,18 +10,24 @@ defined('_FINDEX_') or die('Access Denied');
 
 ?>	
 <script type="text/javascript" charset="utf-8">
-$(function() {		
+$(function() {	
+	$(".approve").click(function(e){
+		$(".action").val("approve");
+	});
+	$(".delete").click(function(e){
+		$(".action").val("delete");
+	});
 	$("#form").submit(function(e){
 		e.preventDefault();
 		var ff = this;
 		var checked = $('input[name="check_comment[]"]:checked').length > 0;
-		if(checked) {	
+		if(checked) {
 			$('#confirmDelete').modal('show');	
 			$('#confirm').on('click', function(){
 				ff.submit();
 			});		
 		} else {
-			noticeabs("<?php echo alert('error',Please_Select_Delete); ?>");
+			noticeabs("<?php echo alert('error',Please_Select_Item); ?>");
 			$('input[name="check_comment[]"]').next().addClass('input-error');
 			return false;
 		}
@@ -103,16 +109,16 @@ $(function() {
 });
 </script>
 <div id="stat"></div>
-<form method="post" id="form">
+<form method="POST" id="form">
 	<div id="app_header">
 		<div class="warp_app_header">		
 		  <div class="app_title"><?php echo Article_Comments; ?></div>
 		  <div class="app_link">			
-			<!--button type="submit" class="btn btn-success" title="<?php echo Save; ?>" value="<?php echo Approve; ?>" name="approve_comment"><i class="icon-ok"></i> <?php echo Approve; ?></button-->	
-			<button type="submit" class="delete btn btn-danger btn-sm btn-grad" title="<?php echo Delete; ?>" value="<?php echo Delete; ?>" name="delete_category"><i class="icon-trash"></i> &nbsp;<?php echo Delete; ?></button>
+			<!--button type="submit" class="btn btn-success approve" title="<?php echo Save; ?>" value="<?php echo Approve; ?>" name="approve_comment"><i class="icon-ok"></i> <?php echo Approve; ?></button-->	
+			<button type="submit" class="delete btn btn-danger btn-sm btn-grad" title="<?php echo Delete; ?>" value="<?php echo Delete; ?>" name="delete_comment"><i class="icon-trash"></i> &nbsp;<?php echo Delete; ?></button>
 			<a class="lbt setting tooltip link" href="?app=comment&act=config" title="<?php echo Configuration; ?>"></a>
 		  </div> 	
-		  <?php printAlert('NOTICE_REF'); ?>
+		  <?php printAlert(); ?>
 		</div>
 	</div>
 	<table class="data">
@@ -132,20 +138,3 @@ $(function() {
         </tbody>			
 	</table>
 </form>
-
-<div class="modal fade" id="confirmDelete" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true" style="display:none">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header"><h4 class="modal-title"><?php echo Delete_Confirmation; ?></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p class="question"><?php echo Sure_want_delete; ?></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Cancel; ?></button>
-        <button type="button" class="btn btn-danger btn-grad" id="confirm" name="delete_comment"><?php echo Delete; ?></button>	
-      </div>
-    </div>
-  </div>
-</div>

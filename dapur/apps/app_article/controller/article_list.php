@@ -8,7 +8,7 @@
 
 session_start();
 if(@$_SESSION['USER_LEVEL'] > 5 or !isset($_GET['iSortCol_0'])) die ('Access Denied!');
-define('_FINDEX_',1);
+define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
 
 	/* Array of database columns which should be read and sent back to DataTables. Use a space where

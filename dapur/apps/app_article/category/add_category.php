@@ -36,16 +36,14 @@ $(function() {
 		<div>
 			<table>
 				<tr>
-					<td class="row-title"><span class="tips" title="<?php echo Category_Name; ?>"><?php echo Category_Name; ?></span></td>
-					<td><input type="hidden" name="id" value="<?php  echo $row['id'] ?>">
-					<input type="text" name="name" size="20" <?php formRefill('name'); ?> required></td>
+					<td class="row-title"><span class="tips" title="<?php echo Category_Name; ?>"><?php echo Category_Name; ?></span></td><td>
+					<input type="text" name="name" required size="20" <?php formRefill('name'); ?> /></td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Parent_category_tip; ?>"><?php echo Parent_category; ?></span></td>
 					<td><select name="parent_id" class="parents" data-placeholder="<?php echo Choose_category; ?>" style="min-width:125px;">
 					<option value=''></option>
 					<?php			
-						$level = $row['level'];	
 						$sql2=$db->select(FDBPrefix.'article_category','*','parent_id=0');
 						while($row2=mysql_fetch_array($sql2)){	
 							echo "<option value='$row2[id]'>$row2[name]</option>";

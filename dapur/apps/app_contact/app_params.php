@@ -224,7 +224,7 @@ $(document).ready(function(){
 				</td>
 			</tr>
 			<!-- Tipe tampilan menu -->
-			<tr class="selgro <?=$visible;?>">
+			<tr class="selgro <?php echo $visible;?>">
 				<td id="caton">Select Group</td>
 				<td>
 					<select id="cat">
@@ -244,51 +244,51 @@ $(document).ready(function(){
 			<tr class="office invisible">
 				<td >Office Email</td>
 				<td>									
-					<input type="email"  value="<?=$param11;?>" size="20"  name="param11"  required />
+					<input type="email"  value="<?php echo $param11;?>" size="30"  name="param11"  required />
 				</td>
 			</tr>	
 			<tr class="office invisible">
 				<td>Office Phone 1</td>
 				<td>									
-					<input type="text"  value="<?=$param12;?>" size="20" name="param12"  />
+					<input type="text"  value="<?php echo $param12;?>" size="20" name="param12" required  />
 				</td>
 			</tr>
 			<tr class="office invisible">
 				<td>Office Phone 2</td>
 				<td>									
-					<input type="text"  value="<?=$param13;?>" size="20"  name="param13" />
+					<input type="text"  value="<?php echo $param13;?>" size="20"  name="param13" />
 				</td>
 			</tr>
 			<tr class="office invisible">
 				<td>Office Fax</td>
 				<td>									
-					<input type="text"  value="<?=$param14;?>" name="param14"  size="20"/>
+					<input type="text"  value="<?php echo $param14;?>" name="param14"  size="20"/>
 				</td>
 			</tr>	
 			<!-- Tipe tampilan menu -->
 			<tr class="office invisible">
 				<td>Office Address</td>
 				<td>									
-					<textarea rows="3" style="width: 100%" name="param15" ><?=$param15;?></textarea>
+					<textarea rows="3" style="width: 100%" name="param15" required ><?php echo $param15;?></textarea>
 				</td>
 			</tr>	
 			<!-- Tipe tampilan menu -->
 			<tr class="office invisible">
 				<td>Custom Text</td>
 				<td>									
-					<textarea rows="3" style="width: 100%" name="param16" ><?=$param16;?></textarea>
+					<textarea rows="3" style="width: 100%" name="param16" ><?php echo $param16;?></textarea>
 				</td>
 			</tr>	
 			<!-- Tipe tampilan menu -->
 			<tr class="office invisible">
-				<td>Google Map</td>
+				<td>Map Script</td>
 				<td>									
-					<textarea rows="3" style="width: 100%" name="param17" ><?=$param17;?></textarea>
+					<textarea rows="3" style="width: 100%" name="param17" ><?php echo $param17;?></textarea>
 				</td>
 			</tr>	
 			
 			<!-- Tipe tampilan menu -->
-			<tr class="selco <?=$visible2;?>">
+			<tr class="selco <?php echo $visible2;?>">
 				<td id="caton">Select Contact</td>
 				<td>					
 					<input type="hidden" value="?app=contact&view=item&id=<?php echo $id;?>" id="pgs" size="20" readonly /> 					

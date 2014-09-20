@@ -1,15 +1,17 @@
-<?php
+<?php 
 /**
 * @version		2.0
 * @package		Fiyo CMS
 * @copyright	Copyright (C) 2014 Fiyo CMS.
-* @license		GNU/GPL, see LICENSE.
+* @license		GNU/GPL, see LICENSE.txt
 **/
 
-define('_FINDEX_',1);
 session_start();
-if(!isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] > 4) die ();
+if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 4 or !isset($_POST['url'])) die();
+define('_FINDEX_','BACK');
+
 require_once ('../../../system/jscore.php');
+
 $db = new FQuery();  
 $db->connect(); 
 if(!isset($_POST['url'])) $_POST['url'] = '';
@@ -20,12 +22,10 @@ if(!isset($_POST['url'])) $_POST['url'] = '';
 		$db = new FQuery();  
 		$db->connect(); 
 		$user_id = USER_ID;
-		if(USER_LEVEL > 3) {
+		if($_SESSION['USER_LEVEL'] > 3)
 			$sql = $db->select(FDBPrefix."comment","*,DATE_FORMAT(date,'%W, %b %d %Y') as dates","parent_user_id = $user_id OR thread_user_id = $user_id",'date DESC LIMIT 10');
-			echo USER_LEVEL;
-		}
 		else
-		$sql = $db->select(FDBPrefix."comment","*,DATE_FORMAT(date,'%W, %b %d %Y') as dates","",'date DESC LIMIT 10'); 
+			$sql = $db->select(FDBPrefix."comment","*,DATE_FORMAT(date,'%W, %b %d %Y') as dates","",'date DESC LIMIT 10'); 
 		$no = 0;		
 		while($qr=mysql_fetch_array($sql)) {					
 			$id = "$qr[id]";
@@ -53,7 +53,7 @@ if(!isset($_POST['url'])) $_POST['url'] = '';
 				$approven = "<a data-id='$id' class='btn-tools btn btn-success btn-sm btn-grad approve-user' title='$approve'>$approve</a><a data-id='$id' class='btn-tools btn btn-danger btn-sm btn-grad disable-user' title='$hide'  style='display:none;'>$hide</a>";
 				$red = "class='unapproved'";
 			}
-			echo "<tr $red><td style='text-align: center; vertical-align: middle;  padding: 7px 8px 6px 10px;'>$foto</td><td style='width: 97%; padding: 7px 8px 8px 0;'><b>$qr[name]</b> <span>on</span> $title<a data-toggle='tooltip' data-placement='right' title='$info' class='icon-time tooltips'></a><a data-toggle='tooltip' data-placement='left' title='$qr[email]' class='icon-envelope-alt tooltips'></a>
+			echo "<tr $red><td style='text-align: center; vertical-align: middle;  padding: 7px 8px 6px 10px;'>$foto</td><td style='width: 97%; padding: 7px 8px 8px 0;'><b>$qr[name]</b> <span>on</span> $title <a data-toggle='tooltip' data-placement='right' title='$info' class='icon-time tooltips'></a> <a data-toggle='tooltip' data-placement='left' title='$qr[email]' class='icon-envelope-alt tooltips'></a>
 			<br/><span>$comment ...</span><br/>
 			<div class='tool-box tool-$no'>
 				$approven

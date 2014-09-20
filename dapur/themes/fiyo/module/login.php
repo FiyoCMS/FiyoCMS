@@ -8,7 +8,7 @@
 
 if(!isset($_POST['user'])) die('Access Denied!');
 session_start();
-define('_FINDEX_',1);
+define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
 $db = new FQuery();  
 		$user =  mysql_real_escape_string($_POST['user']);

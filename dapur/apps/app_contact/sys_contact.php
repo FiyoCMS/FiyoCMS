@@ -42,17 +42,18 @@ if(isset($_POST['add_group']) or isset($_POST['save_group'])){
 /****************************************/
 /*			Delete group contact		*/
 /****************************************/
-if(isset($_POST['delete_group'])){
-	$source = @$_POST['check'];
+if(isset($_POST['check_group'])){
+	$source = @$_POST['check_group'];
 	$source = multipleSelect($source);
 	$delete = multipleDelete('contact_group',$source,'contact','id');		
-	if($delete == 'noempty') 
+	if($delete == 'noempty') {
 		notice('error',Group_contact_Not_Empty);
+	}
 	else if(isset($delete))
 		notice('info',Group_Deleted);
 	else
 		notice('error',Please_Select_Group);
-	redirect(getUrl());		
+	refresh();
 }
 		
 	

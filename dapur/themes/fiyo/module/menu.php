@@ -13,11 +13,9 @@ $db->connect();
 
 if(isset($_GET['app'])) $link = $_GET['app']; else $link = 'dashboard';
 ?>
-
 <!-- #menu -->
 <ul id="menu" class="collapse top affix content">
-<?php
-	
+<?php	
 $sql = $db->select(FDBPrefix."menu","*","category='adminpanel' AND status=1  AND parent_id=0 ".Level_Access,"short ASC");
 $no = 1;
 $sum = mysql_affected_rows();	
@@ -152,7 +150,7 @@ function loadUrl(url) {
 	if(n == 0 || n === '') {
 		return false;	
 	} else {	
-		$("body").append("<div id='loadingbar'></div>").find("#loadingbar").animate({width:'90%'},2000);
+		$("body").append("<div id='loadingbar'></div>").find("#loadingbar").animate({width:'90%'},3000);
 	}
 	if(dataurl == 'index.php') url = '?theme=blank';
 	else if(dataurl) url = dataurl+'&theme=blank';
@@ -160,7 +158,7 @@ function loadUrl(url) {
 		var w = $("#loadingbar");
 	  	$.ajax({
 			url: url,
-			timeout:5000, 
+			timeout:10000, 
 			error:function(){ 
 				$("#mods").modal("show");
 				w.stop();

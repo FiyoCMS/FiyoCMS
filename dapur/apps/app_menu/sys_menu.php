@@ -140,7 +140,7 @@ if(isset($_POST['save_add']) or isset($_POST['apply_add'])){
 		}
 		elseif($qr AND isset($_POST['save_add'])) {
 			notice('success',Menu_Saved,2);
-			redirect('?app=menu');
+			redirect("?app=menu&cat=$_POST[cat]");
 		}
 		else {				
 			notice('error',Status_Invalid);
@@ -207,7 +207,7 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 if(isset($_POST['delete']) or isset($_POST['delete_confirm'])){
 	$source = @$_POST['check'];
 	$source = multipleSelect($source);
-	$delete = multipleDelete('menu',$source,'','','','',1);
+	$delete = multipleDelete('menu',$source,'','','','sub');
 	
 	if(isset($delete))
 		if($delete == 'noempty')		
@@ -324,7 +324,7 @@ function sub_menu($parent_id,$pre,$nos) {
 function option_sub_menu($parent_id,$sub = NULL,$pre) {
 	$db = new FQuery();  
 	$db->connect(); 
-	if($_REQUEST['id']) $eid = "AND id!=$_REQUEST[id]";
+	if($_REQUEST['id']) $eid = "AND id!=$_REQUEST[id]"; else $eid = '';
 	$sql = $db->select(FDBPrefix."menu","*","parent_id=$parent_id $eid");  
 	while($qr=mysql_fetch_array($sql)){	
 		if($sub==$qr['id']) $s="selected"; else $s="";

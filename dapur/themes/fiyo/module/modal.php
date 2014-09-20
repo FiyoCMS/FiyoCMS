@@ -2,14 +2,13 @@
 /**
 * @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
 defined('_FINDEX_') or die('Access Denied');
+
 ?>
-
-
 <div class="modal fade" id="mods" style="display:none">
   <div class="modal-dialog modal-sm modal-error">
     <div class="modal-content">
@@ -35,8 +34,7 @@ defined('_FINDEX_') or die('Access Denied');
         <p class="question"><?php echo Sure_want_delete; ?></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Cancel; ?></button>
-        <button type="button" class="btn btn-danger btn-grad" id="confirm"><?php echo Delete; ?></button>	
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Cancel; ?></button><button type="button" class="btn btn-danger btn-grad" id="confirm"><?php echo Delete; ?></button>	
       </div>
     </div>
   </div>

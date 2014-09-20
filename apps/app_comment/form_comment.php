@@ -28,17 +28,17 @@ defined('_FINDEX_') or die('Access Denied');
 			var t = $(this);
 			$.ajax({
 				type : "POST",
-				data: "send=true&name="+name+"&email="+email+"&url="+url+"&text="+encodeURIComponent(text)+"&captcha="+captcha+"&link="+encodeURIComponent("<?=$link;?>"),
+				data: "send=true&name="+name+"&email="+email+"&url="+url+"&text="+encodeURIComponent(text)+"&captcha="+captcha+"&link="+encodeURIComponent("<?php echo $link;?>"),
 				url: "<?php echo FUrl; ?>apps/app_comment/controller/insert.php",
 				success: function(data){
 					var json = $.parseJSON(data);
 					$(".notice-comment").remove();
 					$("#comments").after("<div class='notice alert notice-comment "+json.status+"'>"+json.notice+"</div>");
 					if(json.redirect == 1)
-					$("#comments").after("<meta http-equiv='REFRESH' content='3; url=<?=getUrl();?>#comment-"+json.id+"'>");
+					$("#comments").after("<meta http-equiv='REFRESH' content='3; url=<?php echo getUrl();?>#comment-"+json.id+"'>");
 					if(json.status == 'success' || json.status == 'info')	$("#comment-text").val("");
 					
-					t.html("<?=Send_Comment;?>").removeAttr('disabled');
+					t.html("<?php echo Send_Comment;?>").removeAttr('disabled');
 					reloadCaptcha();
 				}
 			});
@@ -92,6 +92,6 @@ defined('_FINDEX_') or die('Access Denied');
 	</div>
 	<?php endif; ?>
 	<div style="overflow: visible;">
-		<button type='button' name='send-comment' class='comment-button button btn send_comment' value="Send"><?=Send_Comment;?></button>
+		<button type='button' name='send-comment' class='comment-button button btn send_comment' value="Send"><?php echo Send_Comment;?></button>
 	</div>
 </form>

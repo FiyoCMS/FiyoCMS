@@ -13,6 +13,10 @@ defined('_FINDEX_') or die('Access Denied');
 /* Connect to database */
 $db = new FQuery();  
 $db -> connect();
+
+/* ini set manual jika sistem mengijinkan */
+ini_set('post_max_size', format_size(siteConfig('file_size')));
+ini_set('upload_max_filesize', format_size(siteConfig('file_size')));
 			
 /* basic query function */
 function FQuery($table, $where = null, $output = null, $hide = null, $order = null, $select = null) {	
@@ -35,7 +39,8 @@ function FQuery($table, $where = null, $output = null, $hide = null, $order = nu
 
 //query database untuk satu output
 function oneQuery($table,$field,$value,$output = null) {
-	$query = FQuery($table,"$field=$value",$output);
+	$value = str_replace("'","",$value);
+	$query = FQuery($table,"$field='$value'",$output);
 	return $query;	
 }
 
@@ -45,19 +50,9 @@ function oneQuery($table,$field,$value,$output = null) {
 /********************************************/
 /* Website Global Information */
 function siteConfig($name) {
-	$output = oneQuery('setting','name',"'$name'",'value');
+	$output = oneQuery('setting','name',"$name",'value');
 	return $output;
 }
-
-$size = siteConfig('file_size')/1024;
-if(empty($size)) $size = 2;
-$size .= "M";
-ini_set('upload_max_filesize', "$size");
-ini_set('post_max_size', "$size");
-ini_set('max_execution_time', 30);
-ini_set('memory_limit','256M');
-header('Access-Control-Allow-Origin: *');
-
 
 // mengambil data informasi dari user yang sudah login
 function userInfo($value = null,$id = null) {
@@ -65,7 +60,7 @@ function userInfo($value = null,$id = null) {
 		$id = $_SESSION['USER_ID'];
 		$value = strtolower($value);
 		if($value == 'id' or !isset($value)) $value = 'user_id';
-		$output = oneQuery('session_login','user_id',"'$id'","$value");	
+		$output = oneQuery('session_login','user_id',"$id","$value");	
 		if(!empty($output))
 			return $output;
 		else false;
@@ -82,10 +77,13 @@ function userInfo($value = null,$id = null) {
 }
 
 // mengambil informasi menu
-function menuInfo($value, $url = null, $id = null) {
+function menuInfo($value, $url = null, $id = null, $match = false) {
 	if(empty($id)) {
-		if(empty($url)) $url = getLink(); 
-		return FQuery('menu',"link LIKE '%$url%' AND status=1 AND category != 'adminpanel'","$value");
+		if(empty($url)) $url = getLink();
+		if(!$match)  
+			return FQuery('menu',"link LIKE '%$url%' AND status=1 AND category != 'adminpanel'","$value",'',"LENGTH(`link`)");	
+		else
+			return FQuery('menu',"link LIKE '$url' AND status=1 AND category != 'adminpanel'","$value",'',"LENGTH(`link`)");
 	}
 	else {
 		return FQuery('menu',"id = $id AND status=1","$value");
@@ -108,21 +106,14 @@ function homeInfo($field) {
 /* Base site url */
 function FUrl($www = null) {
 	$furl = str_replace('index.php','',$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"]);
-	if(_FINDEX_=='BACK') {
-		$jurl = substr_count($furl,"/")-1;
-		$ex = explode("/",$furl);
-		$no = 1 ;
-		$FUrl = '';
-		foreach($ex as $b) {$FUrl .= "$b/";  if($no==$jurl) break; $no++;}	
+	if(_FINDEX_=='BACK') {	
+		$bfol = strpos($furl,siteConfig('backend_folder'));
+		$furl = substr($furl,0,$bfol).siteConfig('backend_folder');
 	}
-	else {
-		$FUrl= $furl;
-	}
-	
 	if(siteConfig('sef_www') or isset($www))
-		return $FUrl;
+		return $furl;
 	else
-		return str_replace("www.","",$FUrl);
+		return str_replace("www.","",$furl);
 }
 
 /********************************************/
@@ -233,11 +224,11 @@ function htmlToText($text)
 /********************************************/
 //fungsi redirect menggunakan php
 function redirect($url) {
-	header("location:".$url);
+	@header("location:".$url);
 }
 //fungsi redirect menggunakan php
 function refresh() {
-	header("location:".getUrl());
+	@header("location:".getUrl());
 }
 
 //fungsi redirect menggunakan html
@@ -335,13 +326,12 @@ function getUrl() {
 function getLink() {
 	if(defined('SEF_URL') AND _FINDEX_ != 'BACK') {
 		$tapos = strpos($_SERVER['REQUEST_URI'],"?");
-		if(!_Page)
+		if(!_Page or _Page == 1)
 			$link = substr($_SERVER['REQUEST_URI'],$tapos);
 		else
 			$link = substr($_SERVER['REQUEST_URI'],0,$tapos);
 		
 		if(isset($_GET['pid'])) { 
-			echo 1;
 			$link = str_replace("&pid=$_GET[pid]","",$link);
 		}
 		$link = str_replace("&pid=","",$link);
@@ -554,6 +544,30 @@ function format_size($size) {
     $endIndex = strpos($size, ".")+3;
     return substr( $size, 0, $endIndex).' '.$units[$i];
 }
+
+//format byte
+function format_byte($from) {
+	if(strpos($from,"M") AND !strpos($from,"MB"))
+	$from = str_replace("M","MB",$from);
+	if(strpos($from,"G") AND !strpos($from,"GB"))
+	$from = str_replace("G","GB",$from);
+    $number=substr($from,0,-2);
+    switch(strtoupper(substr($from,-2))){
+        case "KB":
+            return $number*1024;
+        case "MB":
+            return $number*pow(1024,2);
+        case "GB":
+            return $number*pow(1024,3);
+        case "TB":
+            return $number*pow(1024,4);
+        case "PB":
+            return $number*pow(1024,5);
+        default:
+            return $from;
+    }
+}
+
 /********************************************/
 /*  		    Loader Function				*/
 /********************************************/
@@ -575,6 +589,10 @@ function loadPlugin() {
 			echo alert("error","Error : failed to open {<i>$folder</i>}",true,true);
 	}
 }
+
+function plugin_exists($name) {
+	return oneQuery('plugin','folder',"$name",'status');
+} 
 
 function loadLang($dir = null) {
 	$lang = siteConfig('lang');
@@ -791,6 +809,13 @@ function multipleDelete($table, $source, $item = null, $cat = null, $except = nu
 					$noempty = 1;	
 			}
 			else {
+				if(!empty($except)) 
+					$art = $db->select(FDBPrefix.$table,'*',"$except");						
+				if(@mysql_num_rows($art)>0) {
+					$noempty = 1;					
+					break;
+				}	
+				
 				if(isset($sub)) {
 					if(!oneQuery($table,'parent_id',$id))
 						$qr = $db->delete(FDBPrefix.$table,"$fid='$id'");
@@ -850,20 +875,34 @@ function backup_tables($tables = '*', $directory = null, $file = null, $installe
 		$row2[1] = str_replace(FDBPrefix,'db_prefix_',$row2[1]);
 		$return.= "\n\n".$row2[1].";\n\n--\n\n";
 		
-		for ($i = 0; $i < $num_fields; $i++) 
+		$r = mysql_query('SELECT COUNT(*) AS allItemCount  FROM '.$table);
+		$c = mysql_fetch_row($r);
+		
+		$return .= "INSERT INTO `$ntable` (";		
+		for($n = 0 ; $n < $num_fields; $n++) {		
+			$return .= "`".mysql_field_name($result, $n)."`";
+			if($n < $num_fields - 1)
+			$return .= ",";		
+		}		
+		$return .= ") VALUES ";		
+		
+		$a = 0;
+		while($row = mysql_fetch_row($result))
 		{
-			while($row = mysql_fetch_row($result))
+			$a++;
+			$return .= "(";
+			for($j=0; $j < $num_fields; $j++) 
 			{
-				$return.= 'INSERT INTO `'.$ntable.'` VALUES(';
-				for($j=0; $j<$num_fields; $j++) 
-				{
-					$row[$j] = addslashes($row[$j]);
-					$row[$j] = ereg_replace("\n","\\n",$row[$j]);
-					if (isset($row[$j])) { $return.= '"'.$row[$j].'"' ; } else { $return.= '""'; }
-					if ($j<($num_fields-1)) { $return.= ','; }
-				}
-				$return.= ");\n";
-			}
+				$row[$j] = addslashes($row[$j]);
+				$row[$j] = str_replace("\n","\\n",$row[$j]);
+				if (isset($row[$j])) { $return.= '"'.$row[$j].'"' ; } else { $return.= '""'; }
+				if ($j<($num_fields-1)) { $return.= ','; }
+			}				
+				
+			if($a == $c[0])
+			$return.= ");\n";
+			else
+			$return.= "),\n";
 		}
 		$return.="\n--\n\n";
 	}

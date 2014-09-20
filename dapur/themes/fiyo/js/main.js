@@ -67,6 +67,11 @@ $(function() {
 	loadSpinner();
 	loadChoosen();
 	noticeabs();
+	$('.spinner').change(function () {
+		$(this).next('label').hide() ;
+	});
+	
+	
 });
 function loader() {
 	$(".cb-enable").click(function(){
@@ -116,15 +121,20 @@ function loader() {
 	$("input, select, textarea").addClass('form-control');
 	$("input").addClass('form-control');
 	$('input[type="checkbox"],input[type="radio"]').wrap("<label>");
+	$('input[type="number"]').attr("type","text");
 	$('input[type="checkbox"],input[type="radio"]').after("<span class='input-check'>");	
 	$("input.form-control[type=password]").parent().wrapInner("<div>");		
-	$("[required]").addClass('required').after('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').parent().wrapInner("<div>");		
+	$("[required]").addClass('required').after('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').parent().wrapInner("<div>"
+	);		
+	
     $('.required-input i').tooltip();
 	$("#editor").attr("required","required");
 	if ($.isFunction($.fn.validate)) {
 		$("body").find("#content form").validate({ ignore: ":hidden:not(select)" });
 	}
 	$('input[type=date]').attr('type','text').after('<span class="add-on input-group-addon"><i class="icon-calendar"></i></span>').parent().wrapInner("<div class='input-append date input-group'>").datetimepicker();
+	
+	
 }
 
 function selectCheck() {
@@ -265,7 +275,7 @@ function loadSpinner() {
 		$('#spinnernull').spinner({ min: -100, max: 100, allowNull: true });
 		$('#spinnerdisable').spinner({ min: -100, max: 100 });
 		$('#spinnermaxlen').spinner();
-		$('#spinner5').spinner();
+		$('#spinner5').spinner();	
 	}
 }
 function noticeabs(data) {

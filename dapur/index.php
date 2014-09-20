@@ -1,6 +1,6 @@
 <?php
 /**
-* @version		1.5.0
+* @version		2.0
 * @package		Fiyo CMS
 * @copyright	Copyright (C) 2012 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.php
@@ -30,3 +30,4 @@ require_once ('system/core.php');
 
 //melakukan pengecekan login AdminPanel
 check_backend_login();
+

@@ -3,17 +3,28 @@
   src: url(Lobster.otf) format("opentype");  
 }  
 
+
 body {	
 	overflow: hidden;
-	height: 100%;	
 	margin: 0;
 	padding: 0;
-	background:#080808  url(../images/bg.jpg) top center no-repeat;
-	-webkit-background-size:cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+	background:#020202  url(../images/bg.jpg) center no-repeat;
 	font:1em arial;
+	height: 100%;
+}
+
+@media (min-width: 1024px) {
+	body {	
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+		background:#020202  url(../images/bg.jpg) top center no-repeat;
+		-webkit-background-size:cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		font:1em arial;
+	}
 }
 #content {
 	position: relative;

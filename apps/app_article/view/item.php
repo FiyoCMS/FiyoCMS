@@ -82,7 +82,7 @@ if(isset($text)) :
 	<div class='panel-bottom'>
 		<?php if($shits) : ?>	
 		<div class='article-read'>		
-			<?=Reads;?> <?php echo "<b>$hits</b>";  ?> <?=times;?>	
+			<?php echo Reads;?> <?php echo "<b>$hits</b>";  ?> <?php echo times;?>	
 		</div>	
 		<?php endif; ?>				
 		<?php if($srate) : ?>

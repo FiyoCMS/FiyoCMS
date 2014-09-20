@@ -8,7 +8,7 @@
 
 session_start();
 if(@$_SESSION['USER_LEVEL'] > 5 or !isset($_GET['iSortCol_0'])) die ('Access Denied!');
-define('_FINDEX_',1);
+define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * Easy set variables
@@ -193,7 +193,7 @@ require('../../../system/jscore.php');
 				$comm = htmlentities(htmlToText($aRow['comment']));
 				$comm = substr($comm,0,50);
 				
-				$comm ="<a class='tips' title='".Edit."' href='?app=article&view=comment&act=edit&id=$aRow[id]'>$comm ...</a>";
+				$comm ="<a class='tips' title='".Edit."' href='?app=comment&act=edit&id=$aRow[id]'>$comm ...</a>";
 				$row[] = "$comm";
 			}
 			else if ( $i == 4 )

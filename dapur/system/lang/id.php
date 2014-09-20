@@ -218,7 +218,7 @@ define("Max_File_Size_tip","Maksimum ukuran file yang boleh di upload ke media p
 define("Media_Theme","Tampilan Media");
 define("Media_Theme_tip","Tampilan media penyimpanan");
 
-define("Max_upload_file_not_allowed","Ukuran file terlalu besar <small>(max : ".format_size(siteConfig('file_size')*1024).")</small>");
+define("Max_upload_file_not_allowed","Ukuran file terlalu besar <small>(max : ".ini_get("upload_max_filesize").")</small>");
 
 /************** BackEnd_Settings *****************/
 define("Language_and_Time","Bahasa dan Waktu");
@@ -243,6 +243,7 @@ define("Latest_Table_Backup","Tabel Backup Terbaru");
 define("Backup_Installer_Created","Backup Installer berhasil dibuat");
 define("Backup_Database_Created","Backup database berhasil dibuat");
 define("Backup_Table_Created","Backup tabel database berhasil dibuat");
+define("Restore_Database_Successfully","Restore database telah berhasil");
 define("Please_chose_sql_file","Pilih format file SQL (*.sql)");
 
 /***************** Update ***********************/
@@ -252,7 +253,7 @@ define("Complete_information","Informasi lengkap bisa dilihat di ");
 define("Using_latest_version","Sedang menggunakan versi terbaru.");
 define("Downloading_file_updates","Mengunduh file pembaruan.");
 define("Installing_patch","Menginstal patch : ");
-define("Update_complete","Selamat, update telah berhasil!");
+define("Update_complete","Selamat, proses update telah selesai!");
 
 
 
@@ -553,7 +554,8 @@ define("File_not_support","Tipe file tidak mendukung!");
 define("File_Saved","File berhasil disimpan");
 define("File_Error","Gagal menyimpan file!");
 define("File_uploaded_not_valid","File bukan termasuk Fiyo Addons!");
-define("Success_installed_new_AddOns","Addons baru berhasil di install");
+define("Success_installed_new_AddOns","Addons baru berhasil dipasang");
+define("successfully_installed","berhasil dipasang");
 define("Please_choose_file","Pilih file terlebih dahulu!");
 define("Please_choose_zip_file","Pilih file dengan format ZIP (*.zip)");
 define("Enter_valid_url","Ketik url terlebih dahulu!");

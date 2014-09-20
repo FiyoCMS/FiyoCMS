@@ -6,9 +6,9 @@
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
-define('_FINDEX_',1);
 session_start();
 if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 3 or !isset($_POST['url'])) die();
+define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
 ?>
@@ -17,7 +17,7 @@ require_once ('../../../system/jscore.php');
 	<?php	
 		$db = new FQuery();  
 		$db->connect(); 
-		$sql = $db->select(FDBPrefix."user","*,DATE_FORMAT(time_log,'%W, %Y-%m-%d %H:%i') as date","time_log != '0000-00-00 00-00-00'",'time_log DESC LIMIT 10'); 
+		$sql = $db->select(FDBPrefix."user","*,DATE_FORMAT(time_log,'%W, %Y-%m-%d %H:%i') as date","time_log != '0000-00-00 00-00-00' AND level >= $_SESSION[USER_LEVEL]",'time_log DESC LIMIT 10'); 
 		$no = 1;
 		while($qr=mysql_fetch_array($sql)) {
 			$id = $qr['id'];

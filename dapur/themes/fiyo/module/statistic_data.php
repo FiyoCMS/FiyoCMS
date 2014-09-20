@@ -1,12 +1,14 @@
-<?php
+<?php 
 /**
 * @version		2.0
 * @package		Fiyo CMS
 * @copyright	Copyright (C) 2014 Fiyo CMS.
-* @license		GNU/GPL, see LICENSE.
+* @license		GNU/GPL, see LICENSE.txt
 **/
 
-define('_FINDEX_',1);
+session_start();
+if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 5) die();
+define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
 $db = new FQuery();  

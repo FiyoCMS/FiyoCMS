@@ -7,6 +7,8 @@
 	Tobias Kluge, enarion.net
 */
 
+defined('_FINDEX_') or die('Access Denied');
+
 require_once('inc/startup.php');
 
 switch ($state) {

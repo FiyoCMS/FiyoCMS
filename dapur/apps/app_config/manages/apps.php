@@ -7,7 +7,7 @@
 **/
 
 defined('_FINDEX_') or die('Access Denied');
-
+printAlert();
 ?>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
@@ -44,12 +44,16 @@ $(document).ready(function() {
 		$apps = $_POST['id'];
 		$notice = $b = $c = '';
 		if(!empty($apps)) {
-			if(delete_directory("apps/$apps")) $notice .= "folder <i>apps/$apps</i> ".deleted."!<br>";		
+			$bf = siteConfig('backend_folder');
+			if(delete_directory("apps/$apps")) $notice .= "folder <i>$bf/apps/$apps</i> ".deleted."!<br>";		
 			if(delete_directory("../apps/$apps")) $notice .= "folder <i>apps/$apps</i> ".deleted."!<br>";	
 		}		
+		$fl = str_replace("app_","",$apps);
+		$db->delete(FDBPrefix.'menu',"category = 'adminpanel' AND link LIKE '%?app=$fl'");
 		$qr = $db->delete(FDBPrefix.'apps',"folder='$apps'");
-		if($qr) $c = "table <i>$apps</i> ".deleted."!<br>";	
-		alert('info',"$notice", true);	
+		if($qr) $notice .= "table <i>$apps</i> ".deleted."!<br>";	
+		refresh();
+		notice('info',"$notice",2);	
 	}	
 	$sql =	$db->select(FDBPrefix.'apps','*','',"name ASC"); 
 	while($qr=mysql_fetch_array($sql)){		

@@ -29,7 +29,10 @@ $(function() {
 			url: "apps/app_menu/controller/status.php",
 			data: "stat="+value+"&id="+id,
 			success: function(data){
-				$('#type',parent).attr('value',0);					
+				if(value == 1)
+					$('.type',parent).val("1");
+				else 
+					$('.type',parent).val("0");				
 				notice(data);		
 			}
 		});

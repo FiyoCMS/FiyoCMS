@@ -31,7 +31,7 @@ $link = "<a href='".make_permalink($qr['link'])."#comment-$qr[id]' target='_blan
 			<div class="app_link">				
 				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="save_edit"><i class="icon-ok"></i> <?php echo Save; ?></button>	
 				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="apply_edit"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>		
-				<a class="danger btn btn-default" href="?app=article&view=comment" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
+				<a class="danger btn btn-default" href="?app=comment&view=comment" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 				<?php printAlert(); ?>
 				
 			</div>

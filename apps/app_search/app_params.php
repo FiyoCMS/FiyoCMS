@@ -1,9 +1,9 @@
 <?php
 /**
-* @version		Beta 1.0
+* @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2011 Fiyo CMS.
-* @license		GNU/GPL, see liCENSE.php
+* @copyright	Copyright (C) 2014 Fiyo CMS.
+* @license		GNU/GPL, see liCENSE.txt
 * @description	Simple Module banner for Fiyo CMS
 **/
 $show_panel	= mod_param(show_panel,$qr[parameter]);

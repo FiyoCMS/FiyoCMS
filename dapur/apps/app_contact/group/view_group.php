@@ -1,8 +1,8 @@
 <?php
 /**
-* @version		1.5.0
+* @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see license.txt
 * @description	
 **/
@@ -11,26 +11,42 @@ defined('_FINDEX_') or die('Access Denied');
 printAlert();
 ?>	
 <script type="text/javascript" charset="utf-8">
-		$(document).ready(function() {
-			loadTable();
-			$('#checkall').click(function () {
-		        $(this).parents('form:eq(0)').find(':checkbox').attr('checked', this.checked);
-			});
-		});
-</script>
-<form method="post">
-	<div id="app_header">
-	 <div class="warp_app_header">
+$(document).ready(function() {
+
+		$("#form").submit(function(e){
+			e.preventDefault();
+			var ff = this;
+			var checked = $('input[name="check_group[]"]:checked').length > 0;
+			if(checked) {	
+				$('#confirmDelete').modal('show');	
+				$('#confirm').on('click', function(){
+					ff.submit();
+				});		
+			} else {
+				noticeabs("<?php echo alert('error',Please_Select_Menu); ?>");
+				$('input[name="check_group[]"]').next().addClass('input-error');
+				return false;
+			}
+		});	
 		
-		<div class="app_title"><?=Group_Contact;?></div>
-	
-		<div class="app_link">
-			<a class="btn add btn-primary" href="?app=contact&view=group&act=add" title="<?php echo Add_new_group; ?>"><i class="icon-plus"></i> <?php echo New_Group; ?></a> <button type="submit" class="delete btn btn-danger" title="<?php echo Delete; ?>" value="<?php echo Delete; ?>" name="delete_group"><i class="icon-trash"></i> &nbsp;<?php echo Delete; ?></button>
-		</div> 	
-	 </div>
+		loadTable();
+		$('#checkall').click(function () {
+			$(this).parents('form:eq(0)').find(':checkbox').attr('checked', this.checked);
+		});
+});
+</script>
+<form method="post" id="form">
+	<div id="app_header">
+		<div class="warp_app_header">				
+			<div class="app_title"><?php echo Contact_Manager; ?></div>
+			<div class="app_link">			
+				<a class="btn add btn-primary" href="?app=contact&view=group&act=add" title="<?php echo Add_new_group; ?>"><i class="icon-plus"></i> <?php echo New_Group; ?></a> 
+				<button type="submit" class="delete btn btn-danger" title="<?php echo Delete; ?>" value="<?php echo Delete; ?>" name="delete_group"><i class="icon-trash"></i> &nbsp;<?php echo Delete; ?></button>
+				<input type="hidden" value="true" name="delete_confirm"  style="display:none" />
+		  </div> 	
+		</div>
 	</div>
-	
-	<table cellpadding="4" class="data">
+	<table class="data">
 		<thead>
 			<tr>								  
 				<th width="3%" class="no" colspan="0" id="ck">  
@@ -50,7 +66,7 @@ printAlert();
 			while($qr=mysql_fetch_array($sql)){
 				$qr2=$db->select(FDBPrefix.'contact','*',"group_id='$qr[id]'"); 
 				$jml2= mysql_affected_rows();						
-				$checkbox ="<input type='checkbox' name='check[]' value='$qr[id]'>";	
+				$checkbox ="<input type='checkbox' name='check_group[]' value='$qr[id]'>";	
 				$name ="<a class='tips' title='".Edit."' href='?app=contact&view=group&act=edit&id=$qr[id]'>$qr[name]</a>";
 				echo "<tr>";
 				echo "<td align='center'>$checkbox</td><td>$name</td><td>$qr[description]</td><td align='center'>$jml2</td><td align='center'>$qr[id]</td>";

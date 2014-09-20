@@ -75,12 +75,12 @@ $db->connect();
 				
 				<tr>
 					<td class="row-title"><span class="tips"  title="<?php echo Meta_Keywords_tip; ?>"><?php echo Meta_Keywords; ?></td>
-					<td><textarea rows="3" cols="30" name="meta_keys" style="width:100%; resize: vertical;"><?php echo siteConfig('site_keys'); ?></textarea></td>
+					<td><textarea rows="4" cols="30" name="meta_keys" style="width:100%; resize: vertical;"><?php echo siteConfig('site_keys'); ?></textarea></td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips"  title="<?php echo Meta_Description_tip; ?>"><?php echo Meta_Description; ?></td>
 					<td>
-					<textarea rows="5" cols="30" name="meta_desc" style="width:100%; resize: vertical;"><?php echo siteConfig('site_desc'); ?></textarea></td>
+					<textarea rows="6" cols="30" name="meta_desc" style="width:100%; resize: vertical;"><?php echo siteConfig('site_desc'); ?></textarea></td>
 				</tr>
 			</table>
 		</div>
@@ -248,7 +248,7 @@ $db->connect();
 						$sql2=$db->select(FDBPrefix.'user_group'); 
 						while($qrs=mysql_fetch_array($sql2)){
 							if($qrs['level'] >= USER_LEVEL) {
-								if($qrs['level'] == 1){
+								if($qrs['level'] < 3){
 									echo "<option value='$qrs[level]' disabled>$qrs[group_name]</option>";
 								}
 								else {
@@ -281,7 +281,7 @@ $db->connect();
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips"  title="<?php echo Disk_Space_tip; ?>"><?php echo Disk_Space; ?></td>
-					<td><input type="text" name="file_size" size="5" class="numeric spinner" value="<?php echo siteConfig('web_disk'); ?>" > MB</td>
+					<td><input type="text" name="disk_space" size="5" class="numeric spinner" value="<?php echo siteConfig('disk_space'); ?>" > MB</td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips"  title="<?php echo Max_File_Size_tip; ?>"><?php echo Max_File_Size; ?></td>

@@ -17,7 +17,7 @@ $qr=mysql_fetch_array($sql);
 <form method="post">
 	<div id="app_header">
 		<div class="warp_app_header">
-			<div class="app_title"><?=Edit_Group;?></div>
+			<div class="app_title"><?php echo Edit_Group;?></div>
 			<div class="app_link">
 				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply_group"><i class="icon-ok"></i> <?php echo Save; ?></button>	
 				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="edit_group"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>			
@@ -38,7 +38,8 @@ $qr=mysql_fetch_array($sql);
 				</tr>
 				<tr>
 					<td class="row-title"><span title="<?php echo Description; ?>"><?php echo Description; ?></td>
-					<td><textarea name="desc" rows="3" cols="50"><?php formRefill('desc',$qr['description'],'textarea'); ?></textarea></td>
+					<td>
+					<textarea name="desc" rows="3" required cols="50"><?php formRefill('desc',$qr['description'],'textarea'); ?></textarea></td>
 				</tr>
 			</table>
 		</div> 

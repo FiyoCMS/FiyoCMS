@@ -7,6 +7,8 @@
 	Tobias Kluge, enarion.net
 */
 
+defined('_FINDEX_') or die('Access Denied');
+
 if(!$xml) :
 ?> 
 	<h4 style='text-align:center; padding: 40px 0; color: #999; font-size: 1.5em'>Please setup your sitemap configuration and crawl your site.<br><small><a href='?app=sitemap&view=setup'>Setup Now!</a></small></h4>

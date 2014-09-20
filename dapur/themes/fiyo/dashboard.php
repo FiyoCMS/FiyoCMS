@@ -13,7 +13,7 @@ defined('_FINDEX_') or die('Access Denied');
 		<div class="app_title">Dashboard</div>
 		<div class="app_link">			
 			<a class="btn btn-default btn-primary" href="?app=article&act=add" title="<?php echo Add_New_Menu; ?>"><i class="icon-pencil"></i> <?php echo New_Article; ?></a>
-			<a class="btn btn-default btn-sm btn-grad" title="<?php echo Add_New_Menu; ?>" href="?app=config"><i class="icon-cogs" style=""></i> <?=Configuration?></a>
+			<a class="btn btn-default btn-sm btn-grad" title="<?php echo Add_New_Menu; ?>" href="?app=config"><i class="icon-cogs" style=""></i> <?php echo Configuration?></a>
 		</div> 	
 	</div>
 </div>
@@ -32,13 +32,13 @@ defined('_FINDEX_') or die('Access Denied');
 	</div>
 	
 	<div class="box statistic primary">	
-		<div class="mini-box box-1 online-user"><h3><span class="data">Loading...</span><i class="icon-circle"></i></h3><span><?=Online_Visitor;?></span><i class="icon icon-bullseye"></i>
+		<div class="mini-box box-1 online-user"><h3><span class="data">Loading...</span><i class="icon-circle"></i></h3><span><?php echo Online_Visitor;?></span><i class="icon icon-bullseye"></i>
 		</div>
-		<div class="mini-box box-2 today-visitor"><h3>Loading...</h3><span><?=Today_Visitor;?></span><i class="icon icon-calendar-empty"></i>
+		<div class="mini-box box-2 today-visitor"><h3>Loading...</h3><span><?php echo Today_Visitor;?></span><i class="icon icon-calendar-empty"></i>
 		</div>
-		<div class="mini-box box-3 monthly-visitor"><h3>Loading...</h3><span><?=Monthly_Visitor;?></span><i class="icon icon-calendar"></i>
+		<div class="mini-box box-3 monthly-visitor"><h3>Loading...</h3><span><?php echo Monthly_Visitor;?></span><i class="icon icon-calendar"></i>
 		</div>
-		<div class="mini-box box-4 total-visitor"><h3>Loading...</h3><span><?=Total_Visitor;?></span><i class="icon icon-signal"></i>
+		<div class="mini-box box-4 total-visitor"><h3>Loading...</h3><span><?php echo Total_Visitor;?></span><i class="icon icon-signal"></i>
 		</div>
 	</div>	
 </div>
@@ -49,9 +49,9 @@ defined('_FINDEX_') or die('Access Denied');
 			<a class="accordion-toggle" data-toggle="collapse" href="#article-box">
 			</a>	
 			<ul class="nav nav-tabs">
-			  <li class="active"><a data-target="#latest" data-toggle="tab" class='article-latest'><?=Latest_Article?></a></li>
-			  <li><a data-target="#popular" data-toggle="tab" class='article-popular'><?=Popular_Article?></a></li>
-			  <li><a data-toggle='tooltip' data-placement='top' title='<?=New_Article;?>' href="?app=article&act=add"><i class="icon-pencil"></i></a></li>
+			  <li class="active"><a data-target="#latest" data-toggle="tab" class='article-latest'><?php echo Latest_Article?></a></li>
+			  <li><a data-target="#popular" data-toggle="tab" class='article-popular'><?php echo Popular_Article?></a></li>
+			  <li><a data-toggle='tooltip' data-placement='top' title='<?php echo New_Article;?>' href="?app=article&act=add"><i class="icon-pencil"></i></a></li>
 			</ul>	
 		</header>								
 		<div id="article-box" class="in">
@@ -81,10 +81,10 @@ defined('_FINDEX_') or die('Access Denied');
 			<a class="accordion-toggle" data-toggle="collapse" href="#member-box">
 			</a>	
 			<ul class="nav nav-tabs">
-			  <li class="active"><a data-target="#member-new" data-toggle="tab" class='member-new'><?=Latest_User?></a></li>
-			  <li><a data-target="#member-log" data-toggle="tab" class='member-log'><?=Latest_Login?></a></li>
-			  <li><a data-target="#member-online" data-toggle="tab"  class='member-online'><?=Online_User?></a></li>
-			  <li><a href="?app=user&act=add"  data-toggle='tooltip' data-placement='top' title='			  <?=Register_New_Member?>'><i class="icon-plus" ></i></a></li>
+			  <li class="active"><a data-target="#member-new" data-toggle="tab" class='member-new'><?php echo Latest_User?></a></li>
+			  <li><a data-target="#member-log" data-toggle="tab" class='member-log'><?php echo Latest_Login?></a></li>
+			  <li><a data-target="#member-online" data-toggle="tab"  class='member-online'><?php echo Online_User?></a></li>
+			  <li><a href="?app=user&act=add"  data-toggle='tooltip' data-placement='top' title='			  <?php echo Register_New_Member?>'><i class="icon-plus" ></i></a></li>
 			</ul>	
 		</header>								
 		<div id="member-box" class="in">
@@ -184,6 +184,7 @@ $(function () {
 			success: function(data){
 				$("#statistic").html(data);
 				loadArticleLatest();
+				updateOnline();	
 			}
 		});
 	}	
@@ -270,8 +271,7 @@ $(function () {
 	
 	$('.member-new').click(function(){	
 		loadNewMember();
-	});
-	
+	});	
 	
 	updateStat();
 
@@ -286,7 +286,7 @@ $(function () {
 			updateStat();
 			cH = uH;
 		}
-	}, 1000*5);	
+	}, 1000 * 10);	
 	
 	setInterval(function(){
 		loadMemberLog();	

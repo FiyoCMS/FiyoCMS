@@ -1,8 +1,8 @@
 <?php 
 /**
-* @version		1.5.0
+* @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
@@ -186,9 +186,10 @@ function explode_query($q , $target) {
 	return $value;
 }
 /* add search permalink */
+if(SEF_URL) {
 if(getLink() == '?app=search') 
 	add_permalink('search');
-
+}
 /* define search page title */
 define('PageTitle', 'Search Page');
 

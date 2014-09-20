@@ -47,7 +47,7 @@ if($qr['id']==1 or $qr['id']==2 or $qr['id']==3) $dis="readonly"; else $dis = nu
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo User_Group_level; ?>">Level *</span></td>
-					<td>	<input class="numeric" type="text" id="level" name="level" size="5" min="3" max="98" <?php echo "value='$qr[level]' $dis" ;?> required>
+					<td><input class="numeric spinner" type="text" id="level" name="level" size="1" min="3" max="98" <?php echo "value='$qr[level]' $dis" ;?> required>
 					
 					<input class="numeric" type="hidden"name="levels" <?php echo "value='$qr[level]'" ;?>></td>
 				</tr>

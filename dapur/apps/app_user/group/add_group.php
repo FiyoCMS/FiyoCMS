@@ -38,12 +38,15 @@ $db->connect();
 			<table>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo User_Group_name; ?>">Group Name</span></td>
-				<td>	<input type="text" name="group" size="20" required <?=formRefill('group')?>/></td>
+					<td>	
+						<input type="text" name="group" size="20" required <?php echo formRefill('group')?>/>
+					</td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo User_Group_level; ?>">Level</span></td>
-				<td>
-				<input type="text" id="level" name="level" class="numeric" size="5" min="3" max="98" required <?=formRefill('level')?>/></span></td>
+					<td>
+						<input type="text" id="level" name="level" class="numeric spinner" size="1" min="3" max="98" required <?php echo formRefill('level')?>/>
+					</td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo User_Group_description; ?>">Description</span></td>

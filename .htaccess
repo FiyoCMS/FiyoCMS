@@ -3,6 +3,9 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule (.*) index.php?&link=$1 [L]
+RewriteCond %{HTTP_USER_AGENT} libwww [NC,OR]
+RewriteCond %{QUERY_STRING} ^(.*)=http [NC]
+RewriteRule ^(.*)$ – [F,L]
 
 ############### SET Keep-Alive ##################
 <ifModule mod_headers.c>
@@ -18,13 +21,12 @@ RewriteRule (.*) index.php?&link=$1 [L]
 </ifmodule>
 
 
-###### Speed up caching
+###### Speed up caching ######
 FileETag MTime Size
 
 ## EXPIRES CACHING ##
 <IfModule mod_expires.c>
-	ExpiresActive On
-	
+	ExpiresActive On	
 	ExpiresByType image/jpg "access 1 month"
 	ExpiresByType image/jpeg "access 1 month"
 	ExpiresByType image/gif "access 1 month"
@@ -34,13 +36,6 @@ FileETag MTime Size
 	ExpiresByType text/html "access 1 week"
 	ExpiresByType application/pdf "access 1 month"
 	ExpiresByType text/x-javascript "access 1 month"
-	ExpiresByType application/x-shockwave-flash "access 1 month"
-	
+	ExpiresByType application/x-shockwave-flash "access 1 month"	
 	ExpiresDefault "access 1 month"
 </IfModule>
-## EXPIRES CACHING ##
-
-
-RewriteCond %{HTTP_USER_AGENT} libwww [NC,OR]
-RewriteCond %{QUERY_STRING} ^(.*)=http [NC]
-RewriteRule ^(.*)$ – [F,L]

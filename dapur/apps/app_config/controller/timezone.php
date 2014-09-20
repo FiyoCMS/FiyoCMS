@@ -1,3 +1,13 @@
+<?php
+/**
+* @version		2.0
+* @package		Fiyo CMS
+* @copyright	Copyright (C) 2014 Fiyo CMS.
+* @license		GNU/GPL, see LICENSE.
+**/
+
+defined('_FINDEX_') or die('Access Denied');
+?>
 <option <?php $value="Pacific/Midway"; echo "value ='$value'"; if(siteConfig('timezone') == "$value") echo "selected"; ?>>(UTC-11:00) Midway Island</option>
     <option <?php $value="Pacific/Samoa"; echo "value ='$value'"; if(siteConfig('timezone') == "$value") echo "selected"; ?>>(UTC-11:00) Samoa</option>
     <option <?php $value="Pacific/Honolulu"; echo "value ='$value'"; if(siteConfig('timezone') == "$value") echo "selected"; ?>>(UTC-10:00) Hawaii</option>

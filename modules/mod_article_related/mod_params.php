@@ -83,7 +83,7 @@ $(document).ready( function(){
 				</td>
 			</tr>	
 			<tr>
-				<td class="row-title" title='<?php echo $filterTip; ?>'>Article Filter</td>
+				<td class="row-title" title='<?php echo @$filterTip; ?>'>Article Filter</td>
 				<td>
 					<select name='param2' id='type'>
 					<option value="title" <?php echo @$b1;?>>Title</option>

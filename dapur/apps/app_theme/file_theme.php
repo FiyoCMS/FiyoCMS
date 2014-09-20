@@ -8,6 +8,9 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
+if(USER_LEVEL != 1)
+redirect("http://localhost/fiyo/dapur/?app=theme&folder=$_GET[folder]");
+
 include("libs/php_file_tree.php");
 $spot_file = "../themes/$folder/theme_details.php";
 if(file_exists($spot_file)) include("$spot_file");
