@@ -82,7 +82,7 @@ defined('_FINDEX_') or die('Access Denied');
 							$_SESSION['INSTALL_NOTICE'][0] = 3;
 							$_SESSION['INSTALL_NOTICE'][1] = "<div class='install_info panel box'><h2>$addons[name] ".successfully_installed."</h2>
 							$addons[info]</div>";
-							refresh();
+							echo "<script>location.reload();</script>";
 						}
 						delete_directory('../tmp');	
 					}
