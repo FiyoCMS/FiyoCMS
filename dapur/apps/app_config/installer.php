@@ -24,7 +24,6 @@ defined('_FINDEX_') or die('Access Denied');
 			$path_file = "../tmp/$name_file.zip";
 			$c = @copy($url_file, $path_file);
 		}
-			echo $path_file;
 		if(!empty($path_file) AND $c) {
 			if(extractZip($path_file,"../tmp/$name_file")) {
 			if(file_exists("../tmp/$name_file/installer.php")) {				
@@ -252,7 +251,6 @@ $(document).ready(function() {
 				echo $_SESSION['INSTALL_NOTICE'][1];
 				$_SESSION['INSTALL_NOTICE'] = null;
 			}
-			echo $_SESSION['INSTALL_NOTICE'][0];
 		}	
 	?>
 	<div class="panel box"> 		
