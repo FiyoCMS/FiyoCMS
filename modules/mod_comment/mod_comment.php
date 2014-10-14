@@ -75,7 +75,7 @@ $(function() {
 				var img = $(this).find("img").length ;
 				if(img > 0) img.remove();
 				var hash = $(this).attr('data-gravatar-hash')
-				return '<img width="36" height="36" alt="" src="<?=FUrl;?>/apps/app_comment/images/user.png" >'; 
+				return '<img width="36" height="36" alt="" src="<?php echo FUrl;?>/apps/app_comment/images/user.png" >'; 
 			});	
 		},
 		success: function(data){

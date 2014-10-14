@@ -1,6 +1,6 @@
 <?php
 /**
-* @version		1.5.0
+* @version		2.0
 * @package		Related Article
 * @copyright	Copyright (C) 2012 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
@@ -71,3 +71,20 @@ else :
 
 echo "Not found any article.";
 endif;
+?>
+
+<script>
+	$(function() {
+		function main() {
+		var p = $('.article-nextprev .prev').height();
+		var n = $('.article-nextprev .next').height();
+		if(p > n) n = p;
+		$('.article-nextprev .prev').height(n);
+		$('.article-nextprev .next').height(n);
+		}
+			main();
+		$(window).resize(function() {
+			main();
+		});
+	});
+</script>

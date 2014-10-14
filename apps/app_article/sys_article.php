@@ -30,9 +30,8 @@ function articleParameter($value) {
 function articleHits($vid) {
 	$db = new FQuery();  
 	$db->connect();
-	$hits=$vid+1;
 	$id = app_param('id');
-	$db->update(FDBPrefix.'article',array('hits'=>"$hits"),"id=$id");	
+	$db->update(FDBPrefix.'article',array('hits'=> '+hits' ),"id=$id");	
 }
 
 function categoryInfo($output, $id = null) {
@@ -56,17 +55,22 @@ function itemLink($value) {
 	return $link ;
 }
 
-function tagToLink($tags) {
+function tagToLink($tags, $hits = null) {
+	$db = new FQuery();  
+	$db->connect();
 	$tgs = explode(",",$tags);
 	$tags = null;
 	foreach($tgs as $tag) {				
 		$ltag = str_replace(" ","-",$tag);	
 		$ltag = "?app=article&tag=$ltag";	
 		$ltag = make_permalink($ltag);
-		$tags .= "<li><a href='$ltag' alt='See article for tag $tag'>$tag</a></li>";				
+		$tags .= "<li><a href='$ltag' alt='See article for tag $tag'>$tag</a></li>";
+		if($hits)
+		$db->update(FDBPrefix.'article_tags',array('hits'=> '+hits'),"name='$tag'");				
 	}
 	return $tags;
 }
+
 function articleIntro($article) {
 	$article = str_replace('"',"'",$article);
 	$article = str_replace('&nbsp;'," ",$article);
@@ -173,8 +177,11 @@ class Article {
 				$category 	= categoryInfo('name',$qr['category']);
 				$catLevel 	= categoryInfo('level',$qr['category']);
 				$catLink	= categoryLink($qr['category']);
-				if(!empty($qr['author_id']))
+				if(!empty($qr['author_id'])) {
 					$author		= userInfo('name',$qr['author_id']);
+					if(empty($author))
+						$author = "Administrator";
+				}
 				else				
 					$author		= 'Administrator';	
 				$autMail	= userInfo('email',$qr['author_id']);	
@@ -277,7 +284,7 @@ class Article {
 				/* tags */
 				$tags = null;
 				if(!empty($qr['tags'])) {
-					$tags = tagToLink($qr['tags']);					
+					$tags = tagToLink($qr['tags'], true);		
 				}
 				
 				$article = $qr['article'];
@@ -396,8 +403,11 @@ class Article {
 			$catHref	= "<a href='$catLinks'>$category</a>";
 			
 			/* Author */			
-			if(empty($qr['author'])) 
-				$author = userInfo('name',1);
+			if(empty($qr['author'])) { 
+				$author = userInfo('name',$qr['author_id']);
+				if(empty($author))
+					$author = "Administrator";
+			}
 			else  {
 				$author = $qr['author'];
 			}
@@ -446,7 +456,7 @@ class Article {
 			$content = $article;	
 			
 			/* Blog Style */
-			if($format == 'blog' or $type == 'tag' or $format == 'list') {
+			if($format == 'blog' or $type == 'tag' or $format == 'list' or $format == 'grid') {
 				$image	= articleImage($content);	
 				$image	= str_replace("/media","/media/.thumbs",$image);
 				$imgH  = menu_param('imgH',Page_ID);
@@ -463,12 +473,14 @@ class Article {
 				$panel	= menu_param('panel_format',Page_ID);
 				$fpanel = "#" . menu_param('panel_format',Page_ID);
 				$dpanel = str_replace('%rel',"",$fpanel);
-				
+				$ctname = strtolower($category);
 				if(empty($panel) or !strpos($dpanel,'%')) {
-					if(siteConfig('lang') == 'id')
-					$panel = "<b>%A</b> &#183; %f %m %Y &#183; %c";
+					if($format == 'grid')
+					$panel = "<span class='author-link'><b>%A</b>,</span> <date><span>%f</span> <span>%m</span> <span>%Y</span>  &#183;</date> <span class='category-link category-$ctname'>%c</span>";
+					else if(siteConfig('lang') == 'id')
+					$panel = "<span class='author-link'><b>%A</b> &#183;</span> <date><span>%f</span> <span>%m</span> <span>%Y</span></date> &#183; <span class='category-link category-$ctname'>%c</span>";
 					else
-					$panel = "%m, %f %Y &#183; <b>%A</b> &#183; %c";					
+					$panel = "<date>%m, %f %Y &#183;</date> <span class='author-link'><<b>%A</b> &#183;</span> <span class='category-link category-$ctname'>%c</span>";					
 				}
 				$panel = str_replace('%A',$author,$panel);
 				
@@ -514,7 +526,9 @@ class Article {
 					$panel = str_replace('%s',$qr['s'],$panel);
 					$panel = str_replace('%p',$qr['p'],$panel);
 				}
-				$panel = str_replace('*',"",$panel);
+			$panel = str_replace('*',"",$panel);
+			
+			if($format == 'grid');
 				
 				
 			
@@ -697,6 +711,7 @@ if($id > 0) {
 			$follow = false;
 	}
 }
+
 if($a){
 	if(!checkHomePage()) {	
 		if ($view=="item") {

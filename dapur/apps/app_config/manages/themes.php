@@ -48,7 +48,7 @@ $(document).ready(function() {
 		if(preg_match ( "/[\.]/i" , $folder)) {
 			$folder = str_replace(".atm","",$folder);
 			if($folder==$atheme) {
-				alert('error',Theme_already_used);
+				alert('error',Theme_already_used,2);
 			}
 			else {
 				$a = $b = $c = 'Null <br>';
@@ -57,12 +57,12 @@ $(document).ready(function() {
 				if($del) $a ="folder <i>folder/$folder</i> ".deleted."!<br>";	
 				if($del2) $b ="folder <i>folder/$folder</i> ".deleted."!<br>";				
 				if($del2 or $del) $c = "tabel <i>$folder</i> ".deleted."!<br>";	
-				alert('info',"$a $b $c");
+				alert('info',"$a $b $c",2);
 		}
 		}
 		else {
 			if($folder==$themes) {
-				alert('error',Theme_already_used);
+				alert('error',Theme_already_used,2);
 			}
 			else {
 				$a = $b = $c = 'Null <br>';
@@ -71,7 +71,7 @@ $(document).ready(function() {
 				if($del) $a ="folder <i>folder/$folder</i> ".deleted."!<br>";	
 				if($del2) $b ="folder <i>folder/$folder</i> ".deleted."!<br>";				
 				if($del2 or $del) $c = "tabel <i>$folder</i> ".deleted."!<br>";	
-				alert('info',"$a $b $c");
+				alert('info',"$a $b $c",2);
 			}		
 		}
 	}		
@@ -140,7 +140,7 @@ $(document).ready(function() {
 
 <div class="modal fade" id="confirmDelete" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true" style="display:none">
   <div class="modal-dialog modal-sm">
-    <div class="modal-content">
+    <div class="modal-content modal-question">
       <div class="modal-header"><h4 class="modal-title"><?php echo Delete_Confirmation; ?></h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       </div>

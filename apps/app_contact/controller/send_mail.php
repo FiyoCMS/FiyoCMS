@@ -29,7 +29,7 @@ else {
 		echo "{ \"status\":\"0\" , \"alert\":\"".alert('error',You_alreay_sent_message)."\"}";	
 	else if(isset($name,$email,$post,$send,$to)) {
 		$_SESSION['COMMENT_DELAY'] = 0;
-		if(empty($name) or empty($email) or empty($post))
+		if(empty($name) or empty($email) or empty($post) or empty($subject ) )
 			echo "{ \"status\":\"0\" , \"alert\":\"".alert('error',contact_Error)."\"}";	
 		else if(!filter_var($to, FILTER_VALIDATE_EMAIL))	
 			echo "{ \"status\":\"0\" , \"alert\":\"".alert('error',contact_Error2)."\"}";	

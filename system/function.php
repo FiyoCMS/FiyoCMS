@@ -235,6 +235,12 @@ function refresh() {
 function htmlRedirect($link,$time = null) {
 	if($time) $time = $time; else $time = 0;
 	echo "<meta http-equiv='REFRESH' content='$time; url=$link'>";
+	die();
+}
+
+function htmlRefresh() {
+	echo "<script>location.reload();</script>";
+	die();
 }
 
 //fungsi membuat permalink
@@ -458,7 +464,7 @@ class FlxZipArchive extends ZipArchive {
         $location .= '/';      
         $dir = opendir ($location);
         while ($file = readdir($dir)) {
-            if ($file == '.' || $file == '..' || $file == '.backup') continue; 
+            if ($file == '.' || $file == '..' || $file == '.backup' || $file == 'config.php') continue; 
             // Rekursiv, If dir: FlxZipArchive::addDir(), else ::File();
             $do = (filetype( $location . $file) == 'dir') ? 'addDir' : 'addFile';
             $this->$do($location . $file, $name . $file);
@@ -627,8 +633,11 @@ function angka2($x) {
 
 }
 
-function digit($x, $d = 0) {
-	return number_format("$x",0,",",".");
+function digit($x, $d = 0, $p = '.') {
+	if($p == ',') $c = '.';
+	else $c = ',';
+	
+	return number_format("$x",$d,"$c","$p");
 }
 
 function randomString($length, $valid_chars = null) {
@@ -795,25 +804,37 @@ function multipleDelete($table, $source, $item = null, $cat = null, $except = nu
 				if(@mysql_num_rows($art)>0) {
 					$noempty = 1;					
 					break;
+				}			
+
+				if(!empty($except)) { 
+					$art = $db->select(FDBPrefix.$table,'*',"$except AND $fid = $id");	
+					if(@mysql_num_rows($art)>0) {
+						$noempty = 1;					
+						break;
+					}
 				}				
-				if(!isset($noempty))	
+					
+				if(!isset($noempty)) {	
 					if(!empty($sub)) {
 						if(!oneQuery($table,'parent_id',$id))
 							$qr = $db->delete(FDBPrefix.$table,"$fid='$id'");
 						else 						
 							$noempty = 1;	
 					}
-					else
-						$qr = $db->delete(FDBPrefix.$table,"$fid='$id'");						
+					else {
+						$qr = $db->delete(FDBPrefix.$table,"$fid='$id'");	
+					}
+				}
 				else 						
 					$noempty = 1;	
 			}
 			else {
-				if(!empty($except)) 
-					$art = $db->select(FDBPrefix.$table,'*',"$except");						
-				if(@mysql_num_rows($art)>0) {
-					$noempty = 1;					
-					break;
+				if(!empty($except)) { 
+					$art = $db->select(FDBPrefix.$table,'*',"$except AND $fid ='$id'");		
+					if(@mysql_num_rows($art)>0) {		
+						$cantdelete = 1;		
+						break;
+					}	
 				}	
 				
 				if(isset($sub)) {
@@ -822,12 +843,14 @@ function multipleDelete($table, $source, $item = null, $cat = null, $except = nu
 					else 						
 						$noempty = 1;	
 				}
-				else
+				else if(!isset($noempty)) {		
 					$qr = $db->delete(FDBPrefix.$table,"$fid='$id'");
+				}
 			}
 		}
-	if(isset($qr)) return 1;
+	if(isset($qr)) return 'deleted';
 	else if(isset($noempty)) return 'noempty';
+	else if(isset($cantdelete)) return 'cantdelete';
 	else return null;
 }
 

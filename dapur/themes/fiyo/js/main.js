@@ -44,7 +44,9 @@ $(function() {
 		$.ajax({
 			type: 'POST',
 			url: "themes/fiyo/module/view.php",
-			data: "view=true"
+			data: "view=true",
+			success: function(data){
+			}
 		});	
     });
 	
@@ -105,6 +107,22 @@ function loader() {
 		var checkBoxes = $("input[type='checkbox']", t);
 		checkBoxes.prop("checked",false);
 	});
+	$("input, select, textarea").addClass('form-control');
+	$("input").addClass('form-control');
+	$('input[type="checkbox"],input[type="radio"]').wrap("<label>");
+	$('input[type="number"]').attr("type","text").addClass('spinner').addClass('numeric');
+	$('input[type="checkbox"],input[type="radio"]').after("<span class='input-check'>");	
+	$("input.form-control[type=password]").parent().wrapInner("<div>");		
+	$("[required]").addClass('required').after('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').parent().wrapInner("<div>"
+	);		
+	
+    $('.required-input i').tooltip();
+	$("#editor").attr("required","required");
+	if ($.isFunction($.fn.validate)) {
+		$("body").find("#content form").validate({ ignore: ":hidden:not(select)" });
+	}
+	$('input[type=date]').attr('type','text').after('<span class="add-on input-group-addon"><i class="icon-calendar"></i></span>').parent().wrapInner("<div class='input-append date input-group'>").datetimepicker();
+	
     $('[data-toggle=popover]').popover();
     $('[data-popover=tooltip]').popover();
     $('[data-toggle=tooltip]').tooltip();
@@ -118,22 +136,6 @@ function loader() {
 	$('.selainchar').alphanumeric({ichars:'.1a'});
 	$('.web').alphanumeric({allow:':/.-_'});
 	$('.email').alphanumeric({allow:':.-_@'});
-	$("input, select, textarea").addClass('form-control');
-	$("input").addClass('form-control');
-	$('input[type="checkbox"],input[type="radio"]').wrap("<label>");
-	$('input[type="number"]').attr("type","text");
-	$('input[type="checkbox"],input[type="radio"]').after("<span class='input-check'>");	
-	$("input.form-control[type=password]").parent().wrapInner("<div>");		
-	$("[required]").addClass('required').after('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').parent().wrapInner("<div>"
-	);		
-	
-    $('.required-input i').tooltip();
-	$("#editor").attr("required","required");
-	if ($.isFunction($.fn.validate)) {
-		$("body").find("#content form").validate({ ignore: ":hidden:not(select)" });
-	}
-	$('input[type=date]').attr('type','text').after('<span class="add-on input-group-addon"><i class="icon-calendar"></i></span>').parent().wrapInner("<div class='input-append date input-group'>").datetimepicker();
-	
 	
 }
 

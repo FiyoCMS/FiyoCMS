@@ -44,6 +44,7 @@ defined('_FINDEX_') or die('Access Denied');
 			});
 		});
 	});	
+	
 </script>
 
 <h3 id="comments" ><?php echo comment_Leave_Comment; ?></h3>
@@ -54,26 +55,26 @@ defined('_FINDEX_') or die('Access Denied');
 		<label>
 			<span><?php echo comment_Name; ?> *</span>
 			<div>
-				<input type='text' name='name' id="comment-name" value ="<?php echo @$name; ?>" <?php if(!empty($name)) echo "readonly"; ?>  class="input required" placeholder="Name" required></label>
+				<input type='text' name='name' id="comment-name" value ="<?php echo @$name; ?>" <?php if(!empty($name)) echo "readonly"; ?>  class=" form-control input required" placeholder="Name" required></label>
 			</div>
 		</div>
 		<div>
 			<label><span><?php echo comment_Email; ?> *</span>
 			<div>
-				<input class="input required email" id="comment-email" type='email' name='email' value ="<?php echo @$email; ?>" <?php if(!empty($email)) echo "readonly"; ?> placeholder="name@email.com" required></label>
+				<input class="input required email  form-control" id="comment-email" type='email' name='email' value ="<?php echo @$email; ?>" <?php if(!empty($email)) echo "readonly"; ?> placeholder="name@email.com" required></label>
 			</div>
 		</div>
 		<div>
 			<label><span><?php echo comment_Website; ?> </span>
 			<div>
-				<input type="url" class="input" id="comment-url" name="web" value="<?php echo @$_POST['web']; ?>" placeholder="www.yoursite.com" /></label>
+				<input type="url" class="input  form-control" id="comment-url" name="web" value="<?php echo @$_POST['web']; ?>" placeholder="www.yoursite.com" /></label>
 			</div>
 		</div>	
 	</div>	
 	<div id="input-text-comment">
 		<label><span><?php echo comment_Comment; ?> *</span>
 		<div>
-			<textarea class="input required" id="comment-text" name='com' style='width:100%; max-width : 100%;' rows="8" required data-placeholder="<?php echo leave_a_comment; ?>" placeholder="<?php echo leave_a_comment; ?>"><?php echo @$_POST['com']; ?></textarea></label>
+			<textarea class="input required form-control" id="comment-text" name='com' style='width:100%; max-width : 100%;' rows="8" required data-placeholder="<?php echo leave_a_comment; ?>" placeholder="<?php echo leave_a_comment; ?>"><?php echo @$_POST['com']; ?></textarea></label>
 		</div>
 	</div>
 	<?php if(empty($privatekey) or empty($publickey )) : ?>

@@ -72,7 +72,7 @@ if(isset($_POST['edit_category']) or isset($_POST['apply_category']) ){
 if(isset($_POST['check_category'])){
 	$source = @$_POST['check_category'];
 	$source = multipleSelect($source);
-	$delete = multipleDelete('article_category',$source,'article','','','');
+	$delete = multipleDelete('article_category',$source,'article');
 	if($delete == 'noempty') {
 		notice('error',Category_Not_Empty);
 		redirect(getUrl());
@@ -125,7 +125,7 @@ if(isset($_POST['save_add']) or isset($_POST['add_new']) or isset($_POST['apply_
 		if($qr AND isset($_POST['apply_add'])){
 			$sql = $db->select(FDBPrefix.'article','id','','id DESC' ); 
 			$qrs = mysql_fetch_array($sql);					
-			notice('success',Article_Saved);
+			notice('success',Article_Saved,3);
 			redirect('?app=article&act=edit&id='.$qrs['id']);
 		}
 		else if($qr AND isset($_POST['save_add'])) {
@@ -190,6 +190,7 @@ if(isset($_POST['save_edit']) or isset($_POST['save_new']) or isset($_POST['appl
 		"category"=>"$_POST[cat]",
 		"title"=>"$title",
 		"author"=>"$author",
+		"author_id"=>"$_POST[author_id]",
 		"date"=>"$_POST[date]",
 		"status"=>"$_POST[status]",
 		"featured"=>"$_POST[featured]",
@@ -238,9 +239,13 @@ if(isset($_POST['save_edit']) or isset($_POST['save_new']) or isset($_POST['appl
 if(isset($_POST['delete']) or isset($_POST['delete_confirm'])){
 	$source = @$_POST['check'];
 	$source = multipleSelect($source);
-	$delete = multipleDelete('article',$source);	
-	if(isset($delete)) {
+	$delete = multipleDelete('article',$source,'','','author_id != '.USER_ID. ' AND '.USER_LEVEL.' > 2');	
+	if($delete == 'deleted') {
 		notice('info',Article_Deleted);
+		redirect(getUrl());
+	}
+	elseif($delete == 'cantdelete') {
+		notice('error',Article_Cant_Delete);		
 		redirect(getUrl());
 	}
 	else {

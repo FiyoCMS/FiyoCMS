@@ -77,8 +77,8 @@ $_CONFIG = array(
     'maxImageWidth' => 0,
     'maxImageHeight' => 0,
 
-    'thumbWidth' => 200,
-    'thumbHeight' => 200,
+    'thumbWidth' => 300,
+    'thumbHeight' => 300,
 
     'thumbsDir' => ".thumbs",
 

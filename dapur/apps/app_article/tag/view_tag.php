@@ -63,7 +63,7 @@ $(function() {
 				$checkbox ="<input type='checkbox' data-name='rad-$qr[id]' sub-target='.sub-menu' name='check_tag[]' value='$qr[id]' rel='ck'>";
 				$name ="<a class='tips' title='".Edit."' data-placement='right'  href='?app=article&view=tag&act=edit&id=$qr[id]'>$qr[name]</a>";
 				echo "<tr>";
-				echo "<td align='center'>$checkbox</td><td>$name</td><td align='center'>$qr[hits]</td>";
+				echo "<td align='center'>$checkbox</td><td>$name</td><td align='center'>".digit($qr['hits'])."</td>";
 				echo"</tr>";
 				$no++;	
 				

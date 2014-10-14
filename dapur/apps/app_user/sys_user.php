@@ -44,10 +44,11 @@ if(isset($_POST['add_group']) or isset($_POST['apply_group'])){
 /****************************************/
 /*			Delete Group User			*/
 /****************************************/
-if(isset($_POST['check']) or isset($_POST['delete_confirm'])){
-	$source = @$_POST['check'];
-	$source = multipleSelect($source);
-	$delete = multipleDelete('user_group',$source,'user','level','','','1,2,3,4');		
+if(isset($_POST['check_group']) or isset($_POST['delete_confirm'])){
+	$source = @$_POST['check_group'];
+	$sc = multipleSelect($source);
+	$delete = multipleDelete('user_group',$sc,'user','level','level <= 4');
+	
 	if($delete == 'noempty') {
 		notice('error',User_Group_Not_Empty);
 		refresh();		
@@ -69,7 +70,8 @@ if(isset($_POST['check']) or isset($_POST['delete_confirm'])){
 if(isset($_POST['edit_group']) or isset($_POST['save_group'])){
 	$db = new FQuery();  
 	$db->connect();			
-	if(!empty($_POST['level']) AND !empty($_POST['group'])) {	
+	if(!empty($_POST['level']) AND !empty($_POST['group'])) {
+		if($_POST['levels'] <= 3) $_POST['level'] = $_POST['levels'];
 		$qr=$db->update(FDBPrefix."user_group",array(
 		"level"=>"$_POST[level]",
 		"group_name"=>"$_POST[group]",
@@ -87,12 +89,12 @@ if(isset($_POST['edit_group']) or isset($_POST['save_group'])){
 			redirect('?app=user&view=group');
 		}
 		else {				
-			notice('error',Status_Fail);
+			notice('error',Status_Fail,2);
 		}					
 	}		
 	else 
 	{				
-		notice('error',Status_Invalid);
+		notice('error',Status_Invalid,2);
 	}			
 }
 
@@ -196,8 +198,8 @@ if(isset($_POST['edit']) or isset($_POST['applyedit'])){
 if(isset($_POST['delete']) or isset($_POST['delete_confirm'])){
 	$source = @$_POST['check'];
 	$source = multipleSelect($source);
-	$delete = multipleDelete('user',$source);	
-	if(isset($delete))
+	$delete = multipleDelete('user',$source,'','','level <= '.USER_LEVEL);	
+	if($delete)
 		notice('info',User_Deleted);
 	else
 		notice('error',Please_Select_User);

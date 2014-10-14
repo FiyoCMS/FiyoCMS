@@ -46,7 +46,7 @@ $(document).ready(function() {
 			
 			$qr = $db->delete(FDBPrefix.'plugins',"folder='$folder'");
 			$b = "tabel <i>$folder</i> ".has_ben_deleted.".<br>";	
-			alert('info',"$a $b");
+			alert('info',"$a $b",2);
 		}		
 		
 		$dir=opendir("../plugins"); 
@@ -104,7 +104,7 @@ $(document).ready(function() {
 <div class="modal fade" id="confirmDelete" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true" style="display:none">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
-      <div class="modal-header"><h4 class="modal-title"><?php echo Delete_Confirmation; ?></h4>
+      <div class="modal-content modal-question"><h4 class="modal-title"><?php echo Delete_Confirmation; ?></h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       </div>
       <div class="modal-body">

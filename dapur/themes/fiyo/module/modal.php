@@ -34,7 +34,7 @@ defined('_FINDEX_') or die('Access Denied');
         <p class="question"><?php echo Sure_want_delete; ?></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Cancel; ?></button><button type="button" class="btn btn-danger btn-grad" id="confirm"><?php echo Delete; ?></button>	
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Cancel; ?></button><button type="button" class="btn btn-danger btn-grad" id="confirm" name="delete"><?php echo Delete; ?></button>	
       </div>
     </div>
   </div>

@@ -126,32 +126,5 @@
 	<footer>
 		<div class="container">
 			<div class="padding10">
-				<div class="left">&copy; <a href="<?php echo FUrl; ?>"><?php echo SiteName; ?></a> <?php echo date("Y") ;?>. All Rights Reserved.</div>
-				<div class="right">Design by <a href="http://firstryan.net/" title="Web Programmer & Web Designer">First Ryan</a></div>
-			</div>	
-		</div>	
-	</footer>  
-
-	
-	<div class="badge-bottom-right ">
-		<?php loadModule('badge-bottom-right'); ?>
-	</div>	  
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-transition.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-alert.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-modal.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-dropdown.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-scrollspy.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-tab.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-tooltip.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-popover.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-button.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-collapse.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-carousel.js"></script>
-    <script src="<?php echo FThemePath; ?>/assets/js/bootstrap-typeahead.js"></script>
-
-  </body>
-</html>
+				<div class="left">© <a href="<?php echo FUrl; ?>"><?php echo SiteName; ?></a> <?php echo date("Y") ;?>. All Rights Reserved.</div>
+				<div class="right">Design by <a href="http://firstryan.net/" title="Web Programmer 

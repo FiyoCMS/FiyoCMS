@@ -14,7 +14,7 @@ $(document).ready(function() {
 	$("#form").submit(function(e){
 		e.preventDefault();
 		var ff = this;
-		var checked = $('input[name="check[]"]:checked').length > 0;
+		var checked = $('input[name="check_group[]"]:checked').length > 0;
 		if(checked) {	
 			$('#confirmDelete').modal('show');	
 			$('#confirm').on('click', function(){
@@ -22,7 +22,7 @@ $(document).ready(function() {
 			});		
 		} else {
 			noticeabs("<?php echo alert('error',Please_Select_Delete); ?>");
-			$('input[name="check[]"]').next().addClass('input-error');
+			$('input[name="check_group[]"]').next().addClass('input-error');
 			return false;
 		}
 	});		
@@ -63,7 +63,7 @@ $(document).ready(function() {
 			while($qr = mysql_fetch_array($sql)) {
 				$checkbox = null;
 				if($qr['level']!=1 And $qr['level']!=2 and $qr['level']!=3 )
-				$checkbox ="<input type='checkbox' name='check[]' value='$qr[level]'>";
+				$checkbox ="<input type='checkbox' name='check_group[]' value='$qr[level]'>";
 				else $checkbox = "<span class='icon lock'></lock>";
 				$name ="<a class='tips' title='".Edit."' data-placement='right' href='?app=user&view=group&act=edit&id=$qr[id]'>$qr[group_name]</a>";
 				if($_SESSION['USER_LEVEL'] > 2) {

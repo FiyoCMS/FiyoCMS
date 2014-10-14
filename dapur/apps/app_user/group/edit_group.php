@@ -19,7 +19,8 @@ $db->connect();
 
 $sql=$db->select(FDBPrefix."user_group","*","id=$_REQUEST[id]"); 
 $qr = mysql_fetch_array($sql); 
-if($qr['id']==1 or $qr['id']==2 or $qr['id']==3) $dis="readonly"; else $dis = null;
+if($qr['id']==1 or $qr['id']==2 or $qr['id']==3 or $qr['level']==1 or $qr['level']==2 or $qr['level']==3) {$dis="readonly"; $dis2 = ""; }
+else {$dis =  null; $dis2 = "spinner";}
 
 ?>
 <form method="post">
@@ -47,7 +48,7 @@ if($qr['id']==1 or $qr['id']==2 or $qr['id']==3) $dis="readonly"; else $dis = nu
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo User_Group_level; ?>">Level *</span></td>
-					<td><input class="numeric spinner" type="text" id="level" name="level" size="1" min="3" max="98" <?php echo "value='$qr[level]' $dis" ;?> required>
+					<td><input class="numeric <?php echo "$dis2" ;?>" type="text" id="level" name="level" size="1" min="3" max="98" <?php echo "value='$qr[level]' $dis" ;?> required>
 					
 					<input class="numeric" type="hidden"name="levels" <?php echo "value='$qr[level]'" ;?>></td>
 				</tr>

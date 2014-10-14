@@ -27,7 +27,7 @@ if(isset($article-> category)) :
 	if($desc AND _FEED_ != 'rss') :	?>
 	
 		<?php if(defined('Apps_Title')) : ?>
-			<h2><?php echo Apps_Title; ?></h2>
+			<h1 class='title'><?php echo Apps_Title; ?></h1>
 		<?php endif; ?>
 				
 		<!-- Article Main Warp -->

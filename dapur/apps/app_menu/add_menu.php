@@ -76,6 +76,7 @@ $(function() {
 		$sql =	$db->select(FDBPrefix.'apps','*','type <= 1',"name ASC"); $apps_date = $apps_version = '-';
 		while($qr=mysql_fetch_array($sql)){	
 				$file = "../apps/$qr[folder]/app_details.php";
+				$app_desc = '';
 				if(file_exists($file))
 				include("../apps/$qr[folder]/app_details.php");
 				echo "<tr target-radio='$qr[folder]'>";

@@ -32,6 +32,7 @@ else $view3='selected';
 if($format=='default') $format1='selected';
 else if($format=='blog') $format2='selected';
 else if($format=='list') $format3='selected';
+else if($format=='grid') $format4='selected';
 
 
 if(!is_numeric($intro) or empty($intro)) $intro = 5;
@@ -109,7 +110,7 @@ $(document).ready(function(){
 				
 		
 		if(type == 'category') {
-			$("#link").val("?app=ar&view="+type+"&id="+cate);
+			$("#link").val("?app=article&view="+type+"&id="+cate);
 			$(".category").removeClass("invisible");	
 		}
 		else
@@ -191,6 +192,7 @@ $(document).ready(function(){
 					<select id="format" name="param6">
 						<option value='default' <?php echo @$format1;?>>Default</option>
 						<option value='blog' <?php echo @$format2;?>>Blog</option>
+						<option value='grid' <?php echo @$format4;?>>Grid</option>
 						<option value='list' <?php echo @$format3;?>>List</option>
 					</select>
 				</td>

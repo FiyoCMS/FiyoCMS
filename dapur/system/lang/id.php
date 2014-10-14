@@ -291,6 +291,7 @@ define("Article_New_Saved","Artikel baru berhasil disimpan");
 define("Article_Saved","Artikel berhasil disimpan");
 define("Article_Deleted","Artikel berhasil dihapus");
 define("Article_Not_Select","Pilih artikel terlebih dahulu!");
+define("Article_Cant_Delete","Tidak berhak menghapus item pilihan");
 define("Article_category","Kategori Artikel");
 define("Add_new_article","Buat artikel baru");
 define("Edit_Article","Edit Artikel");

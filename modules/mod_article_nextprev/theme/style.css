@@ -34,7 +34,8 @@
 }
 
 .article-nextprev .next a{
-	border-left: 0;
+	border-left: 1px dotted #ccc;
+	margin-left: -1px;
 	border-right: 0;
 	opacity: 1;
 }

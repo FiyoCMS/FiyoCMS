@@ -19,6 +19,15 @@ defined('_FINDEX_') or die('Access Denied');
 	<title><?php echo SiteTitle; ?>'s Admin Panel</title>
 	<link rel="shortcut icon" href="<?php echo AdminPath; ?>/images/favicon.png" />
 	<link rel="stylesheet" href="<?php echo AdminPath; ?>/css/login.css" type="text/css">
+	<style>
+	* {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none; }
+	</style>
 	<script type="text/javascript" src="<?php echo AdminPath; ?>/js/jquery.min.js"></script>
 
 	<script type="text/javascript">
@@ -47,6 +56,7 @@ defined('_FINDEX_') or die('Access Denied');
 					},	
 					success: function(data){
 					try {
+						$('.alert').remove();
 						var json = $.parseJSON(data);
 						if(json.status == '0') {
 							$(t).removeAttr("disabled");			
@@ -133,14 +143,10 @@ defined('_FINDEX_') or die('Access Denied');
 			$("button").toggle();			
 		});
 		
-		$(".alert-error").click(function() {	
+		$(".notice, .alert").click(function() {	
 			alert();
-			$(this).fadeOut();
 		});
-		setTimeout(function(){
-			$('.alert').fadeOut(2000, function() {
-			});				
-		}, 2200);	
+		
 	});	
 	</script>	
 </head>

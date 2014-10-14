@@ -237,12 +237,11 @@ require('../../../system/jscore.php');
 			{			
 				
 				$aut = userInfo('name',$aRow['author_id']); 
-					$author = $aut;
+				$author = $aut;
 				if(!empty($aRow['author']))
-					$author=$aRow['author'];
-					
-				if($aRow['author_id'] == 0)
-					$author="<span title='Original by Null' class='tips'>Anonymous</span>";
+					$author = $aRow['author'];					
+				else if(empty($author))
+					$author="<span title='Original by Anonymous' class='tips'>Anonymous</span>";
 				else
 					$author="<span title='Original by $aut' class='tips'>$author</span>";
 				$row[] = "<div class='center'>$author</div>";

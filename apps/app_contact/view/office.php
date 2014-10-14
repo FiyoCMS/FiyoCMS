@@ -10,8 +10,8 @@
 defined('_FINDEX_') or die('Access Denied');
 
 $id = app_param('id');
-$contact = new Contact() or die;  
-echo Page_ID;
+$contact = new Contact() or die; 
+
 //$contact -> send(@$_POST['name'],@$_POST['email'],@$_POST['text'],@$_POST['send'],@$_POST['to']);
 	$param = menuInfo('parameter','?app=contact','',true);
 	$email = parse_param('office_email',$param);

@@ -36,7 +36,7 @@ if(isset($text)) :
 	$editable2 = null;
 	if($_SESSION['USER_LEVEL'] <= 3 OR (!empty($_SESSION['USER_EMAIL']) AND $_SESSION['USER_EMAIL'] == $autmail)) {
 		$editable = ' class="title editordb" title="Click to edit"';
-		$editable2 = ' class="editordb"  id="article-main" title="Click to edit"';
+		$editable2 = ' class="editordb" id="article-main"';
 		addJs (FUrl."plugins/plg_ckeditor/ckeditor.js");
 		addJs (FUrl."apps/app_article/theme/js/scrollfixed.js");
 		$_SESSION["ARTICLE_EDITOR_$id"] = "$text";
@@ -75,8 +75,8 @@ if(isset($text)) :
 			</div>
 			<a class='limit-editor-panel'></a>
 		</div>	
-	</div>
-		
+	</div>		
+	<div style="clear:both"> </div>	
 	<?php if(!empty($article->bpanel)) : ?>
 	<?php if($shits or $stag or $srate) : ?>	
 	<div class='panel-bottom'>

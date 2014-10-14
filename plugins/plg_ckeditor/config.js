@@ -30,11 +30,12 @@ CKEDITOR.editorConfig = function( config ) {
 	[
 		
 		{ name: 'document', items: [ 'Source' ] },
+		{ name: 'links', items :[ 'Undo', 'Redo' ] },	
 		{ name: 'basicstyles', items : [ 'Bold','Italic','Underline'] },
 		{ name: 'justify', items : [ 'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
 		{ name: 'links', items : [ 'Link','Unlink' ] },		
 		{ name: 'insert', items : [ 'Image','Flash','Table'] },	
-		{ name: 'links', items :[ 'Undo', 'Redo' ] },		
+		'/',										
 		{ name: 'styles', items : ['Format','Font','FontSize' ] },
 		{ name: 'colors', items : [ 'TextColor','BGColor' ] },
 		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent'] },

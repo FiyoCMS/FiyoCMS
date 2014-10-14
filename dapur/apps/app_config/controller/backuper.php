@@ -50,6 +50,9 @@ if(isset($_GET['type'])) {
 	if($_GET['type'] == 'installer') {		
 		@unlink("../../../../.backup/$_GET[file]");
 		$file = '../../../../system/installer.zip';
+		$cfile = '../../../../config.php';
+		$cfile2 = '../../../../_config.php';
+		@copy($cfile,$cfile2);
 		extractZip($file,'../../../../system');
 		if(!file_exists('../../../../.backup'))
 			mkdir('../../../../.backup');		
@@ -58,6 +61,7 @@ if(isset($_GET['type'])) {
 		$date = md5(date("Ymd:His"));
 		$file = "installer-backup-$date.zip";
 		$c = archiveZip('../../../../',"../../../../.backup/$file");
+		@unlink("$cfile2");
 		if($c) 		{
 			$size = format_size(filesize("../../../../.backup/$file"));
 			$time = date("Y/m/d H:i:s",filemtime("../../../../.backup/$file"));	
@@ -65,6 +69,7 @@ if(isset($_GET['type'])) {
 			echo "{ \"file\":\"$file\" , \"info\":\"$r\" }";			
 		}
 	}
+
 	if($_GET['type'] == 'delete') {
 		if($_GET['act'] == 'installer' || $_GET['act'] == 'db')	
 		@unlink("../../../../.backup/$_GET[file]");

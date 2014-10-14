@@ -12,7 +12,7 @@ defined('_FINDEX_') or die('Access Denied!');
 $id 	= app_param('id');
 $view 	= app_param('view');
 $format	= menu_param('format');
-if($format != 'blog' AND $format != 'list') $format = 'default';
+if($format != 'blog' AND $format != 'list' AND $format != 'grid') $format = 'default';
 
 switch($view)
 {

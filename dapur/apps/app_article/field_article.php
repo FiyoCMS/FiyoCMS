@@ -18,7 +18,7 @@ else
 	$id = null;
 if(!isset($id)) {
 	$_GET['id']=0;	
-	$qr = null;
+	$qr = $editor_level = null;
 	$new =1;	
 	$show_comment = $panel_top = $show_title = $panel_bottom = $show_author = $show_date = $show_category = $show_hits=$show_tags = $show_rate = 2; 
 	$rate_value = $rate_counter = 0;
@@ -197,7 +197,7 @@ $(function() {
 			<?php if($_GET['act'] != 'add') : ?>
 			<tr>
 				<td class="row-title" title="<?php echo Hits; ?>"><?php echo Hits; ?></td>
-				<td><span id="hits"><?php echo $qr['hits']; ?></span>
+				<td><span id="hits"><?php echo digit($qr['hits']); ?></span>
 				<input name="viewed" type="hidden" value="<?php echo $qr['hits']; ?>"/> 
 				<?php if(userInfo('level') < 3 AND !empty($qr['hits'])) : ?><label class="reset" title="<?php echo Hits_Reset; ?>" style="margin-left:5px; cursor: pointer;"><input type="checkbox" value="1" name="hits_reset">Reset</label><?php else : ?><?php endif; ?></td>
 			</tr>
@@ -219,7 +219,7 @@ $(function() {
 		<table class="data2">
 			<tr>
 				<td class="row-title" style="width: 35%" title="<?php echo Author_tip; ?>"><?php echo Author; ?></td>
-				<td><input name="author" style="min-width: 83.5%" disabled size="15" type="text"value="<?php echo userInfo('name',$qr['author_id']); ?>"/></td>
+				<td><input name="author_id" style="min-width: 83.5%" disabled size="15" type="hidden" value="<?php if($ui = userInfo('name',$qr['author_id'])) echo $ui; else echo USER_ID; ?>"/><input name="author_name" style="min-width: 83.5%" disabled size="15" type="text"value="<?php echo userInfo('name',$qr['author_id']); ?>"/></td>
 			</tr>
 			<tr>
 				<td class="row-title" style="width: 35%" title=""><?php echo Author_Alias; ?></td>

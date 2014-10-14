@@ -219,12 +219,14 @@ class FQuery {
             $keys = array_keys($rows);
             for($i = 0; $i < count($rows); $i++)
             {
-                if(is_string($rows[$keys[$i]]))
+                if(is_string($rows[$keys[$i]]) AND $rows[$keys[$i]] !== '+hits')
                 {
                     $update .= $keys[$i].'="'.$rows[$keys[$i]].'"';
                 }
                 else
                 {
+					
+					if($rows[$keys[$i]] == '+hits') $rows[$keys[$i]] = $keys[$i] . '+'. 1;
                     $update .= $keys[$i].'='.$rows[$keys[$i]];
                 }
 

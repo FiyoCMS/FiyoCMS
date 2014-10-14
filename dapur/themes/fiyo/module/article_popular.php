@@ -18,8 +18,9 @@ require_once ('../../../system/jscore.php');
   <tbody>
 	<?php	
 		$sql = $db->select(FDBPrefix."article","*,DATE_FORMAT(date,'%W, %b %d %Y') as date","",'hits DESC LIMIT 10'); 
-		$no = 1;
+		$no = 0;
 		while($qr=mysql_fetch_array($sql)) {		
+			$no++;	
 			$h = $qr['hits'];
 			if($h > 999) {
 				$h = $h / 1000;
@@ -34,19 +35,17 @@ require_once ('../../../system/jscore.php');
 			$auth = userInfo("name","$qr[author_id]");
 			$info = "Hits : $h";
 			$read_article = Read;
-			$edit_article = Edit;
-			if($no%2==0) $class = 'clr'; else 	$class = 'cln';		
+			$edit_article = Edit;		
 			echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$qr[title] <a class='tooltips icon-bar-chart' title='$info' data-placement='right'></a> 
 			<div class='tool-box'>
 				<a href='$read' target='_blank'  class='btn btn-tools tips' title='$read_article'>$read_article</a>";				
 			$editor_level 	= mod_param('editor_level',$qr['parameter']);
 			if($editor_level >= USER_LEVEL or empty($editor_level)) echo "<a href='$edit' class='btn btn-tools tips' title='$edit_article'>$edit_article</a> ";
 			echo "</div></td></tr>";
-			$no++;	
 		}		
-		if(mysql_affected_rows() < 1) { 
+		if($no == 0) { 
 			echo "<tr><td style='text-align:center; padding: 40px 0; color: #ccc; font-size: 1.5em'>".No_Article."</td></tr>";
-		}								
+		}							
 		?>				
        </tbody>			
 </table>

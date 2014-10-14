@@ -38,7 +38,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 					<i class="icon-reorder"></i>
 				</a>
 				<a data-placement="bottom" class="side-bar right userSideBar">
-					<i class="icon-tasks"></i>
+					<i class="icon-ellipsis-horizontal"></i>
 				</a>
 				<span class="navbar-logo" href="index.php"></span>
 			</header>

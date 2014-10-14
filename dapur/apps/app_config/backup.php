@@ -357,6 +357,7 @@ $(document).ready(function() {
 			
 		} 
 	}	
+	
 	?>
 	
 	<div class="panel box"> 		

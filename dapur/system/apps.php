@@ -2,7 +2,7 @@
 /**
 * @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
@@ -14,9 +14,9 @@ $app = $_REQUEST['app'];
 
 if(!empty($app)){
 	if(!file_exists("apps/app_$app/app_$app.php"))
-	{	
+	{
 		function sysAdminApps() {
-			redirect('../'.siteConfig('backend_folder'));
+			htmlRedirect('../'.siteConfig('backend_folder'));
 			/* blank line */
 		}
 		function loadAdminApps() {		

@@ -24,6 +24,104 @@ if (get_magic_quotes_gpc()) {
     array_walk_recursive($_REQUEST, 'stripslashes_gpc');
 }
 	
+if(isset($_POST['upload']) or isset($_POST['copy'])) {
+	$c = false;
+	if(isset($_POST['upload'])  AND !empty($_FILES['zip'])) {
+		$path_file = $_FILES['zip']['tmp_name'];
+		$name_file = $_FILES['zip']['name'];
+		$name_file = md5($path_file);
+		$_SESSION['file'] = $path_file;
+		$c = true;
+	} else if(isset($_POST['copy']) AND !empty($_POST['url'])) {
+		$url_file  = $_POST['url'];
+		if(!file_exists("../tmp"))
+		mkdir("../tmp");
+		$name_file = md5($url_file);
+		$path_file = "../tmp/$name_file.zip";
+		$c = @copy($url_file, $path_file);
+	}
+	if(!empty($path_file) AND $c) {
+		if(extractZip($path_file,"../tmp/$name_file")) {
+		if(file_exists("../tmp/$name_file/installer.php")) {				
+				include("../tmp/$name_file/installer.php");
+					
+				//Modules Installer
+				if($addons['type'] == 'modules') {
+					$folder	= "../modules/$addons[folder]";
+					$copy	= @copy_directory("../tmp/$name_file",$folder);
+				}
+				//Plugins Installer
+				else if($addons['type'] == 'plugins'){	
+					insert_new_plg(@$addons['folder'],@$addons['parameter']);
+					$folder	= "../plugins/$addons[folder]";				
+					$copy	= @copy_directory("../tmp/$name_file",$folder);
+				}
+				//Apps Installer
+				else if($addons['type'] == 'apps'){					
+					if($addons['app_type'] > 0) {
+						if(isset($addons['app_icon'])) $icon = $addons['app_icon']; else $icon = null;
+						if(isset($addons['app_style'])) $style = $addons['app_style']; else $style = null;
+						insert_new_apps($addons['name'],$addons['folder'],$addons['author'],$addons['app_type'], $icon, $style);
+						$folback = siteConfig('backend_folder');
+						if($addons['app_type'] == 3 or $addons['app_type'] == 1)
+						$copy = @copy_directory("../tmp/$name_file/$addons[frontend]","../apps/$addons[folder]");
+						if($addons['app_type'] == 2 or $addons['app_type'] == 1) 
+						$copy = @copy_directory("../tmp/$name_file/$addons[backend]","../$folback/apps/$addons[folder]");
+					}
+				}
+				//Themes Installer
+				else if($addons['type'] == 'themes'){					
+					$folder	= "../themes/$addons[folder]";	
+					$copy = @copy_directory("../tmp/$name_file","../themes/$addons[folder]");
+				}
+				//Admin Themes installer
+				else if($addons['type'] == 'admin_themes'){
+					$flback = siteConfig('backend_folder');	
+					$folder	= "../$flback/themes/$addons[folder]";	
+					$copy	= @copy_directory("../tmp/$name_file",$folder);
+				}
+				//updater / patcher
+				else if($addons['type'] == 'updater'){
+					$copy	= @copy_directory("../tmp/$name_file","../");
+					$dapur 	= siteConfig('backend_folder');
+					if(siteConfig('backend_folder') != 'dapur')		
+						@copy_directory("../dapur","../$dapur",true);
+				} else {
+					$fail = true;						
+					alert('error',File_uploaded_not_valid,true);			
+				}
+				
+				if(!isset($fail)) {
+					if(isset($folder) AND file_exists("$folder/installer.php"))
+						@unlink("$folder/installer.php",true);
+					if($copy)
+						alert('info',AddOns_installed);
+					if(isset($addons['info'])) {
+						$_SESSION['INSTALL_NOTICE'][0] = 3;
+						$_SESSION['INSTALL_NOTICE'][1] = "<div class='install_info panel box'><h2>$addons[name] ".successfully_installed."</h2>
+						$addons[info]</div>";
+						refresh();
+					}
+					delete_directory('../tmp');	
+				}
+			}
+			else {
+				alert('error',File_uploaded_not_valid,true);
+			}
+		}
+		else{
+			alert('error',File_not_support,true);
+		}
+	}
+	else if(!$c) {
+		alert('error',File_uploaded_not_valid,true);
+	}
+	else {
+		alert('error',Please_choose_file,true);
+	}
+	delete_directory('tmp');
+}
+
 if(isset($_POST['config_save'])) {
 	if(empty($_POST['site_name']) AND empty($_POST['site_title']) AND empty($_POST[site_url]) AND empty($_POST['site_status']) AND empty($_POST['site_title']) AND empty($_POST['file_allowed']) AND empty($_POST['file_size'])) 
 	{	

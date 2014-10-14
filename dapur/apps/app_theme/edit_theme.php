@@ -15,6 +15,12 @@ defined('_FINDEX_') or die('Access Denied');
 	 </div>
 </div>
 <?php
+
+$spot_file = "../themes/$folder/theme_details.php";
+if(file_exists($spot_file)) include("$spot_file");
+
+$params = "../themes/$folder/theme_params.php";
+
 $folder = $_REQUEST['folder'];
 $a = $b = $c = '';
 if(isset($_REQUEST['type'])) {
@@ -22,6 +28,12 @@ if(isset($_REQUEST['type'])) {
 	if($_REQUEST['type'] == 'file') {
 		$c='active';
 		include('libs/edit_default.php');
+	}
+	else if($_REQUEST['type'] == 'param') {
+		$c='active';
+		if(!file_exists($params)) {
+			htmlRedirect("?app=theme&folder=$folder");
+		}
 	}
 	else {
 		include('file_theme.php');
@@ -33,10 +45,7 @@ else {
 	$a = 'active';
 }
 
-$spot_file = "../themes/$folder/theme_details.php";
-if(file_exists($spot_file)) include("$spot_file");
 		
-$params = "../themes/$folder/theme_params.php";
 
 if($a) :
 ?>
@@ -46,7 +55,7 @@ if($a) :
 			<h5><?php echo General; ?></h5>
 		</header>
 		<div>
-			<table class="data2">
+			<table>
 				<tr>
 					<td><?php echo Name; ?></td>
 					<td><?php echo @$theme_name; ?></td>
@@ -88,7 +97,21 @@ if($a) :
 	</div>
 </div>
 <?php
-if(file_exists($params) AND isset($theme_params)) include("$params");
+endif;
+if($c) :
+?>
+
+<div class="<?php if(file_exists($params) AND isset($theme_params)) echo "box-left col-lg-6 "; else echo "panel box"?>">
+	<div class="panel box"> 		
+		<header>
+			<h5>Parameter</h5>
+		</header>
+		<div>
+		<?php include($params); ?>
+		</div>
+	</div>
+</div>
+<?php
 endif;
 ?>
 	
@@ -96,6 +119,9 @@ endif;
 <div class="app_link tabs">		
 	<div class="app_link">		
 		<a class="add btn btn-default <?php echo $a; ?>" href="?app=theme&folder=<?php echo $folder;?>"><i class="icon-magic"></i> <?php echo Information; ?></a>
+		<?php if(USER_LEVEL < 3 AND file_exists($params)) : ?>
+		<a class="add btn btn-default <?php echo $c; ?>" href="?app=theme&folder=<?php echo $folder;?>&type=param"><i class="icon-cogs"></i> Parameter</a>		
+		<?php endif; ?>	
 		<?php if(USER_LEVEL == 1) : ?>
 		<a class="add btn btn-default <?php echo $b; ?>" href="?app=theme&folder=<?php echo $folder;?>&type=files"><i class="icon-file-text-alt"></i> Files</a>		
 		<?php endif; ?>	
