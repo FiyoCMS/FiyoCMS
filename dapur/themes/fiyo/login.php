@@ -9,7 +9,6 @@
 
 include('theme_data.php');
 defined('_FINDEX_') or die('Access Denied');
-
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -17,19 +16,10 @@ defined('_FINDEX_') or die('Access Denied');
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
 	<title><?php echo SiteTitle; ?>'s Admin Panel</title>
+	<?php include("module/auth.php"); ?>
 	<link rel="shortcut icon" href="<?php echo AdminPath; ?>/images/favicon.png" />
 	<link rel="stylesheet" href="<?php echo AdminPath; ?>/css/login.css" type="text/css">
-	<style>
-	* {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none; }
-	</style>
-	<script type="text/javascript" src="<?php echo AdminPath; ?>/js/jquery.min.js"></script>
-
+	<script type="text/javascript" src="<?php echo AdminPath; ?>/js/jquery.min.js"></script>	
 	<script type="text/javascript">
 	<?php if(!isset($_SESSION['USER_ID']) AND isset($_GET['theme'])) : ?>
 		location.reload();
@@ -37,7 +27,7 @@ defined('_FINDEX_') or die('Access Denied');
 	$(function() {
 		$(".name").focus();
 		$(".submit").click(function(e) {				
-			$(".alert").fadeOut('slow');
+			$(".alert").remove();
 			var name = $(".name").val();
 			var pass = $(".pass").val();
 			var url = $(".url").val();
@@ -47,16 +37,16 @@ defined('_FINDEX_') or die('Access Denied');
 				$(this).attr("disabled","disabled");	
 				e.preventDefault();	
 				$.ajax({
-					url: "<?php echo AdminPath; ?>/module/login.php",
-					type: "POST",
+					url: "<?php echo FAdminPath; ?>/module/login.php",
+					type: "GET",
 					data: "user="+name+"&pass="+pass+"&url="+url,
 					timeout : 10000,
-					error: function(data){
-						$(t).html("Login");	
+					error: function(data){	
+						$(t).html("Login");					
+
 					},	
 					success: function(data){
 					try {
-						$('.alert').remove();
 						var json = $.parseJSON(data);
 						if(json.status == '0') {
 							$(t).removeAttr("disabled");			
@@ -71,10 +61,14 @@ defined('_FINDEX_') or die('Access Denied');
 							$("#content").prepend("Login Error!");	
 						}
 					} catch (e) {
-						alert(data);
+						$("#content").prepend(data);	
+						$(t).removeAttr("disabled");			
+						$(t).html("Login");		
 					}
-						setTimeout(function(){
-							$(".notice, .alert").fadeOut('slow');
+					setTimeout(function(){
+						$(".notice, .alert").fadeOut(function() {
+							$(this).remove();
+						});
 						}, 10000);	
 					}
 				});						
@@ -99,10 +93,10 @@ defined('_FINDEX_') or die('Access Denied');
 				var t = $(this).html("Loading...");	
 				e.preventDefault();	
 				$.ajax({
-					url: "<?php echo AdminPath; ?>/module/lost_password.php",
-					type: "POST",
+					url: "<?php echo FAdminPath; ?>/module/lost_password.php",
+					type: "GET",
 					data: "email="+email+"&url="+url,
-					timeout : 1000,
+					timeout : 10000,
 					error: function(data){
 						$(t).html("Send");	
 					},	
@@ -150,29 +144,32 @@ defined('_FINDEX_') or die('Access Denied');
 	});	
 	</script>	
 </head>
-
-<body style="background-image: url(<?php echo $PARAM['background'];?>)";>        
+<?php if(checkMobile()) :?>
+<body>
+<?php else :?>
+<body style="background-image: url(<?php echo $PARAM['background'];?>)";>      
+<?php endif;?>  
 	<div id="content">
         <div id="steps">
              <form id="formElem" method="post">
                 <fieldset class="step">
-                    <p class="legend"><img src="<?php echo $PARAM['logo'];?>" width="190"></p>
-                    <p>
+                    <div class="legend"><img src="<?php echo $PARAM['logo'];?>" width="190"></div>
+                    <div><input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" /><input type="password" name="password_fake" id="password_fake" value="" style="display:none;" />
                         <input name="user" autocomplete="OFF" type="text" class="name" placeholder="Username" />                    
-                        <input name="email" autocomplete="OFF" type="email" class="email femail" placeholder="Email" />
-                    </p>
-                    <p>
+                        <input name="email" autocomplete="OFF" type="email" class="email femail" placeholder="Email" style="display: none" />
+                    </div>
+                    <div>
                         <input name="pass" autocomplete="OFF" type="password" class="pass"  placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" />
                         <input name="url" type="hidden" class="url"/>
-                    </p>
-                    <p class="button">
+                    </div>
+                    <div class="button">
                         <button id="registerButton" type="submit" name="fiyo_login" class="submit flogin" style="background: <?php echo $PARAM['button_color'];?>">Login</button>
-                        <button id="registerButton" type="submit" name="forgot_password" class="send-mail femail" style="margin-top: -10px; background: <?php echo $PARAM['button_color'];?>">Send</button>
-                    </p>
-					<p style="width: 100%; text-align: center; margin-top: 10px;">
+                        <button id="registerButton" type="submit" name="forgot_password" class="send-mail femail" style="background: <?php echo $PARAM['button_color'];?> display: none">Send</button>
+                    </div>
+					<div style="width: 100%; text-align: center; margin-top: 10px;">
 						<span class="lost-password flogin">Lost Password?</span>
-						<span class="lost-password femail">User Login</span>
-					</p>
+						<span class="lost-password femail" style="display: none">User Login</span>
+					</div>
                 </fieldset>
 			</form>	
          </div>

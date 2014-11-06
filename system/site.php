@@ -16,7 +16,8 @@ defined('_FINDEX_') or die('Access Denied');
 define ('FBase',FUrl());
 if(_FINDEX_ == 'BACK') 
 define ('FUrl',str_replace(siteConfig('backend_folder'),"",'http://'.FBase)); 
-else define ('FUrl','http://'.FBase); 
+else define ('FUrl','http://'.FBase);
+define ('FAdmin',FUrl.siteConfig('backend_folder'));
 
 /* Define deed url */
 define('_FEED_',	app_param('feed')) ;

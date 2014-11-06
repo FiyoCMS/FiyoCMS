@@ -8,6 +8,10 @@
 
 //set session start
 session_start();
+
+$start_time = microtime(TRUE);
+define('_START_TIME_', $start_time );
+
 ob_start();
 
 //flag for main file

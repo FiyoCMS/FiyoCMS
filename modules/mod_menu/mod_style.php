@@ -10,3 +10,4 @@
 defined('_FINDEX_') or die('Access Denied');
 
 addCss(FUrl.'modules/mod_menu/css/style.css');
+?>

@@ -6,17 +6,21 @@
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
-if(!isset($_SERVER['HTTP_REFERER']) or !defined('_FINDEX_')) die('Access Denied!');
+
+if(!isset($_SESSION['PLATFORM']) AND (!isset($_SERVER['HTTP_REFERER']) or !defined('_FINDEX_'))) die('Access Denied!');
 
 //memuat file pendukung query dan fungsi lainya
 require_once ('../../../../config.php');
 require_once ('../../../../system/query.php');
+require_once ('../../../../system/libs.php');
 require_once ('../../../../system/function.php');
 require_once ('../../../../system/user.php');
 loadLang 	 ('../../../system');
 
 $api = siteConfig('apikey');
-if(!empty($api)) {
+if(isset($_SESSION['PLATFORM'])) {
+
+} else if(!empty($api)) {
 	if(strpos(stripslashes($_SERVER['HTTP_REFERER']),stripslashes("http://".FUrl())) === false OR $_POST['apikey'] == "$api") 
 	die('Access Denied!');
 } else {

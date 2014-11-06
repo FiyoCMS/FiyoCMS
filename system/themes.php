@@ -58,6 +58,9 @@ define("FThemes","themes/".FThemeFolder."/index.php");
 /*  		  Load default theme		  	*/
 /********************************************/
 if(!file_exists(FThemes)) {	
+	$file = str_replace(".php",".html",FThemes);
+	if(file_exists($file))
+	if(@rename($file,FThemes)) refresh();
 	echo alert("error","Theme is not found!",true,true);
 	die();
 }
@@ -65,7 +68,67 @@ else if(_FEED_ == 'rss' or _FINDEX_ == 'blank') {
 	loadApps();
 }
 else {
-	require_once(FThemes);
+	include(FThemes);
 }
 
-?>
+$output = ob_get_contents();
+ob_end_clean();
+
+if(_FEED_ !== 'rss' AND _FINDEX_ !== 'blank') {
+
+	ob_start(); 
+		loadAppsCss();
+		loadModuleCss();
+		$cssasset = ob_get_contents();
+	ob_end_clean();
+	
+	ob_start(); 
+		loadAppsJs();	
+		loadPluginJs();
+		$jsasset = ob_get_contents();	
+		
+	ob_end_clean();
+	
+	$tlx = strpos($output,"<link");
+	$ntx = substr($output , 0, $tlx );
+
+	$tlb = strpos($output,"</body>");
+	$ntb = substr($output ,$tlb );
+
+	$output = str_replace($ntx, $ntx.$cssasset,$output);
+	
+	
+	$output = str_replace(array("href=\"css","href=\"/css"), "href=\"".FThemePath."/css",$output);
+	$output = str_replace(array("href=\"/asset", "href=\"asset"), "href=\"".FThemePath."/asset",$output);
+	$output = str_replace(array("href=\"/images", "href=\"images"), "href=\"".FThemePath."/images",$output);
+	$output = str_replace(array("src=\"/asset", "src=\"asset"), "src=\"".FThemePath."/asset",$output);
+	$output = str_replace(array("src=\"/js","src=\"js"), "src=\"".FThemePath."/js",$output);
+	$output = str_replace(array("src=\"/images", "src=\"images"), "src=\"".FThemePath."/images",$output);
+	$output = str_replace(array("src=\"/img","src=\"img"), "src=\"".FThemePath."/img",$output);
+	
+	$jsasset = preg_replace("/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\)\/\/.*))/", "", $jsasset);
+	$output = str_replace($ntb, $jsasset.$ntb,$output);
+	
+	ob_end_clean();
+}
+
+$html = str_get_html($output);
+$css = $js = '';
+foreach($html->find('link[rel=stylesheet]') as $element) {
+	if(strpos($element->href,".css"))
+	$css .= $element."\n";
+	$output = str_replace($element -> outertext,"",$output);
+}
+
+$tlx = strpos($output,"</head>");
+$ntx = substr($output , 0, $tlx );
+$output = str_replace($ntx, $ntx.$css,$output);
+	
+$et = microtime(TRUE);
+$output = preg_replace('#^\s*//.+$#m', "", $output);
+$output = preg_replace('/<!--(.*)-->/Uis', "", $output);
+$output = preg_replace(array('(( )+\))','(\)( )+)'), ')', $output);
+$output = str_replace(array("\t","\n"), ' ', $output);
+$output = str_replace(array("  ","   "), ' ', $output);
+$output = str_replace("  ", ' ', $output);
+echo $output;

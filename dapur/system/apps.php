@@ -38,8 +38,9 @@ else {
 	function sysAdminApps() {	
 		/* blank line */
 	}
-	function loadAdminApps() {
-		require(AdminPath."/dashboard.php");			
+	function loadAdminApps() {		
+		$themePath = siteConfig('admin_theme');
+		require("themes/$themePath/dashboard.php");			
 	}
 }
 

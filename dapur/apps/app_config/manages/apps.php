@@ -9,21 +9,6 @@
 defined('_FINDEX_') or die('Access Denied');
 printAlert();
 ?>
-<script type="text/javascript" charset="utf-8">
-$(document).ready(function() {
-	loadTable();	
-	$(".uninstall").click(function(e){
-		e.preventDefault();
-		var ff = this;	
-			$('#confirmDelete').modal('show');
-			$('.number').val($(this).attr('id'));
-			$('#confirm').on('click', function(){
-				ff.submit();
-			});		
-		
-	});
-});
-</script>
 <div id="app_header">
 	<div class="warp_app_header">		
 		<div class="app_title">Apps Manager</div>
@@ -37,6 +22,7 @@ $(document).ready(function() {
 		<th style="width:15% !important;" class="no"></th>
 	</tr>
 	</thead>
+	<tbody>
 	<?php	
 	$db = new FQuery();  
 	$db->connect();
@@ -82,6 +68,7 @@ $(document).ready(function() {
 		echo "</tr>";
 	}
 	?> 
+	</tbody>
 </table>
 <div class="app_link tabs">	
 	<a class="btn apps active" title="<?php echo Manage_Apps; ?>"><i class="icon-star"></i> Apps</a>		
@@ -109,3 +96,19 @@ $(document).ready(function() {
     </div>
   </div>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+$(function() {
+	loadTable();	
+	$(".uninstall").click(function(e){
+		e.preventDefault();
+		var ff = this;	
+			$('#confirmDelete').modal('show');
+			$('.number').val($(this).attr('id'));
+			$('#confirm').on('click', function(){
+				ff.submit();
+			});		
+		
+	});
+});
+</script>

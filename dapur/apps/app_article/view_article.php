@@ -43,7 +43,7 @@ function iniTable () {
 		oTable = $('table.data').dataTable({
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "apps/app_article/controller/article_list.php?cat="+cat+"&user="+user+"&level="+level,
+			"sAjaxSource": "<?php echo FAdmin;?>/apps/app_article/controller/article_list.php?cat="+cat+"&user="+user+"&level="+level,
 			"bJQueryUI": true,  
 			"sPaginationType": "full_numbers",
 			"fnDrawCallback": function( oSettings ) {
@@ -72,7 +72,7 @@ function iniTable () {
 					var value = $('.type',parent).attr('value');
 					if(value == 1) value = 0; else value = 1;
 					$.ajax({
-						url: "apps/app_article/controller/article_status.php",
+						url: "<?php echo FAdmin;?>/apps/app_article/controller/article_status.php",
 						data: "stat="+value+"&id="+id,
 						success: function(data){
 						if(value == 1)
@@ -90,7 +90,7 @@ function iniTable () {
 					var value = $('.type',parent).attr('value');
 					if(value == 1) value = 0; else value = 1;
 					$.ajax({
-						url: "apps/app_article/controller/article_status.php",
+						url: "<?php echo FAdmin;?>/apps/app_article/controller/article_status.php",
 						data: "fp="+value+"&id="+id,
 						success: function(data){
 						if(value == 1)

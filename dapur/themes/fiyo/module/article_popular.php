@@ -7,7 +7,7 @@
 **/
 
 session_start();
-if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 5 or !isset($_POST['url'])) die();
+if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 5 or !isset($_GET['url'])) die();
 define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
@@ -30,7 +30,7 @@ require_once ('../../../system/jscore.php');
 					$h = substr($h,0,1);
 				$h = $h."k";	
 			}
-			$read = $_POST['url'].check_permalink("link","?app=article&view=item&id=$qr[id]","permalink");
+			$read = $_GET['url'].check_permalink("link","?app=article&view=item&id=$qr[id]","permalink");
 			$edit = "?app=article&act=edit&id=$qr[id]";						
 			$auth = userInfo("name","$qr[author_id]");
 			$info = "Hits : $h";

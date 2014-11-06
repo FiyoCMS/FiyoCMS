@@ -340,7 +340,7 @@ $db->connect();
 					<td class="row-title"><span class="tips"  title="<?php echo Time_Zone_tip; ?>"><?php echo Time_Zone; ?></td>
 					<td>
 						<select class="timezone-select" id="timezone" name="timezone" style="width: 800px">
-							<?php include('controller/timezone.php'); ?>
+							<?php require('controller/timezone.php'); ?>
 						</select>
 					</td>
 				</tr>

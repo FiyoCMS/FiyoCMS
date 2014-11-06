@@ -6,19 +6,19 @@
 * @license		GNU/GPL, see LICENSE.
 **/
 
-if(!isset($_POST['email'])) die('Access Denied!');
+if(!isset($_GET['email'])) die('Access Denied!');
 session_start();
-define('_FINDEX_',1);
+define('_FINDEX_','BACK');
 
 require('../../../system/jscore.php');
-if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){		
+if(!filter_var($_GET['email'], FILTER_VALIDATE_EMAIL)){		
 	echo "{ \"status\":\"0\" , \"alert\":\"".alert('error',Email_Invalid)."\"}";
 } 
 else {
-	$qr = $db->select(FDBPrefix."user","*","status=1 AND email='$_POST[email]'"); 
+	$qr = $db->select(FDBPrefix."user","*","status=1 AND email='$_GET[email]'"); 
 	$qr = mysql_fetch_array($qr);
 	$jml = mysql_affected_rows();
-	define('FUrl',$_POST['url']);
+	define('FUrl',$_GET['url']);
 	if($jml) {
 		$btnClass = 'style="text-align: center;  font-size: 11px;  font-family: arial,sans-serif;  color: white;  font-weight: bold;  border-color: #3079ed;  background-color: #4d90fe;  background-image: linear-gradient(top,#4d90fe,#4787ed);  text-decoration: none;  display: inline-block;  min-height: 27px;  padding-left: 8px;  padding-right: 8px;  line-height: 27px;  border-radius: 2px;  border-width: 1px;
 		"';
@@ -26,7 +26,7 @@ else {
 			$_SESSION['USER_REMINDER'] = $reminder;
 			$_SESSION['USER_REMINDER_ID'] = $qr['id'];
 			$reminder = "app=user&res=$reminder";
-			$to  = "$_POST[email]" ;
+			$to  = "$_GET[email]" ;
 			$webmail = siteConfig('site_mail'); 
 			$domain  = substr(FUrl(),0,strpos(FUrl(),"/")); 
 			if(empty($webmail)); $webmail = "noreply@$domain";
@@ -60,7 +60,7 @@ else {
 			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 
 		// Additional headers
-			$headers .= "To: $qr[name] <$_POST[email]>" . "\r\n";
+			$headers .= "To: $qr[name] <$_GET[email]>" . "\r\n";
 			
 			$headers .= "From: ".siteConfig('site_name'). "<$webmail>" ."\r\n";
 			$headers .= "cc :" . "\r\n";

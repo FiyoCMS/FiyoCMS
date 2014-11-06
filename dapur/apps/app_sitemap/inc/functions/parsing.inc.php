@@ -490,8 +490,6 @@ function writeSitemap($FILE) {
 	
 	
 	
-	include_once('apps/app_sitemap/settings/files.inc.php');
-	
 	/* Di Modifikasi oleh Fiyo Dev. */
 	$student_info = $FILES;
 

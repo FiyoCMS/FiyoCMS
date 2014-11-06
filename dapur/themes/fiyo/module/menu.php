@@ -22,17 +22,19 @@ $sum = mysql_affected_rows();
 
 while($menu=mysql_fetch_array($sql)) {				
 	$subtitle = $pid = "";			
-	$app = str_replace("http://".siteConfig('backend_folder')."/index.php","",$menu['link']);
+	$app2 = str_replace("http://".siteConfig('backend_folder')."/index.php","",$menu['link']);
 	$app = $menu['sub_name'];
 	$ac = false;
 	if(isset($_REQUEST['app']))
 	$pid = FQuery('menu',"link LIKE '%$_REQUEST[app]%' AND status=1 AND category ='adminpanel'","parent_id");
 	if((isset($_REQUEST['app']) AND $_REQUEST['app'] == $app) OR ($menu['id'] == $pid)) { 
-		$a="panel active $app"; 
+		$a ="panel active $app"; 
 		$ac = true;
 	}
-	else 
-		$a="panel ";	
+	else if(!isset($_REQUEST['app']) AND $menu['link'] == 'index.php')
+		$a ="panel active root $app"; 
+	else
+		$a ="panel";
 		if(empty($menu['class'])) $menu['class'] = 'icon-asterisk';
 		if ($menu['app'] =="sperator"){
 			echo "<li class=\"$a\"><a data-parent=\"#menu\" data-toggle=\"collapse\" class=\"accordion-toggle collapsed\" data-target=\"#nav-$menu[id]\">
@@ -138,10 +140,10 @@ else if(isset($_GET['type']))
   $name = $link.'-'.$_GET['type'];
 else $name = $link;
 
+if(isset($_SESSION['PLATFORM'])) $f = FAdmin; else $f = '';
 ?>
 
 <!-- /#menu -->
-<div style="display:none"><div><div><div><div><div><div><div><div>
 <script language="javascript" type="text/javascript">
 function loadUrl(url) {
 	$("#loadingbar").remove();
@@ -157,15 +159,14 @@ function loadUrl(url) {
 	if(dataurl) {
 		var w = $("#loadingbar");
 	  	$.ajax({
-			url: url,
+			url: '<?php echo $f;?>'+url,
 			timeout:10000, 
-			error:function(){ 
+			error:function(data){ 
 				$("#mods").modal("show");
 				w.stop();
 				w.animate({width:'101%'},100).fadeOut('fast');
 			},
 			success: function(data){	
-				
 				$('.alert').remove();
 				w.stop();
 				window.history.pushState(dataurl, "Fiyo CMS", dataurl);
@@ -174,7 +175,7 @@ function loadUrl(url) {
 				if(data == 'Redirecting...')
 				window.location.replace(location.href);
 				else
-				$("#mainApps").html(data);			
+				$("#mainApps").html(data);
 				
 				w.animate({width:'101%'},100).fadeOut('fast');
 				setTimeout(function() {
@@ -188,7 +189,7 @@ function loadUrl(url) {
 				loader();
 				loadSpinner();
 				loadChoosen();
-				loadScrollbar()
+				loadScrollbar();
 				$('#content a[href]').on('click', function(e){				
 					if (!$(this).attr('target') ){
 						if ($(this).attr('href')!== window.location.hash){
@@ -253,4 +254,4 @@ $(function() {
 	$('#menu li.active ul').addClass('in');
 	$('#menu li.active li.<?php echo $name; ?>').addClass('active');
 });
-</script></div></div></div></div></div></div></div></div></div>
+</script>

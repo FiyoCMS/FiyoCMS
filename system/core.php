@@ -13,8 +13,11 @@ defined('_FINDEX_') or die('Access Denied');
 */ 
 require_once ('config.php');
 require_once ('system/query.php');
+require_once ('system/libs.php');
 require_once ('system/function.php');
 
+if(isset($_POST['platform']))
+$_SESSION['PLATFORM'] = true;
 //check table setting
 $ress = mysql_query("SHOW TABLES LIKE '".FDBPrefix."setting'");
 mysql_num_rows($ress) or die(alert("error","Table setting is not found. Please check <b>DBPrefix</b> on file config.php!",true,true));

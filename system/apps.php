@@ -21,7 +21,14 @@ function loadAppsCss() {
 	$file = "apps/app_$apps/app_style.php";	
 	if(file_exists($file)) {
 		require_once ($file);
-		echo "\n";
+	}
+}
+
+function loadAppsJs() {	
+	$apps = app_param('app');
+	$file = "apps/app_$apps/app_js.php";	
+	if(file_exists($file)) {
+		require_once ($file);
 	}
 }
 

@@ -79,7 +79,7 @@ function openKCFinder(div) {
 <div class="col-lg-6 box-left">
 	<div class="panel box"> 		
 		<header>
-			<h5>Umum</h5>
+			<h5>Personal</h5>
 		</header>
 		<div>
 			<table class="data2">
@@ -150,7 +150,7 @@ function openKCFinder(div) {
 <div class="box-right">
 	<div class="box">									
 		<header class="dark">
-			<h5>Module Details</h5>
+			<h5>Contact</h5>
 		</header>				
 		<div class="isi">
 			<table class="data2">				
@@ -205,10 +205,7 @@ function openKCFinder(div) {
 					<div class="image-group <?php if(empty($qr['photo'])) echo "noimg"; ?>">
 						<div id="image1" class="imgdiv btn" onclick="openKCFinder(this)"><?php if(!empty($qr['photo'])) echo "<img id='img' src='$qr[photo]' class='img tips' height='150' title='click to change image'>";?><a <?php if(!empty($qr['photo'])) echo " style=' display: none';"; ?>>Choose Image</a></div>
 						<label <?php if(empty($qr['photo'])) echo " style=' display: none';"; ?> class=" red tips delete btn" data-placement="top" title="" data-original-title="<?php echo Delete; ?>"><span><b class="icon-remove-sign"></b></span></label>
-						<span class="infade">aasdasdsdsd</span>
-					</div>
-					
-					
+					</div>					
 					</td>
 				</tr>		
 			</table>

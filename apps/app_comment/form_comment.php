@@ -39,7 +39,7 @@ defined('_FINDEX_') or die('Access Denied');
 					if(json.status == 'success' || json.status == 'info')	$("#comment-text").val("");
 					
 					t.html("<?php echo Send_Comment;?>").removeAttr('disabled');
-					reloadCaptcha();
+					//reloadCaptcha();
 				}
 			});
 		});

@@ -7,6 +7,7 @@
 **/
 
 //set mulai session
+ob_start();
 session_start();
 //mendefinisikan _FINDEX_ sebagai halaman utama
 define('_FINDEX_', 'BACK' );
@@ -31,3 +32,4 @@ require_once ('system/core.php');
 //melakukan pengecekan login AdminPanel
 check_backend_login();
 
+ob_end_flush();

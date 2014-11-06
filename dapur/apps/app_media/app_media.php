@@ -27,7 +27,7 @@ else {
 		<div class="app_title">Media Manager</div>	
 	 </div>
 </div>
-<iframe src="../plugins/plg_kcfinder/browse.php?type=<?php echo $type; ?>" width="99.65%" height="550" style="border:solid 1px #ccc; -moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px; padding: 0" class="fg-toolbar"></iframe>
+<iframe src="<?php echo FUrl;?>/plugins/plg_kcfinder/browse.php?type=<?php echo $type; ?>" width="99.65%" height="550" style="border:solid 1px #ccc; -moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px; padding: 0" class="fg-toolbar"></iframe>
 
 <div class="app_link tabs">		
 	<div class="app_link">		

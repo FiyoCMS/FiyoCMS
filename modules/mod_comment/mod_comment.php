@@ -83,7 +83,7 @@ $(function() {
 				var img = $(this).find("img").length ;
 				if(img > 0) img.remove();
 				var hash = $(this).attr('data-gravatar-hash')
-				return '<img width="36" height="36" alt="" src="http://gravatar.com/avatar.php?size=36&gravatar_id=' + hash + '">';
+				return '<img width="36" height="36" alt="" src="http://gravatar.com/avatar/' + hash + '?size=36">';
 			});
 		}
 	});	

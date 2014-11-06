@@ -106,8 +106,24 @@ function load_login() {
 //memilih tema AdminPanel sesuai dengan nilai admin_theme pada tabel setting
 function select_themes($log, $stat = NULL){
 	$themePath = siteConfig('admin_theme');
-	define("AdminPath","themes/$themePath");		
-	if($log=="login") {
+	$adminPath = siteConfig('backend_folder');
+	define("FAdminPath",FUrl."$adminPath/themes/$themePath");
+	
+	if(isset($_SESSION['PLATFORM']) OR isset($_GET['platform'])) {	
+		if(isset($_GET['platform'])) {
+			$_SESSION['PLATFORM'] = $_GET['platform'];
+			if($_GET['platform'] == 'desktop')
+				$_SESSION['ROOT_PLATFORM'] = 'assets';		
+			if($_GET['platform'] == 'android')
+				$_SESSION['ROOT_PLATFORM'] = 'file:///android_asset/www';
+		}		
+		define("AdminPath",$_SESSION['ROOT_PLATFORM']);
+	}
+	else  {
+		define("AdminPath","themes/$themePath");
+	}
+		
+	if($log == "login") {
 		$file =  "themes/$themePath/login.php";
 		if(file_exists($file))
 			require $file;

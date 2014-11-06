@@ -7,7 +7,7 @@
 **/
 
 session_start();
-if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 4 or !isset($_POST['url'])) die();
+if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 4 or !isset($_GET['url'])) die();
 define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
@@ -22,7 +22,7 @@ require_once ('../../../system/jscore.php');
 		while($qr=mysql_fetch_array($sql)) {
 			$no++;			
 			$read = check_permalink("link","?app=article&view=item&id=$qr[id]","permalink");
-			if($read) $read = $_POST['url'].$read; else $read = $_POST['url']."?app=article&view=item&id=$qr[id]";
+			if($read) $read = $_GET['url'].$read; else $read = $_GET['url']."?app=article&view=item&id=$qr[id]";
 			$edit = "?app=article&act=edit&id=$qr[id]";						
 			$auth = userInfo("name","$qr[author_id]");
 			$info = "$qr[date]";

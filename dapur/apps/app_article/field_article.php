@@ -64,13 +64,13 @@ $(function() {
 	});
 	
 	$("#content form").submit(function(e){
-		e.preventDefault();
 		var ff = this;
 		var text = CKEDITOR.instances.editor.getData();
 		if(text && $("#content form").valid()) {
 			$(".inner .alert").remove();
 			ff.submit();
 		}else if(!text) {
+			e.preventDefault();
 			noticeabs("<?php echo alert('error',Please_write_some_text); ?>");
 			CKEDITOR.instances.editor.focus();
 		}

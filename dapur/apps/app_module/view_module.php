@@ -20,10 +20,11 @@ $(document).ready(function() {
 			url: "apps/app_module/controller/status.php",
 			data: "stat="+value+"&id="+id,
 			success: function(data){	
-				if(value == 1)
-					$('.type',parent).val("0");
+				if(value == 1) {
+					$('.type',parent).val("1");
+				}
 				else 
-					$('.type',parent).val("1");				
+					$('.type',parent).val("0");				
 				notice(data);		
 			}
 		});

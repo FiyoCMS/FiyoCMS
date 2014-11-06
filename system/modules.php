@@ -135,10 +135,7 @@ function loadModuleCss() {
 					if($a == Page_ID ) {
 						$file	= "modules/$qr[folder]/mod_style.php";
 						if(file_exists($file)) {
-							if($no > 1)
-							echo "\t";
 							require_once ($file);
-							echo "\n";
 							$no++;
 						}	
 					}
@@ -148,3 +145,4 @@ function loadModuleCss() {
 		}	
 	}
 }
+

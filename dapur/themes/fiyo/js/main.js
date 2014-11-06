@@ -18,11 +18,15 @@ function checkFirstVisit() {
 	});
 }
 
+if($.isFunction($.fn.chosen)) {
+	$("select").chosen({disable_search_threshold: 10});
+}
 $(function() {
 	//checkFirstVisit();
     $('a[href=#]').on('click', function(e){
       e.preventDefault();
     });    
+	
     $('.minimize-box').on('click', function(e) {
         e.preventDefault();
         var $icon = $(this).children('i');
@@ -113,9 +117,8 @@ function loader() {
 	$('input[type="number"]').attr("type","text").addClass('spinner').addClass('numeric');
 	$('input[type="checkbox"],input[type="radio"]').after("<span class='input-check'>");	
 	$("input.form-control[type=password]").parent().wrapInner("<div>");		
-	$("[required]").addClass('required').after('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').parent().wrapInner("<div>"
-	);		
-	
+	$("input[required]").addClass('required').after('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').parent().wrapInner("<div>");	
+	$("select[required]").addClass('required').parent().append('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').wrapInner("<div>");
     $('.required-input i').tooltip();
 	$("#editor").attr("required","required");
 	if ($.isFunction($.fn.validate)) {
@@ -136,7 +139,15 @@ function loader() {
 	$('.selainchar').alphanumeric({ichars:'.1a'});
 	$('.web').alphanumeric({allow:':/.-_'});
 	$('.email').alphanumeric({allow:':.-_@'});
-	
+	$('form').submit(function() {
+		$('.error').parents('.panel-collapse').height('auto').removeClass('collapsed').addClass('in').before().find('a').removeClass('collapsed');
+	});
+	$('.accordion-toggle').click(function () {
+		$(this).parent().next().css("display", "")
+	});
+	$('.accordion-toggle collapsed').bind(function () {
+		alert();
+	});
 }
 
 function selectCheck() {
@@ -265,7 +276,7 @@ function loadTable(url,display) {
 		$('table.data th input[type="checkbox"]').parents('th').unbind('click.DT');
 		if ($.isFunction($.fn.chosen) ) {
 			$("select").chosen({disable_search_threshold: 10});
-		}				
+		}
 	}
 }
 function loadSpinner() {

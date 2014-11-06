@@ -64,7 +64,7 @@ if(isset($article-> category)) :
 			</div>
 			<?php endif; ?>	
 			<div style="clear:both"></div>
-		</div>
+		</div>			
 	<!-- RSS Feed File Generator -->	
 	<?php elseif(_FEED_ == 'rss') : 
 	
@@ -101,24 +101,3 @@ if(isset($article-> category)) :
 	<?php endif; ?>
 	<h3><?php echo Category_is_empty;?></h3>
 <?php endif; ?>
-<script>
-	$(function() {
-		function main() {
-		$('.no-image h2.title a').each(function() {
-			$(this).parent().css('height',$(this).height()+25);
-		});
-		$('.article-grid ').each(function() {
-			$(this).css('height',$(this).width() * .5);
-		});
-		var w = $('#article').width();
-		
-		p = Math.round(w/330);
-			$('.article-grid').css('width',  100/p-.3 +'%');
-		}
-
-			main();
-		$(window).resize(function() {
-			main();
-		});
-	});
-</script>

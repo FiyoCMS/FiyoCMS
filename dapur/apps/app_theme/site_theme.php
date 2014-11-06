@@ -18,16 +18,39 @@ $no=0;
 
 ?>
 <script type="text/javascript">	
-$(function() {			
+$(function() {	
+	$('.theme-img').each(function() {
+	var hash = $('.theme-img').attr('data-img');
+	$.ajax({
+		url: hash ,
+		type : 'GET',
+		timeout: 500, 
+		error:function(data){
+			$('.theme-img[data-img]').prepend(function(){
+				var img = $(this).find("img") ;
+				if(img.length > 0) img.remove();
+				var hash = $(this).attr('data-img')
+				return ''; 
+			});	
+		},
+		success: function(data){
+			$('.theme-img[data-img]').prepend(function(){
+				var img = $(this).find("img") ;
+				if(img.length > 0) img.remove();
+				var hash = $(this).attr('data-img')
+				return '<img  alt="" src=" '+ hash + '">';
+			});
+		}
+	});
 	$( ".count" ).html($(".col-theme:visible" ).length);
-  $("#search").keyup(function(){
-	var v = $(this).val().toLowerCase();
-	$(".col-theme:contains("+v+")" ).css( "display", "block" );
-	$('.col-theme:not(:contains('+v+'))').hide(); 
-	$( ".count" ).html($(".col-theme:visible" ).length);
-  });
-	
-  $(".theme-btn").click(function(){
+	  $("#search").keyup(function(){
+		var v = $(this).val().toLowerCase();
+		$(".col-theme:contains("+v+")" ).css( "display", "block" );
+		$('.col-theme:not(:contains('+v+'))').hide(); 
+		$( ".count" ).html($(".col-theme:visible" ).length);
+	});
+	});
+	$(".theme-btn").click(function(){
 		var vl = $(this);
 		var value = vl.data('name');
 		$.ajax({
@@ -78,16 +101,15 @@ while($folder=readdir($dir)){
 		$c = siteConfig('site_theme');
 		$ac = Activate;
 		if($c == $folder) { $active = 'active'; $ac = Active;}
+		if(file_exists("../themes/$folder/$theme_image")) $img = "<span class='theme-img' data-img='../themes/$folder/$theme_image'></span>"; else $img ="<span class='no-image'>No Preview<br>Image</span>";
 		$isi = "
 		<div class='col-theme $active' data-name='$theme_name'>
 			<div class='theme-box'>
 				<div class='theme-image'>
-				
-					<button value='$folder' name='folder'>					
-					
-					<img src='../themes/$folder/$theme_image' >
+					<a value='$folder' name='folder' href='?app=theme&folder=$folder'>
+					$img
 					<div><span> Details </span></div>
-					</button>	
+					</a>	
 				</div>
 				<div class='theme-title'>			
 					$theme_name							

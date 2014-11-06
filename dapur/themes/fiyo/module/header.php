@@ -25,7 +25,7 @@ defined('_FINDEX_') or die('Access Denied');
 				<li><a href="?app=user&act=edit&id=<?php echo USER_ID; ?>"><i class="icon-pencil"></i> Edit Profile</a></li>
 				<li class="divider"></li>
 				<li><form method="post" action="">
-				<button type="submit" name="fiyo_logout" value="Log Out" title="Click to logout" /><i class="icon-signout"></i> Sign Out</button></form></li>
+				<button type="submit" name="fiyo_logout" id="user-logout" value="Log Out" title="Click to logout"><i class="icon-signout"></i> Sign Out</button></form></li>
 			</ul>
 		</li>
 					<!--li class='dropdown notif'>

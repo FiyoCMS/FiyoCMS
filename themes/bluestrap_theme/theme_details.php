@@ -16,5 +16,5 @@ $theme_author		='First Ryan';
 $theme_author_url	='http://firstryan.net/';
 $theme_author_email	='firstryan@gmail.com';
 $theme_image		='theme_details.jpg';
-$theme_docs			='theme_details.jpg';
+$theme_logo			='image/logo.png';
 ?>

@@ -2,8 +2,8 @@
 /**
 * @nama			Fi Statistic
 * @type			Plugin
-* @version		1.0.0
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @version		2.0
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 **/
 

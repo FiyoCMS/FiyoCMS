@@ -7,24 +7,25 @@
 * @description	Statistic
 **/
 
-defined('_FINDEX_') or die('Access Denied');
-require ('browser.php');
+session_start();
+define('_FINDEX_',1);
+if($_SERVER['REQUEST_METHOD'] != 'POST') {
+	die("Access Denied!");
+} else {
+//load file
+require('../../../system/jscore.php');
+require ('../browser.php');
 
 //get ip
 $ip = getIP();
 if(!empty($_SERVER['REMOTE_ADDR'])) $ip =  $ip;
 if(!checkLocalhost()) {
-	/*	
 	$url = 'http://freegeoip.net/json/';
 	$content = file_get_contents($url);
 	$json = json_decode($content, true);
 	$country = $json['country_name'];
 	$city  = $json['city'];
-	$timeZone = $json['timezone'];		
-	*/
-	$country = '';
-	$city  = '';
-	$timeZone =  siteConfig('timezone')."";
+	$timeZone = $json['timezone'];
 
 
 } else {
@@ -84,7 +85,7 @@ else if (time() - $_SESSION['VISIT_SESSION_DAILY'] > 7200) {
 
 //set visitor timezone
 @date_default_timezone_set($visitor_location['LocalTimeZone']);
-
+}
 
 function getIP() {
         $ipaddress = '';
@@ -110,3 +111,5 @@ function getIP() {
 
     return $ipaddress;
 }
+
+?>

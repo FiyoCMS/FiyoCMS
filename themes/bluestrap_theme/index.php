@@ -7,21 +7,18 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- Le styles -->
-	<?php loadAppsCss(); ?>
-	<?php loadModuleCss(); ?>
-    <script src="<?php echo FThemePath; ?>/assets/js/jquery-2.0.3.min.js"></script>
-    <link href="<?php echo FThemePath; ?>/assets/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo FThemePath; ?>/assets/css/bootstrap-responsive.css" rel="stylesheet"> 
-	<link href="<?php echo FThemePath; ?>/css/style.css" rel="stylesheet">
+    <script src="/assets/js/jquery-2.0.3.min.js"></script>
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet"> 
+	<link href="/css/style.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="<?php echo FThemePath; ?>/assets/js/html5shiv.js"></script>
+      <script src="/assets/js/html5shiv.js"></script>
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="<?php echo FThemePath; ?>/image/favicon.png">
+    <link rel="shortcut icon" href="/image/favicon.png">
   </head>
 
   <body>

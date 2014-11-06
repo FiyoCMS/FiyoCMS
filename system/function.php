@@ -13,7 +13,6 @@ defined('_FINDEX_') or die('Access Denied');
 /* Connect to database */
 $db = new FQuery();  
 $db -> connect();
-
 /* ini set manual jika sistem mengijinkan */
 ini_set('post_max_size', format_size(siteConfig('file_size')));
 ini_set('upload_max_filesize', format_size(siteConfig('file_size')));
@@ -50,8 +49,11 @@ function oneQuery($table,$field,$value,$output = null) {
 /********************************************/
 /* Website Global Information */
 function siteConfig($name) {
-	$output = oneQuery('setting','name',"$name",'value');
-	return $output;
+	$config = new FData();  
+	$config =  $config -> Config($name);
+	if(isset($config[$name]))
+	return $config[$name];
+	else return false;
 }
 
 // mengambil data informasi dari user yang sudah login
@@ -197,6 +199,7 @@ function getHtmlTag($text,$first,$second) {
 	}
 	return $text;
 }
+
 function stripTags($text, $tags = null)
 {  
   // replace php and comments tags so they do not get stripped  
@@ -390,7 +393,7 @@ function addJs($link) {
 //memanggil file CSS
 function addCss($link,$media = null) {
 	if(empty($media)) $media = 'all';
-	echo  "<link href='$link' rel='stylesheet' type='text/css' media='$media' />";
+	echo  "<link href='$link' rel='stylesheet' type='text/css' media='$media' />\n";
 }	
 
 /* membuat file zip */

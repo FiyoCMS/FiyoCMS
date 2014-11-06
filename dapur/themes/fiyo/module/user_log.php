@@ -7,7 +7,7 @@
 **/
 
 session_start();
-if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 3 or !isset($_POST['url'])) die();
+if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 3 or !isset($_GET['url'])) die();
 define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');

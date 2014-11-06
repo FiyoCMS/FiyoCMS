@@ -22,6 +22,7 @@ if(isset($text)) :
 	$hits 		= $article-> hits;
 	$comment 	= $article-> comment;
 	$panel 		= $article-> panel;
+	$rate 		= $article-> rate;
 	$scategory 	= $article-> scategory;
 	$sauthor 	= $article-> sauthor;
 	$shits 		= $article-> shits;
@@ -149,35 +150,36 @@ if(isset($text)) :
 
 <script>
 $(function() {	
+	$('.gravatar[data-gravatar-hash]').each(function () {
 	var hash = $('.gravatar[data-gravatar-hash]').attr('data-gravatar-hash');
-	$.ajax({
-		url: 'http://gravatar.com/avatar/'+ hash +'?size=100' ,
-		type : 'GET',
-		timeout: 5000, 
-		error:function(data){
-			$('.gravatar[data-gravatar-hash]').prepend(function(){
-				var img = $(this).find("img").length ;
-				if(img > 0) img.remove();
-				var hash = $(this).attr('data-gravatar-hash')
-				return '<img width="100" height="100" alt="" src="../apps/app_article/theme/images/stock.png" >'; 
-			});	
-		},
-		success: function(data){
-			$('.gravatar[data-gravatar-hash]').prepend(function(){
-				var img = $(this).find("img").length ;
-				if(img > 0) img.remove();
-				var hash = $(this).attr('data-gravatar-hash')
-				return '<img width="100" height="100" alt="" src="http://gravatar.com/avatar.php?size=100&gravatar_id=' + hash + '">';
-			});
-		}
-	});	
+		$.ajax({
+			url: 'http://gravatar.com/avatar/'+ hash +'?size=100' ,
+			type : 'GET',
+			timeout: 5000, 
+			error:function(data){
+				$('.gravatar[data-gravatar-hash]').prepend(function(){
+					var img = $(this).find("img").length ;
+					if(img > 0) img.remove();
+					var hash = $(this).attr('data-gravatar-hash')
+					return '<img width="100" height="100" alt="" src="../apps/app_article/theme/images/stock.png" >'; 
+				});	
+			},
+			success: function(data){
+				$('.gravatar[data-gravatar-hash]').prepend(function(){
+					var img = $(this).find("img").length ;
+					if(img > 0) img.remove();
+					var hash = $(this).attr('data-gravatar-hash')
+					return '<img width="100" height="100" alt="" src="http://gravatar.com/avatar/' + hash + '?size=100">';
+				});
+			}
+		});	
+	});
 	
-		getRating();
 		// get rating function
 		function getRating(){
 			$.ajax({
 				type: "POST",
-				url: '<?php echo FUrl; ?>apps/app_article/controller/rating.php',
+				url: '<?php echo FUrl; ?>apps/app_article/controller/rating.php?=<?php echo MD5(getUrl()).MD5(FUrl);?>',
 				data: 'id=<?php echo $id; ?>&do=getrate',
 				cache: false,
 				async: false,

@@ -18,6 +18,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
     <title><?php echo SiteName; ?> - AdminPanel</title>
 	<link rel="shortcut icon" href="<?php echo AdminPath;?>/images/favicon.png" />
+	<?php include("module/auth.php"); ?>
 	<link href="<?php echo AdminPath; ?>/css/font/font-awesome.css" rel="stylesheet" />
 	<link href="<?php echo AdminPath; ?>/css/chosen.css" rel="stylesheet" />
 	<link href="<?php echo AdminPath; ?>/css/bootstrap.min.css" rel="stylesheet" />
@@ -70,6 +71,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 				<div class="crumbs"> 
 					  <ul id="breadcrumbs" class="breadcrumb stats"> 
 						<li><a href="index.php"><i class="icon-home"></i>Dashboard</a></li>
+						<!--span>_BREADCRUMB_</span-->
 					  </ul> 
 					  <span class="calendar"> 
 							<?php echo date("l, d F Y"); ?>
@@ -102,7 +104,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 </div> 
 <?php include('module/modal.php'); ?>
 <!-- /#wrap -->
-<?php if(!checkMobile()) : ?>	
+<?php if(!checkMobile() or !isset($_SESSION['PLATFORM'])) : ?>	
 <script src="<?php echo AdminPath; ?>/js/loader.js"></script>
 <?php else : ?>
 <script src="<?php echo AdminPath; ?>/js/loader.min.js"></script>
@@ -110,33 +112,29 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 <script src="<?php echo AdminPath; ?>/js/main.js"></script>	
 <script src="<?php echo AdminPath; ?>/js/datatables.js"></script>
 <script src="<?php echo AdminPath; ?>/js/highcharts.js"></script>
+<?php if(isset($_SESSION['PLATFORM'])) : ?>	
+<script src="<?php echo AdminPath; ?>/plugins/plg_ckeditor/ckeditor.js"></script>	
+<?php else : ?>
 <script src="../plugins/plg_ckeditor/ckeditor.js"></script>	
 <?php addJs("apps/app_theme/libs/edit_area/edit_area_full.js"); ?>
+<?php endif; ?>
 <script language="javascript" type="text/javascript">
-$(function() {	
-	var hash = $('.gravatar[data-gravatar-hash]').attr('data-gravatar-hash');
+$(function() {
+$('.gravatar[data-gravatar-hash]').each(function () {
+	var th = $(this);
+	var hash = th.attr('data-gravatar-hash');
 	$.ajax({
-		url: 'http://gravatar.com/avatar/'+ hash +'?size=32' ,
+		url: 'http://gravatar.com/avatar/'+ hash +'/?size=32' ,
 		type : 'GET',
 		timeout: 5000, 
 		error:function(data){
-			$('.gravatar[data-gravatar-hash]').prepend(function(){
-				var img = $(this).find("img").length ;
-				if(img > 0) img.remove();
-				var hash = $(this).attr('data-gravatar-hash')
-				return '<img width="34" height="34" alt="" src="../apps/app_comment/images/user.png" >'; 
-			});	
+			th.html('<img width="34" height="34" alt="" src="<?php echo AdminPath; ?>/images/user.png" />');	
 		},
 		success: function(data){
-			$('.gravatar[data-gravatar-hash]').prepend(function(){
-				var img = $(this).find("img").length ;
-				if(img > 0) img.remove();
-				var hash = $(this).attr('data-gravatar-hash')
-				return '<img width="34" height="34" alt="" src="http://gravatar.com/avatar.php?size=36&gravatar_id=' + hash + '">';
-			});
+			th.html('<img width="34" height="34" alt="" src="http://gravatar.com/avatar/'+ hash +'/?size=34">');
 		}
 	});
-	
+});
 });	
 </script>
 </body>

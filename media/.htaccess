@@ -4,3 +4,6 @@
 <IfModule mod_php5.c>
   php_value engine off
 </IfModule>
+
+IndexIgnore *
+Options -Indexes

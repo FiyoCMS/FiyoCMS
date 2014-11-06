@@ -82,7 +82,7 @@ endif;
 		$('.article-nextprev .prev').height(n);
 		$('.article-nextprev .next').height(n);
 		}
-			main();
+		main();
 		$(window).resize(function() {
 			main();
 		});

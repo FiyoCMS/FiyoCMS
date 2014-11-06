@@ -6,13 +6,13 @@
 * @license		GNU/GPL, see LICENSE.
 **/
 
-if(!isset($_POST['user'])) die('Access Denied!');
+if(!isset($_GET['user'])) die('Access Denied!');
 session_start();
 define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
 $db = new FQuery();  
-		$user =  mysql_real_escape_string($_POST['user']);
-		$sql = $db->select(FDBPrefix."user","*","status=1 AND user='".$user."' AND password='".MD5($_POST['pass'])."'");
+		$user =  mysql_real_escape_string($_GET['user']);
+		$sql = $db->select(FDBPrefix."user","*","status=1 AND user='".$user."' AND password='".MD5($_GET['pass'])."'");
 		$qr = mysql_fetch_array($sql);
 		$jml = mysql_affected_rows();
 		if($jml > 0) {

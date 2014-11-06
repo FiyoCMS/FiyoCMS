@@ -7,14 +7,14 @@
 **/
 
 session_start();
-if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 4 or !isset($_POST['url'])) die();
+if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['USER_LEVEL'] > 4 or !isset($_GET['url'])) die();
 define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
 
 $db = new FQuery();  
 $db->connect(); 
-if(!isset($_POST['url'])) $_POST['url'] = '';
+if(!isset($_GET['url'])) $_GET['url'] = '';
 ?>
 <table class="table table-striped tools">
   <tbody>
@@ -43,7 +43,7 @@ if(!isset($_POST['url'])) $_POST['url'] = '';
 			$aid = link_param('id',"$qr[link]");	
 			$app = "$qr[apps]";
 			if(empty($app)) $app = 'article';
-			$lread = $_POST['url'].check_permalink("link","?app=article&view=item&id=$aid","permalink");
+			$lread = $_GET['url'].check_permalink("link","?app=article&view=item&id=$aid","permalink");
 			$edit = "?app=$app&view=comment&act=edit&id=$id";			
 			$title = oneQuery('article','id',$aid ,'title');
 			$red = '';
@@ -97,23 +97,20 @@ $(function() {
 		});
 	});
 	
-	var hash = $('.c_gravatar[data-gravatar-hash]').attr('data-gravatar-hash');
+	$('.c_gravatar[data-gravatar-hash]').each(function () {
+	var th = $(this);
+	var hash = th.attr('data-gravatar-hash');
 	$.ajax({
 		url: 'http://gravatar.com/avatar/'+ hash +'?size=32' ,
 		type : 'GET',
 		timeout: 5000, 
-		error:	function(data){
-			$('.c_gravatar[data-gravatar-hash]').prepend(function(){
-				var hash = $(this).attr('data-gravatar-hash')
-				return '<img width="32" height="32" alt="" src="../apps/app_comment/images/user.png" >'; 
-			});	
+		error:	function(data){			
+			th.html('<img width="32" height="32" alt="" src="../apps/app_comment/images/user.png" >');	
 		},
 		success: function(data){
-			$('.c_gravatar[data-gravatar-hash]').prepend(function(){
-				var hash = $(this).attr('data-gravatar-hash')
-				return '<img width="32" height="32" alt="" src="http://gravatar.com/avatar.php?size=36&gravatar_id=' + hash + '">';
-			});
+			th.html('<img width="32" height="32" alt="" src="http://gravatar.com/avatar.php?size=36&gravatar_id=' + hash + '">');
 		}
+	});
 	});
 });	
 </script>

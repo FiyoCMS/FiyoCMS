@@ -29,7 +29,7 @@ addCss("apps/app_theme/libs/styles/default/default.css");
 			var src = $(this).attr('src');
 			 $('.file-title').html(": " + name);
 			$("#save-file").attr('name',"../../../"+src+"/"+name);
-			
+			$("#editor").html("<div style='padding: 26px;font-size: 3em;color: #ccc;'>Loading...</div>");
 			$.ajax({
 				url: "apps/app_theme/libs/check_file.php",
 				data: "src="+src+"&name="+name,
@@ -73,7 +73,7 @@ addCss("apps/app_theme/libs/styles/default/default.css");
 		</div>
 		<div class="inn-theme">			
 			<div class="col full first" style=" width: 100% !important;  ">	
-			<div id="editor"><div style="padding: 30px; font-size: 3em; color: #ccc">
+			<div id="editor" style="margin-bottom: -6px;"><div style="padding: 30px; font-size: 3em; color: #ccc">
 			<?php echo Choose_file_on_left_side; ?>			
 			</div></div>
 			</div>

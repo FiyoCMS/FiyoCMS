@@ -23,16 +23,16 @@ $(function() {
 	$(".activator label").click(function(){ 
 		var parent = $(this).parents('.switch');
 		var id = $('#id',parent).attr('value');	
-		var value = $('#type',parent).attr('value');
+		var value = $('#type',parent).val();
 		if(value == 1) value = 0; else value = 1;
 		$.ajax({
 			url: "apps/app_menu/controller/status.php",
 			data: "stat="+value+"&id="+id,
 			success: function(data){
 				if(value == 1)
-					$('.type',parent).val("1");
+					$('#type',parent).val("1");
 				else 
-					$('.type',parent).val("0");				
+					$('#type',parent).val("0");				
 				notice(data);		
 			}
 		});

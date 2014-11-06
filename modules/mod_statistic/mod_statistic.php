@@ -22,7 +22,7 @@ require_once("mod_system.php");
 
 ?>
 
-<table style="margin-bottom: 0; width: 100%">
+<table style="margin-bottom: 0; width: 100%" class="statistic-table">
 	<tbody>
 		<?php if($td) { ?>
 		<tr>

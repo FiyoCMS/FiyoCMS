@@ -49,7 +49,7 @@ $(document).ready(function() {
 elseif($file == "jpg" || $file == "jpeg" || $file == "png" ||
 $file == "gif" || $file == "tif" || $file == "ico") :
 $furl = "../../$url";
-echo "<div class='warp-img'><img src='".siteConfig('site_url')."$furl' style='max-width: 90%'/ ></div>";
+echo "<div class='warp-img'><img src='".siteConfig('site_url')."$furl' style='max-width: 90%; max-height: 90%;'/ ></div>";
 
 ?> 
 <script language="javascript" type="text/javascript">

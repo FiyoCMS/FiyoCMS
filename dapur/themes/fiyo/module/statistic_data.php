@@ -185,9 +185,9 @@ $(function () {
 			
 		var prevHeight = $(window).height();
 		var prevWidth = $(window).width();
-		$(window).resize(function() {
+		
+		$(".statistic").resize(function() {
 			chartResize(prevWidth, prevHeight);
-			prevWidth = $(window).width();
 		});
 
     }); 
