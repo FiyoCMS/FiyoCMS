@@ -15,7 +15,7 @@ defined('_FINDEX_') or die('Access Denied');
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
-	<title><?php echo SiteTitle; ?>'s Admin Panel</title>
+	<title><?php echo SiteTitle; ?> - AdminPanel</title>
 	<?php include("module/auth.php"); ?>
 	<link rel="shortcut icon" href="<?php echo AdminPath; ?>/images/favicon.png" />
 	<link rel="stylesheet" href="<?php echo AdminPath; ?>/css/login.css" type="text/css">
@@ -42,8 +42,7 @@ defined('_FINDEX_') or die('Access Denied');
 					data: "user="+name+"&pass="+pass+"&url="+url,
 					timeout : 10000,
 					error: function(data){	
-						$(t).html("Login");					
-
+						$(t).html("Login");
 					},	
 					success: function(data){
 					try {

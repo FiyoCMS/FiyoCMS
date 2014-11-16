@@ -34,13 +34,13 @@ addCss("apps/app_theme/libs/styles/default/default.css");
 				url: "apps/app_theme/libs/check_file.php",
 				data: "src="+src+"&name="+name,
 				success: function(data){				
-				$("#editor").html(data); 
+					$("#editor").html(data); 
 				}
 			});
 		});
 		
 		$("#save-file").click(function(){
-			var content =  editAreaLoader.getValue("text") ;
+			var content =  encodeURIComponent(editAreaLoader.getValue("text")) ;
 			var btn = $(this);			
 			$(this).html("Loading...");			
 			$.ajax({

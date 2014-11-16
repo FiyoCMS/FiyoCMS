@@ -77,9 +77,10 @@ $dir=opendir("themes");
 $no=0;
 while($folder=readdir($dir)){ 
 	if($folder=="." or $folder=="..")continue; 
-	if(is_dir("themes/$folder"))
-	{				
+	if(is_dir("themes/$folder") AND file_exists("themes/$folder/index.php"))
+	{
 		$no++;
+		$theme_image = '';
 		$spot_file = "themes/$folder/theme_details.php";
 		if(file_exists($spot_file)) include("$spot_file");
 		else {
@@ -94,7 +95,13 @@ while($folder=readdir($dir)){
 		$c = siteConfig('admin_theme');
 		$ac = Activate;
 		if($c == $folder) { $active = 'active'; $ac = Active;}
-		if(file_exists("themes/$folder/$theme_image")) $img = "<span class='theme-img' data-img='themes/$folder/$theme_image'></span>"; else $img ="<span class='no-image'>No Preview<br>Image</span>";
+		
+		if(!empty($theme_image)) {
+			if(file_exists("themes/$folder/$theme_image")) 
+				$img = "<span class='theme-img' data-img='themes/$folder/$theme_image'></span>"; 	
+			else $img ="<span class='no-image'>No Preview<br>Image</span>";	
+		}
+		else $img ="<span class='no-image'>No Preview<br>Image</span>";
 		$isi = "
 		<div class='col-theme $active' data-name='$theme_name'>
 			<div class='theme-box'>

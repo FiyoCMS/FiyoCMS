@@ -1,4 +1,5 @@
 <?php defined('_FINDEX_') or die('Access Denied!'); ?>
+{loadTime}
 <!DOCTYPE html>
 <html lang="<?php echo SiteLang;  ?>">
 <head>
@@ -9,8 +10,6 @@
 	<meta name="keywords" content="<?php echo MetaKeys;  ?>" />
 	<meta name="description" content="<?php echo MetaDesc;  ?>" />
 	<meta name="generator" content=" Fiyo CMS Integrate Design Easily!" />
-	<?php loadAppsCss(); ?>
-	<?php loadModuleCss(); ?>
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo FThemePath; ?>/css/images/favicon.ico" />
 	<link rel="stylesheet" href="<?php echo FThemePath; ?>/css/style.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="<?php echo FThemePath; ?>/css/font.css" type="text/css" media="all" />

@@ -11,7 +11,6 @@ define('_FINDEX_','BACK');
 
 //load query and function files
 require_once ('../../../system/jscore.php');
-require_once ('../../../../system/html.php');
 
 //logical for image spot and auto fill
 $name = siteConfig('site_theme');

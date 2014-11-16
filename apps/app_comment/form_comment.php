@@ -10,12 +10,15 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-
 ?>
 <script>
 	function reloadCaptcha() {
 		document.getElementById('captcha').src = document.getElementById('captcha').src+ '?' +new Date();
 	}
+	function validateEmail(email) { 
+		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return re.test(email);
+	} 
 	$(function() {
 		$('.send_comment').click(function() {
 			var name = $("#comment-name").val();
@@ -24,24 +27,33 @@ defined('_FINDEX_') or die('Access Denied');
 			var url = $("#comment-url").val();
 			var captcha = $("#comment-captcha").val();
 			var t = $(this);
+			if(!text || !email || !name) {
+				if(!name)
+				$("#comment-name").focus();
+				else if(!email || !validateEmail(email))
+				$("#comment-email").focus();
+				else if(!text)
+				$("#comment-text").focus();
+			} else {
 			t.html("Loading...").attr('disabled','');
-			var t = $(this);
 			$.ajax({
 				type : "POST",
 				data: "send=true&name="+name+"&email="+email+"&url="+url+"&text="+encodeURIComponent(text)+"&captcha="+captcha+"&link="+encodeURIComponent("<?php echo $link;?>"),
 				url: "<?php echo FUrl; ?>apps/app_comment/controller/insert.php",
 				success: function(data){
-					var json = $.parseJSON(data);
 					$(".notice-comment").remove();
-					$("#comments").after("<div class='notice alert notice-comment "+json.status+"'>"+json.notice+"</div>");
+					var json = $.parseJSON(data);
+					$("#comments").after("<div class='alert notice-comment alert-"+json.status+"'>"+json.notice+"<\/div>");
 					if(json.redirect == 1)
 					$("#comments").after("<meta http-equiv='REFRESH' content='3; url=<?php echo getUrl();?>#comment-"+json.id+"'>");
 					if(json.status == 'success' || json.status == 'info')	$("#comment-text").val("");
 					
 					t.html("<?php echo Send_Comment;?>").removeAttr('disabled');
-					//reloadCaptcha();
+					/*reloadCaptcha();*/
 				}
 			});
+			
+			}
 		});
 	});	
 	

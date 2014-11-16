@@ -20,6 +20,9 @@ define( '_FINDEX_', 1 );
 //define root directory
 define('_PATH_BASE_', dirname(__FILE__) );
 
+//set auto construc html
+define('_AUTO_HTML_CONSTRUCT_', false);
+
 //check file configuration
 if(!file_exists('config.php'))
 {

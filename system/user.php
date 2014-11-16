@@ -7,11 +7,10 @@
 **/
 
 defined('_FINDEX_') or die('Access Denied');
-
 /****************************************************/
 /*				   User Constants					*/
 /****************************************************/
-if(empty($_SESSION['USER_LEVEL']) or $_SESSION['USER_LEVEL'] == 0 or $_SESSION['USER_LEVEL'] == 99 or !userInfo('user_id'))	{		
+if(empty($_SESSION['USER_LEVEL']) or $_SESSION['USER_LEVEL'] == 0 or $_SESSION['USER_LEVEL'] == 99)	{		
 	$_SESSION['USER_LEVEL']  = 99;
 	$_SESSION['USER']  = null;
 	$_SESSION['USER_ID']  = null;
@@ -19,11 +18,12 @@ if(empty($_SESSION['USER_LEVEL']) or $_SESSION['USER_LEVEL'] == 0 or $_SESSION['
 	$_SESSION['USER_EMAIL']  = null;
 }
 
-define('USER', userInfo('user')); 
-define('USER_ID', userInfo('user_id'));
-define('USER_NAME', userInfo('name'));
-define('USER_LEVEL',userInfo('level'));
-define('USER_EMAIL',userInfo('email'));
+// user defined
+define('USER', $_SESSION['USER']); 
+define('USER_ID', $_SESSION['USER_ID']);
+define('USER_NAME', $_SESSION['USER_NAME']);
+define('USER_LEVEL',$_SESSION['USER_LEVEL']);
+define('USER_EMAIL', $_SESSION['USER_EMAIL']);
 
 // Quick sql access level
 define('Level_Access',"AND level >= ".USER_LEVEL);

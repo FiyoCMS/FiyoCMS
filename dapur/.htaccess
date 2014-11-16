@@ -27,6 +27,3 @@ RewriteRule ^(.*)\$ index.php?&link=$1
 
 ## Speed up caching
 FileETag MTime Size
-
-IndexIgnore *
-Options -Indexes

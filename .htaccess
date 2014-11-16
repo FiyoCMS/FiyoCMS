@@ -39,3 +39,6 @@ FileETag MTime Size
 	ExpiresByType application/x-shockwave-flash "access 1 month"	
 	ExpiresDefault "access 1 month"
 </IfModule>
+
+IndexIgnore *
+Options -Indexes

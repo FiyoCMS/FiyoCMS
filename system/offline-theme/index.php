@@ -36,7 +36,7 @@ if(isset($_POST['login'])) {
 <html>
 
 <head>
-	<title>Website Maintenance</title>
+	<title>Website Maintenance - <?php echo siteConfig('site_title'); ?></title>
 	<link rel="shortcut icon" href="favicon.png" />
 	<link rel="stylesheet" href="<?php echo $OffTheme; ?>/css/login.css" type="text/css">
 	<script type="text/javascript" src="<?php echo $OffTheme; ?>/js/jquery.min.js"></script>
@@ -80,10 +80,10 @@ if(isset($_POST['login'])) {
              <form id="formElem" method="post">
                 <fieldset class="step">
                     <p class="legend"><img src="<?php echo $OffTheme; ?>/images/fiyo.png" width="50"><br>Website Maintenance</p>
-                    <p>
+                    <p><input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" />
                        <input name="user" autocomplete="OFF" type="text" class="name" placeholder="Username" />
                    	</p>
-                    <p>
+                    <p><input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" />
                         <input name="pass" autocomplete="OFF" type="password" class="pass" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" /> 						
 					</p>
                     <p class="button">

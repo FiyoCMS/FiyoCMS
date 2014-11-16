@@ -4,37 +4,46 @@
 }  
 
 
+* {
+	-webkit-touch-callout: none;
+	box-sizing: border-box;
+	outline: none;
+}
 body {	
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
-	background:#020202  url(../images/bg.jpg) center no-repeat;
+	background:#070707  url(../images/bg.jpg) center 0 no-repeat;
+	background-size: 100%;
 	font:1em arial;
 	height: 100%;
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 1024px) {
 	body {	
-		overflow: hidden;
-		margin: 0;
-		padding: 0;
-		background:#020202  url(../images/bg.jpg) top center no-repeat;
-		-webkit-background-size:cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-		font:1em arial;
+		background:#070707  url(../images/bg.jpg) center 10% fixed no-repeat;
+		height: 100%;
+		background-size: 180%;
+		background-position: center 10%;
 	}
 }
+
+@media (max-width: 768px) {
+	body {	
+		background:#070707  url(../images/bg.jpg) center 80% fixed no-repeat;
+		height: 100%;
+		background-size: 220%;
+	}
+}
+
 #content {
 	position: relative;
 	z-index: 90;
-	min-height: 100%;
-	height: auto;
-	margin: 0 auto -60px;
-	padding: 0 0 60px;
+	height: 100%;
+	margin: 0 auto;
 	width: 100%;
 	float: left;
+	padding:0 0 0;
 }
 
 
@@ -47,6 +56,17 @@ body {
 	width:300px;
 	margin:0px auto;
     padding:0px;
+	margin-left: -140px;
+	margin-top: -13%;
+	top: 36%;
+	left: 50%;
+	position: fixed;
+}
+
+@media (max-width: 600px) {
+	#steps{
+		margin-top: -38%;
+	}
 }
 input, button{
 	opacity: 0.9;
@@ -89,11 +109,12 @@ span.checked{
 } 
 
 #steps form p{
-    float:left;
+    float:none;
     clear:both;
     margin:0;
     padding:.4em 0;
 	width: 100%;
+	text-align: center;
 }
 
 #label { font-size:31px; }
@@ -113,6 +134,7 @@ span.checked{
     width: 100%;
 	min-width: 265px;
 	font-size: 1em;
+	max-width: 270px;
 }
 #steps form input:focus{
     background:#DEF0FF !important;
@@ -125,7 +147,6 @@ span.checked{
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
-    display: block;
     cursor:pointer;
     margin:0;
     padding:0px;
@@ -136,11 +157,11 @@ span.checked{
 	box-shadow: 0 1px 3px #111;
     color: #eee;
 	text-shadow:1px 1px 0 #57180d;
-	float:right;
+	float:none;
 	position:relative;
     width: 100%;
-	min-width: 272px;
     border-radius: 3px;
+	max-width: 270px;
 }
 
 #steps form button:active{
@@ -153,9 +174,9 @@ a { cursor:pointer}
 	top: 35px;
 	margin-left: auto;
 	margin-right: auto;
-	width: 245px;
+	width: 290px;
 	display:block;  
-	padding:11px 5px 11px 45px; 
+	padding:12px 5px 13px 45px; 
 	font-size:13px; 
 	font-weight:bold; 
 	z-index:9999;
@@ -167,7 +188,7 @@ a { cursor:pointer}
 	-webkit-box-shadow:0 1px 2px #333;  
 	box-shadow:0 1px 2px #333; 
 	behavior:ie.htc;	
-	background:url(../images/error.png) no-repeat rgb(167, 7, 7) 7px 3px;
+	background:url(../images/error.png) no-repeat rgb(167, 7, 7) 7px 4px;
 	cursor: pointer;
 	}
 

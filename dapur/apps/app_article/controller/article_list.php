@@ -11,6 +11,10 @@ if(@$_SESSION['USER_LEVEL'] > 5 or !isset($_GET['iSortCol_0'])) die ('Access Den
 define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
 
+	/* Connect to database */
+	$db = new FQuery();  
+	$db -> connect();
+
 	/* Array of database columns which should be read and sent back to DataTables. Use a space where
 	 * you want to insert a non-database field (for example a counter or static image)
 	 */

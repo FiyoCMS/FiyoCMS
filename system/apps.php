@@ -32,7 +32,8 @@ function loadAppsJs() {
 	}
 }
 
-function loadApps() {
+function loadApps($echo = false) {
+	ob_start();
 	$db = new FQuery();  
 	$db ->connect(); 
 	$qr = null; //set $qr to null value
@@ -71,8 +72,7 @@ function loadApps() {
 	}
 	else {
 		if(isset($_GET['theme']) AND $_GET['theme'] =='module' AND $_SESSION['USER_LEVEL'] < 3) {
-			echo "<div style='border: 2px solid #e3e3e3; background: rgba(250,250,250,0.8);	color :#aaa; 
-		padding: 30px; text-align: center; margin: 5px 3px; font-weight: bold;'>Main Content</div>";
+			echo "<div style='border: 2px solid #e3e3e3; background: rgba(250,250,250,0.8);	color :#aaa; padding: 30px; text-align: center; margin: 5px 3px; font-weight: bold;'>Main Content</div>";
 		} 
 		else {
 			$lang = siteConfig('lang');
@@ -84,5 +84,16 @@ function loadApps() {
 			echo '</p>';	
 				loadModule('404');
 		}
-	}	
+	}
+	$apps = ob_get_contents();
+	ob_end_clean();	
+	
+	static $flag ;
+	if ( $flag === null ) {
+		$flag = true;
+		if($echo == true)
+			return $apps;
+		else
+			echo $apps;
+	}
 }

@@ -12,13 +12,16 @@ defined('_FINDEX_') or die('Access Denied');
 /*  		   Site Information	 		 	*/
 /********************************************/
 
+/* Connect to database */
+$db = new FQuery();  
+$db -> connect();
+
 /* Define SEF Base URL */
 define ('FBase',FUrl());
 if(_FINDEX_ == 'BACK') 
 define ('FUrl',str_replace(siteConfig('backend_folder'),"",'http://'.FBase)); 
 else define ('FUrl','http://'.FBase);
 define ('FAdmin',FUrl.siteConfig('backend_folder'));
-
 /* Define deed url */
 define('_FEED_',	app_param('feed')) ;
 

@@ -160,6 +160,8 @@ function loadUrl(url) {
 		var w = $("#loadingbar");
 	  	$.ajax({
 			url: '<?php echo $f;?>'+url,
+			type: 'POST',
+			data: "blank=true",
 			timeout:10000, 
 			error:function(data){ 
 				$("#mods").modal("show");
@@ -172,7 +174,7 @@ function loadUrl(url) {
 				window.history.pushState(dataurl, "Fiyo CMS", dataurl);
 				$('.mCSB_container').css('top',0);
 				
-				if(data == 'Redirecting...')
+				if(data == 'Redirecting...' || data == 'Access Denied!')
 				window.location.replace(location.href);
 				else
 				$("#mainApps").html(data);

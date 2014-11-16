@@ -12,7 +12,6 @@ if(!isset($_SESSION['PLATFORM']) AND (!isset($_SERVER['HTTP_REFERER']) or !defin
 //memuat file pendukung query dan fungsi lainya
 require_once ('../../../../config.php');
 require_once ('../../../../system/query.php');
-require_once ('../../../../system/libs.php');
 require_once ('../../../../system/function.php');
 require_once ('../../../../system/user.php');
 loadLang 	 ('../../../system');

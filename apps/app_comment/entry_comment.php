@@ -34,7 +34,7 @@ $(function() {
 			$('.cmn-gravatar[data-gravatar-hash]').prepend(function(){
 				var img = $(this).find("img").length ;
 				if(img > 0) img.remove();
-				var hash = $(this).attr('data-gravatar-hash')
+				var hash = $(this).attr('data-gravatar-hash');
 				return '<img width="48" height="48" alt="" src="../apps/app_comment/images/user.png" >'; 
 			});	
 		},
@@ -42,7 +42,7 @@ $(function() {
 			$('.cmn-gravatar[data-gravatar-hash]').prepend(function(){
 				var img = $(this).find("img").length ;
 				if(img > 0) img.remove();
-				var hash = $(this).attr('data-gravatar-hash')
+				var hash = $(this).attr('data-gravatar-hash');
 				return '<img width="48" height="48" alt="" src="http://gravatar.com/avatar.php?size=48&gravatar_id=' + hash + '">';
 			});
 		}
@@ -79,6 +79,7 @@ while($com=mysql_fetch_array($sql)){
 	$comment = str_replace("[/i]","</i>",$comment);
 	$comment = str_replace("[u]","<u>",$comment);
 	$comment = str_replace("[/u]","</u>",$comment);
+	$comment = str_replace("{","&#123;",$comment);
 				
 	echo "<div class='inner-comment$s' id='comment-$com[id]'>";
 	echo "<div class='avatar-comment'>$img</div>";

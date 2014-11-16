@@ -83,15 +83,18 @@ $(function() {
 $thm = $act = '';
 while($folder=readdir($dir)){ 
 	if($folder=="." or $folder=="..")continue; 
-	if(is_dir("../themes/$folder"))
+	if(is_dir("../themes/$folder") AND file_exists("../themes/$folder/index.php"))
 	{				
 		$no++;
+		$theme_image = '';
 		$spot_file = "../themes/$folder/theme_details.php";
-		if(file_exists($spot_file)) include("$spot_file");
+		if(file_exists($spot_file)) 
+			include("$spot_file");
 		else {
 			$theme_version = "Error :: File <b>theme_details.php</b> not found in <b>$folder</b> ";
 			$theme_author = "undefined";
 			$theme_date =  "undefined";
+			$theme_image =  "undefined";
 			$theme_name =  $folder;
 			$theme_name2 =  strtolower($folder);
 		}
@@ -101,7 +104,12 @@ while($folder=readdir($dir)){
 		$c = siteConfig('site_theme');
 		$ac = Activate;
 		if($c == $folder) { $active = 'active'; $ac = Active;}
-		if(file_exists("../themes/$folder/$theme_image")) $img = "<span class='theme-img' data-img='../themes/$folder/$theme_image'></span>"; else $img ="<span class='no-image'>No Preview<br>Image</span>";
+		if(!empty($theme_image)) {
+			if(file_exists("../themes/$folder/$theme_image"))
+				$img = "<span class='theme-img' data-img='../themes/$folder/$theme_image'></span>";	
+			else $img ="<span class='no-image'>No Preview<br>Image</span>";
+		}
+		else $img ="<span class='no-image'>No Preview<br>Image</span>";
 		$isi = "
 		<div class='col-theme $active' data-name='$theme_name'>
 			<div class='theme-box'>

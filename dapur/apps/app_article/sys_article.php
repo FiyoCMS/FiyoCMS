@@ -186,11 +186,12 @@ if(isset($_POST['save_edit']) or isset($_POST['save_new']) or isset($_POST['appl
 		if(checkLocalhost()) {
 			$article = str_replace(FLocal."media/","media/",$article);			
 		}		
+		if(!$_POST['author_id']) $aid = $_SESSION['USER_ID']; else $aid = $_POST['author_id'];
 		$qr=$db->update(FDBPrefix.'article',array(				
 		"category"=>"$_POST[cat]",
 		"title"=>"$title",
 		"author"=>"$author",
-		"author_id"=>"$_POST[author_id]",
+		"author_id"=>"$aid",
 		"date"=>"$_POST[date]",
 		"status"=>"$_POST[status]",
 		"featured"=>"$_POST[featured]",

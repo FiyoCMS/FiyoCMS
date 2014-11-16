@@ -91,7 +91,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 						
 						</span>Generate Time : <span id="load-time"><?php
 						$end_time = microtime(TRUE);
-						echo substr($end_time - _START_TIME_,0,7);
+						echo substr($end_time - _START_TIME_,0,6);
 						?></span>s
 					</div>
 				</div>

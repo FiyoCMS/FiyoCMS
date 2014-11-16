@@ -56,6 +56,8 @@ $(function() {
 			url: "apps/app_user/controller/status.php",
 			data: "stat=kick&id="+id,
 			success: function(data){
+				if(id == '<?php echo $_SESSION['USER_ID'];?>')
+				location.reload();
 			}
 		});	
 	});

@@ -151,16 +151,16 @@ if(isset($text)) :
 <script>
 $(function() {	
 	$('.gravatar[data-gravatar-hash]').each(function () {
-	var hash = $('.gravatar[data-gravatar-hash]').attr('data-gravatar-hash');
+		var hash = $('.gravatar').attr('data-gravatar-hash');
 		$.ajax({
-			url: 'http://gravatar.com/avatar/'+ hash +'?size=100' ,
+			url: 'http://gravatar.com/avatar/'+ hash +'?size=100',
 			type : 'GET',
 			timeout: 5000, 
 			error:function(data){
 				$('.gravatar[data-gravatar-hash]').prepend(function(){
 					var img = $(this).find("img").length ;
 					if(img > 0) img.remove();
-					var hash = $(this).attr('data-gravatar-hash')
+					var hash = $(this).attr('data-gravatar-hash');
 					return '<img width="100" height="100" alt="" src="../apps/app_article/theme/images/stock.png" >'; 
 				});	
 			},
@@ -168,61 +168,54 @@ $(function() {
 				$('.gravatar[data-gravatar-hash]').prepend(function(){
 					var img = $(this).find("img").length ;
 					if(img > 0) img.remove();
-					var hash = $(this).attr('data-gravatar-hash')
+					var hash = $(this).attr('data-gravatar-hash');
 					return '<img width="100" height="100" alt="" src="http://gravatar.com/avatar/' + hash + '?size=100">';
 				});
 			}
 		});	
 	});
 	
-		// get rating function
-		function getRating(){
-			$.ajax({
-				type: "POST",
-				url: '<?php echo FUrl; ?>apps/app_article/controller/rating.php?=<?php echo MD5(getUrl()).MD5(FUrl);?>',
-				data: 'id=<?php echo $id; ?>&do=getrate',
-				cache: false,
-				async: false,
-				success: function(result) {
-					// apply star rating to element
-					$('#current-rating').css({ width: '' + result + '%' });
-				},
-				error: function(result) {
+	function getRating(){
+		$.ajax({
+			type: "POST",
+			url: '<?php echo FUrl; ?>apps/app_article/controller/rating.php?=<?php echo MD5(getUrl()).MD5(FUrl);?>',
+			data: 'id=<?php echo $id; ?>&do=getrate',
+			cache: false,
+			async: false,
+			success: function(result) {
+				$('#current-rating').css({ width: '' + result + '%' });
+			},
+			error: function(result) {
 				
-				}
-			});
-		}
-		// link handler
-		$('#ratelinks li a').click(function(){
-			$.ajax({
-				type: 'POST',
-				url: '<?php echo FUrl; ?>/apps/app_article/controller/rating.php',
-				data: 'id=<?php echo $id; ?>&rating='+$(this).text()+'&do=rate',
-				cache: false,
-				async: false,
-				success: function(result) {
-					// remove #ratelinks element to prevent another rate
-					$('#ratelinks').remove();
-					// get rating after click	
-					var x = parseInt($('.valRates span').text(),10);
-					++x;
-					var v ='';
-					if(x<2) v ='Vote'; else v = 'Votes';
-					$('.valRates').html('('+x+' '+v+')');
-					getRating();
-				},
-				error: function(result) {
-				
-				}
-			});
-			
+			}
 		});
-	});	
-	
-	<?php 
-	if($_SESSION['USER_LEVEL'] <= 3 AND (!empty($_SESSION['USER_EMAIL']) or $_SESSION['USER_EMAIL'] == $autmail)) :
-		?>
+	}
 		
+	$('#ratelinks li a').click(function(){
+		$.ajax({
+			type: 'POST',
+			url: '<?php echo FUrl; ?>/apps/app_article/controller/rating.php',
+			data: 'id=<?php echo $id; ?>&rating='+$(this).text()+'&do=rate',
+			cache: false,
+			async: false,
+			success: function(result) {
+				$('#ratelinks').remove();
+				var x = parseInt($('.valRates span').text(),10);
+				++x;
+				var v ='';
+				if(x<2) v ='Vote'; else v = 'Votes';
+				$('.valRates').html('('+x+' '+v+')');
+				getRating();
+			},
+			error: function(result) {
+			
+			}
+		});
+	});
+});	
+	
+<?php if($_SESSION['USER_LEVEL'] <= 3 AND (!empty($_SESSION['USER_EMAIL']) or $_SESSION['USER_EMAIL'] == $autmail)) :?>
+	
 	$("#article-main").focus(function(){
 		$('.editor-button').show();
 		$('.editor-button').attr("style","display: block !important");
@@ -266,7 +259,7 @@ $(function() {
 			
 		
 	});
-	// We need to turn off the automatic editor creation first.
+	
 	var id = $('#article-id').attr('value');
 	
 	$(".title").keypress(function(e){
@@ -329,13 +322,8 @@ $(function() {
 		$("#article-main").html(content_r);			
 		$("#article-main").focus();
 	});
-	/*
-	$("#article .article-main img").after(function(){
-		var title = $(this).attr('alt');
-		return "<div>"+title+"</div>";
-	});*/
-	<?php endif; ?>
 	
+<?php endif; ?>	
 </script>
 <?php 
 else :

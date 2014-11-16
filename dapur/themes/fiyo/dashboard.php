@@ -75,7 +75,7 @@ $db->connect();
 							$edit_article = Edit;
 							echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$qr[title] <a class='tooltips icon-time' title='$info' data-placement='right'></a> 
 							<div class='tool-box'>
-								<a href='$read' target='_blank'  class='btn btn-tools tips' title='$read_article'>$read_article</a>";				
+								<a href='../$read' target='_blank'  class='btn btn-tools tips' title='$read_article'>$read_article</a>";				
 							$editor_level 	= mod_param('editor_level',$qr['parameter']);
 							if($editor_level >= USER_LEVEL or empty($editor_level)) echo "<a href='$edit' class='btn btn-tools tips' title='$edit_article'>$edit_article</a>";
 							echo "</div>			
@@ -123,8 +123,6 @@ $db->connect();
 <table class="table table-striped tools">
   <tbody>
 	<?php	
-		$db = new FQuery();  
-		$db->connect(); 
 		$sql = $db->select(FDBPrefix."user","*,DATE_FORMAT(time_reg,'%W, %Y-%m-%d %H:%i') as date","level >= $_SESSION[USER_LEVEL]",'time_reg DESC LIMIT 10'); 
 		$no = 1;
 		while($qr=mysql_fetch_array($sql)) {
@@ -188,8 +186,6 @@ $db->connect();
 <table class="table table-striped tools">
   <tbody>
 	<?php	
-		$db = new FQuery();  
-		$db->connect(); 
 		$user_id = USER_ID;
 		if($_SESSION['USER_LEVEL'] > 3)
 			$sql = $db->select(FDBPrefix."comment","*,DATE_FORMAT(date,'%W, %b %d %Y') as dates","parent_user_id = $user_id OR thread_user_id = $user_id",'date DESC LIMIT 10');
@@ -217,9 +213,9 @@ $db->connect();
 			$title = oneQuery('article','id',$aid ,'title');
 			$red = '';
 			if($qr['status']) 
-				$approven = "<a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' title='$hide' data-id='$id'>$hide</a><a class='btn-tools btn btn-success btn-sm btn-grad approve-user' title='$approve' style='display:none;' data-id='$id'>$approve</a>";
+				$approven = "<a class='btn-tools btn btn-danger btn-sm btn-grad disable-comment' title='$hide' data-id='$id'>$hide</a><a class='btn-tools btn btn-success btn-sm btn-grad approve-comment' title='$approve' style='display:none;' data-id='$id'>$approve</a>";
 			else {
-				$approven = "<a data-id='$id' class='btn-tools btn btn-success btn-sm btn-grad approve-user' title='$approve'>$approve</a><a data-id='$id' class='btn-tools btn btn-danger btn-sm btn-grad disable-user' title='$hide'  style='display:none;'>$hide</a>";
+				$approven = "<a data-id='$id' class='btn-tools btn btn-success btn-sm btn-grad approve-comment' title='$approve'>$approve</a><a data-id='$id' class='btn-tools btn btn-danger btn-sm btn-grad disable-comment' title='$hide'  style='display:none;'>$hide</a>";
 				$red = "class='unapproved'";
 			}
 			echo "<tr $red><td style='text-align: center; vertical-align: middle;  padding: 7px 8px 6px 10px;'>$foto</td><td style='width: 97%; padding: 7px 8px 8px 0;'><b>$qr[name]</b> <span>on</span> $title <a data-toggle='tooltip' data-placement='right' title='$info' class='icon-time tooltips'></a> <a data-toggle='tooltip' data-placement='left' title='$qr[email]' class='icon-envelope-alt tooltips'></a>
@@ -227,7 +223,7 @@ $db->connect();
 			<div class='tool-box tool-$no'>
 				$approven
 				<a href='$edit' class='btn btn-tools tips' title='$cedit'>$cedit</a>
-				<a href='$lread#comment-$qr[id]' target='_blank'  class='btn btn-tools tips' title='$read'>$read</a>
+				<a href='../$lread#comment-$qr[id]' target='_blank'  class='btn btn-tools tips' title='$read'>$read</a>
 				<!--a class='btn btn-tools tips' title='$delete'>$delete</a-->
 			</div>
 			</td></tr>";
@@ -364,17 +360,6 @@ $(function () {
 		});
 	}
 	
-	
-	function loadFeeds() {	
-		$.ajax({
-			data: "url=<?php echo FUrl; ?>",
-			url: "<?php echo FAdminPath; ?>/module/feeds.php",
-			success: function(data){
-				$(".feed").html(data);
-			}
-		});
-	}
-	
 	$('.article-popular').click(function(){	
 		loadArticlePopular();	
 	});
@@ -409,14 +394,27 @@ $(function () {
 	}, 1000 * 10);	
 	
 	setInterval(function(){
-		loadMemberLog();	
-		loadNewMember();
-	}, 1000*300);
-	
-	setInterval(function(){
 		loadMemberOnline();	
-	}, 1000*500);
+	}, 1000 * 777);
 	
+	
+	
+	function loadFeeds() {	
+		$.ajax({
+			timeout: 8000, 
+			type : 'POST',
+			data: "version=<?php echo siteConfig('version'); ?>",
+			url: "http://feeds.fiy2o.org/",
+			success: function(data){
+				$(".feed").html(data);
+			},
+			error : function(data){
+				$(".feed").html("<div style='text-align:center; padding: 40px 0; color: #ccc; font-size: 1.5em'><?php echo Failed_to_connect_server; ?></div>");
+				
+			}
+		});
+	}
+	loadFeeds();
 	$('.c_gravatar[data-gravatar-hash]').each(function () {
 	var th = $(this);
 	var hash = th.attr('data-gravatar-hash');
@@ -429,9 +427,62 @@ $(function () {
 		},
 		success: function(data){
 			th.html('<img width="32" height="32" alt="" src="http://gravatar.com/avatar/' + hash + '">');
-			loadFeeds();
 		}
 	});
+	});
+	
+	
+	$('.approve-comment').click(function() {
+		var btn = $(this);
+		$.ajax({
+			url: "apps/app_article/controller/comment_status.php",
+			data: "stat=1&id="+btn.data('id'),
+			success: function(data){
+				btn.parents("tr").removeClass('unapproved');
+				btn.hide();
+				btn.parent().find('.disable-comment').show();
+			}
+		});		
+	});
+	$('.disable-comment').click(function() {
+		var btn = $(this);
+		$.ajax({
+			url: "apps/app_article/controller/comment_status.php",
+			data: "stat=0&id="+btn.data('id'),
+			success: function(data){
+				btn.parents("tr").addClass('unapproved');
+				btn.hide();
+				btn.parent().find('.approve-comment').show();
+			}
+		});
+	});
+	
+	$('.approve-user').click(function() {
+		var is = $(this);
+		var id = $(this).data('id');
+		$.ajax({
+			url: "apps/app_user/controller/status.php",
+			data: "stat=1&id="+id,
+			success: function(data){						
+				is.parents("tr").removeClass('unapproved');
+				is.hide();
+				is.parent().find('.disable-user').show();
+			}
+		});		
+	});
+	
+	$('.disable-user').click(function() {
+		var is = $(this);
+		var id = $(this).data('id');
+		$.ajax({
+			url: "apps/app_user/controller/status.php",
+			data: "stat=0&id="+id,
+			success: function(data){
+				is.parents("tr").addClass('unapproved');
+				is.hide();
+				is.parent().find('.approve-user').show();
+			}
+		});	
 	});
 });
 </script>

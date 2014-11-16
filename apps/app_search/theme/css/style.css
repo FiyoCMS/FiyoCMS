@@ -27,7 +27,7 @@ ul.paging {
 	text-align:center
 }
 ul.paging li {
-	margin: 0 2px;
+	margin: 0;
 	display:inline; 
 }
 

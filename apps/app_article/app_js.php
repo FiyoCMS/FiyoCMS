@@ -8,7 +8,8 @@
 **/
 
 defined('_FINDEX_') or die('Access Denied');
-
+$format = app_param('format');
+if($format == 'grid') {
 ?>
 <script>
 	$(function() {
@@ -31,3 +32,7 @@ defined('_FINDEX_') or die('Access Denied');
 		});
 	});
 </script>
+<?php
+}
+
+?>

@@ -150,7 +150,7 @@ function dateRelative($h,$i,$s,$m,$d,$y) {
 }
 
 class Article {	
-	function item($id) {			
+	function item($id) {
 		if(articleInfo('id',$id)) {		
 			$db = new FQuery();  
 			$sql = $db->select(FDBPrefix."article","*,
@@ -290,7 +290,7 @@ class Article {
 				$article = $qr['article'];
 				if(checkLocalhost()) {
 					$article = str_replace(FLocal."media/","media/",$article);
-					$article = str_replace("/media/",FUrl."media/",$article);				
+					$article = str_replace("/media/",FUrl."media/",$article);			
 				}
 				
 				/* perijinan akses artikel */				
@@ -430,7 +430,7 @@ class Article {
 			
 			if(checkLocalhost()) {
 				$article = str_replace(FLocal."media/","media/",$article);
-				$article = str_replace("/media/",FUrl."media/",$article);				
+				$article = str_replace("/media/",FUrl."media/",$article);		
 			}	
 			
 			$comment = null;
@@ -737,9 +737,13 @@ if($a){
 			define('MetaRobots',"$follow");
 			
 			$author = articleInfo('author');
-			if(empty($author))
+			if(empty($author)) 
 				$author = oneQuery('user','id',articleInfo('author_id'),'name');
-			if(define('MetaAuthor',$author));
+			if(empty($author)) 
+				$author = oneQuery('user','id',articleInfo('editor'),'name');
+			if(!empty($author))
+				define('MetaAuthor',$author);
+			
 			
 		}
 		else if($view=="category" or $view=="catlist") {

@@ -10,13 +10,6 @@ defined('_FINDEX_') or die('Access Denied');
 /****************************************/
 /*			 Query Function 			*/
 /****************************************/
-/* Connect to database */
-$db = new FQuery();  
-$db -> connect();
-/* ini set manual jika sistem mengijinkan */
-ini_set('post_max_size', format_size(siteConfig('file_size')));
-ini_set('upload_max_filesize', format_size(siteConfig('file_size')));
-			
 /* basic query function */
 function FQuery($table, $where = null, $output = null, $hide = null, $order = null, $select = null) {	
 	$db = new FQuery();  
@@ -65,12 +58,19 @@ function userInfo($value = null,$id = null) {
 		$output = oneQuery('session_login','user_id',"$id","$value");	
 		if(!empty($output))
 			return $output;
-		else false;
+		else $id = 0;
 	} 
+	
 	if(!empty($id))  {
 		return oneQuery('user','id',$id,$value);
 	} 
 	else if($value == 'level') {
+		$_SESSION['USER']		= null ;
+		$_SESSION['USER_ID']	= null ;		
+		$_SESSION['USER_LOG']	= null ;
+		$_SESSION['USER_NAME']	= null ;
+		$_SESSION['USER_EMAIL'] = null ;
+		$_SESSION['USER_LEVEL'] = null ;		
 		return 99;
 	}
 	else {
@@ -393,7 +393,7 @@ function addJs($link) {
 //memanggil file CSS
 function addCss($link,$media = null) {
 	if(empty($media)) $media = 'all';
-	echo  "<link href='$link' rel='stylesheet' type='text/css' media='$media' />\n";
+	echo  "<link href=\"$link\" rel=\"stylesheet\" type=\"text/css\" media=\"$media\"/>\n";
 }	
 
 /* membuat file zip */
@@ -583,7 +583,7 @@ function format_byte($from) {
 
 //memanggil extensi FiyoCMS (Apps, plugin, template)
 function loadExtention() {
-	include ("system/extention.php");
+	require ("system/extention.php");
 }
 
 //memuat plugins yang aktif
@@ -943,4 +943,31 @@ function backup_tables($tables = '*', $directory = null, $file = null, $installe
 	fwrite($handle,$return);
 	fclose($handle);
 	if($handle) return true;
+}
+
+class FData extends FQuery {
+    private function conf()
+    {
+		$this -> connect();
+		$sql = $this -> select(FDBPrefix."setting","name, value");				
+		$val = null;
+		while($row=mysql_fetch_row($sql))
+			$val[$row[0]] = $row[1];
+		if(!empty($type))
+		return $val[$type];
+		else
+		return $val;
+    }
+	
+	public function Config() {
+		static $flag ;
+		static $result ;
+		// Function has already run
+		if ( $flag === null ) {
+			$flag = true;
+			$result = $this -> conf();		
+		}
+		return $result;
+	}
+	
 }

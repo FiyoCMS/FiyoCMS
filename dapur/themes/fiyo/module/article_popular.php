@@ -17,6 +17,8 @@ require_once ('../../../system/jscore.php');
 <table class="table table-striped tools">
   <tbody>
 	<?php	
+		$db = new FQuery();  
+		$db->connect(); 
 		$sql = $db->select(FDBPrefix."article","*,DATE_FORMAT(date,'%W, %b %d %Y') as date","",'hits DESC LIMIT 10'); 
 		$no = 0;
 		while($qr=mysql_fetch_array($sql)) {		

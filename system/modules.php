@@ -8,11 +8,12 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-function loadModule($position) {	
+function loadModule($position, $echo = false) {	
 	if(isset($_GET['theme']) AND $_GET['theme'] =='module' AND $_SESSION['USER_LEVEL'] < 3) {
-		echo "<div class='theme-module'>$position</div>";
+		return "<div class='theme-module'>$position</div>";
 	} 
 	else {
+		ob_start();
 		$db = new FQuery();  
 		$db ->connect();	
 		$qrs = $db->select(FDBPrefix.'module','*',"status=1 AND position='$position'" .Level_Access, 'short ASC');	
@@ -60,6 +61,12 @@ function loadModule($position) {
 				echo"</div></div>";
 			}
 		}
+		$mod = ob_get_contents();
+		ob_end_clean();
+		if($echo == true)
+		return $mod;
+		else
+		echo $mod;
 	}
 }
 
@@ -80,7 +87,9 @@ function checkModule($position) {
 			if(empty($pid)) $pid = 0;
 		}
 		$val = false;
-		$qrs = $db->select(FDBPrefix.'module','*',"status=1 AND position = '$position'" .Level_Access, 'short ASC');
+		if(!is_array($position)) $where = " position = '$position'";
+		else $where = " position IN('".implode("','",$position)."')";
+		$qrs = $db->select(FDBPrefix.'module','*',"status=1 AND $where" .Level_Access, 'short ASC');
 		while($qr=mysql_fetch_array($qrs)){
 			if(!empty($qr['page'])) {
 				$pid = explode(",",$qr['page']);
@@ -89,7 +98,7 @@ function checkModule($position) {
 					$val = true;
 				}
 			}		
-		}	
+		}
 		return $val;
 	}
 }

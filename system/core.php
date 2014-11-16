@@ -8,25 +8,21 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-/*
-* Load core files
-*/ 
-require_once ('config.php');
-require_once ('system/query.php');
-require_once ('system/libs.php');
-require_once ('system/function.php');
+/** Load core files **/ 
+include_once ('config.php');
+include_once ('system/query.php');
+include_once ('system/function.php');
 
-if(isset($_POST['platform']))
-$_SESSION['PLATFORM'] = true;
-//check table setting
-$ress = mysql_query("SHOW TABLES LIKE '".FDBPrefix."setting'");
-mysql_num_rows($ress) or die(alert("error","Table setting is not found. Please check <b>DBPrefix</b> on file config.php!",true,true));
-
-//set default timezone
-$time = siteConfig('timezone');
-if($time) date_default_timezone_set(siteConfig('timezone'));
-
-/*
-* Load extentions
-*/ 
-loadExtention() ;
+if(siteConfig('site_status') == true OR !empty($_SESSION['USER_ID'])) {
+	include_once ('user.php'); 
+	include_once ('site.php'); 
+	include_once ('plugins.php'); 
+	include_once ('apps.php'); 
+	include_once ('modules.php');
+	include_once ('themes.php');
+}
+else {	
+	define('_OFFSITE_',1) ;
+	include_once ('site.php'); 
+	include_once ('themes-off.php');
+}

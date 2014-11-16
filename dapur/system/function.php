@@ -61,7 +61,6 @@ function load_themes(){
 		redirect(getUrl());
 	}	
 	else {		
-		redirect_www();
 		select_themes('index');	
 	}
 }
@@ -88,7 +87,7 @@ function load_login() {
 			$db->delete(FDBPrefix."session_login","user_id=$qr[id]");			
 			$qr = $db->insert(FDBPrefix."session_login",array("$qr[id]","$qr[user]","$qr[level]",date('Y-m-d H:i:s')));
 		}		
-		if($qr or !empty($_SESSION['USER_ID']) AND $_SESSION['USER_LEVEL'] <= 3 AND userInfo())		
+		if($qr or !empty($_SESSION['USER_ID']) AND $_SESSION['USER_LEVEL'] <= 3 AND userInfo())	
 			redirect(getUrl());
 		else {
 			select_themes('login');
@@ -96,8 +95,8 @@ function load_login() {
 		}
 	}
 	else {
-		if(isset($_GET['theme']) AND $_GET['theme'] == 'blank')
-			echo "Redirecting...";
+		if(isset($_GET['theme']))
+			die('Access Denied!');
 		else
 			select_themes('login');
 	}
@@ -133,10 +132,10 @@ function select_themes($log, $stat = NULL){
 	}
 	else if($log=="index" AND $_SESSION['USER_LEVEL'] <= 3) {	
 		$file =   "themes/$themePath/index.php";
-		if(isset($_GET['theme']) AND $_GET['theme'] =='blank') {
+		if(isset($_GET['theme']) AND $_GET['theme'] =='blank' AND isset($_POST['blank'])) {
 			loadAdminApps();
 			$end_time = microtime(TRUE);
-			$n = substr($end_time - _START_TIME_,0,7);
+			$n = substr($end_time - _START_TIME_,0,6);
 			echo "<input type='hidden' value='$n' class='load-time'>";
 		}
 		else if(file_exists($file)) 

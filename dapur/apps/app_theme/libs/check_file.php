@@ -33,10 +33,8 @@ $(document).ready(function() {
 			,syntax: "<?php echo $file; ?>"	
 			,toolbar: "search, go_to_line, |, undo, redo, |, select_font, |, syntax_selection, |, change_smooth_selection, highlight, reset_highlight"
 			,syntax_selection_allow: "css,html,js,php,python,vb,xml,c,cpp,sql,basic,pas,brainfuck"
-			,EA_load_callback: "editAreaLoaded"
 			,show_line_colors: true
-	});
-	
+	});	
 	var btn = $("#save-file");
 	btn.show();	
 

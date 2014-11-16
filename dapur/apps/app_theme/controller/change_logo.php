@@ -28,13 +28,13 @@ if(isset($_GET['delete']) AND $_GET['delete'] == 'true' AND file_exists($ori.".o
 }
 else if(isset($_GET['file']) AND !empty($_GET['file']) AND file_exists($file) AND file_exists($ori.".ori")) {
 	copy($file,$ori);
-	alert('success',Status_Saved,1);
+	alert('success',Status_Updated,1);
 	
 }
 else if(isset($_GET['file']) AND !empty($_GET['file']) AND file_exists($file)){
 	copy($ori,$ori.".ori");
 	copy($file,$ori);
-	alert('success',Status_Saved,1);
+	alert('success',Status_Updated,1);
 }
 
 ?>
