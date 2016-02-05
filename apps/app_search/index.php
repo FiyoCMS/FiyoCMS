@@ -16,9 +16,6 @@ if(isset($_POST['q'])) {
 	$query = str_replace("`","",$query);
 	$query = str_replace("\\","",$query);
 	$query = str_replace("/","",$query);
-	$query = str_replace("&","",$query);
-	$query = str_replace("'","",$query);
-	$query = str_replace('"',"",$query);
 	$query = trim($query);	
 	 $_SESSION['search'] = $query;
 	 }
@@ -36,10 +33,11 @@ $query = $_SESSION['search'];
 <div id="app-search">	
 <h1>Search Page</h1>
 <form action="" method="POST">
-	<input type="text" name="q" value="<?php if(!empty($query)) echo $query;?>" size="40" placeholder="Search..." /> 
+	<input type="text" name="q" value="<?php if(!empty($query)) echo htmlentities($query);?>" size="40" placeholder="Search..." /> 
 	<input type="submit" name="s" value="Search" class="button btn search-button"/> 
 </form>
-<?php
+<?php 
+if(isset($_POST['s']) or !empty($query)) :
 if(empty($_SESSION['search'])) :
 	echo alert("error",Please_fill_keyword,true);
 elseif(strlen($_SESSION['search'])<3) :
@@ -57,6 +55,8 @@ else :
 	$title		= @$article-> title;
 	$date 		= @$article-> date;
 		
+	$query = str_replace("%20"," ",$query);
+	$query = htmlentities($query);
 	if(!isset($text)) :
 		echo alert("error",Not_found_keyowrd." <b><i>$query</i></b>",true);	
 	else :
@@ -85,6 +85,7 @@ else :
 		</div>
 		<?php
 	endif;
+endif;
 endif;
 ?>
 </div>

@@ -1,9 +1,9 @@
 <?php
 /**
 * @name			Module Statistic
-* @version		1.5.0
+* @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 */
 
@@ -46,17 +46,19 @@ function mkdate($day = null, $month = null, $year = null) {
 /****************************************/ 		
 //get database statistic
 function valday($date) {	
-	return FQuery('statistic',"time BETWEEN  '$date 00:00:00' AND  '$date 23:59:59'");
+	$val = FQuery('statistic',"time BETWEEN  '$date 00:00:00' AND  '$date 23:59:59'");
+	if(!$val) $val = 0;
+	return $val;
 }
 
 function valmonth($x) {
 	$x = substr($x,0,7);
 	$val = 0;
 	$db = new FQuery();  
-	$db ->connect(); 
 	$sql = $db->select(FDBPrefix.'statistic','*');
-	while($qr=mysql_fetch_array($sql)) {
-		$month = substr($qr['time'],0,7);
+	if($sql)
+	foreach($sql as $row) {
+		$month = substr($row['time'],0,7);
 		if($month == $x)
 			$val ++;
 	}

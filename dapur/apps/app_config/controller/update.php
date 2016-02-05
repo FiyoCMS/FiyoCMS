@@ -11,12 +11,10 @@ session_start();
 if(!isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] > 2) die ();
 
 require_once ('../../../system/jscore.php');
-$db = new FQuery();  
-$db->connect(); 
 
 
-$url = 'http://patch.fiyo.org/';
-$xml = @simplexml_load_file($url);
+$url = 'http://localhost/fiyo_instaler2/patch/';
+$xml = simplexml_load_file($url);
 $site_version	= siteConfig('version');
 if($xml) {
 	$latest_version = $xml-> version -> number ;
@@ -76,21 +74,22 @@ if(isset($_POST['patching']) AND $_POST['patching'] != false AND $site_version !
 	if(!file_exists("$root/tmp"))
 		mkdir("$root/tmp");		
 	
-	if (@copy($plink, $newfile)) {
-		if(@extractZip($newfile,"$root")) {
+	if (copy($plink, $newfile)) {
+		if(extractZip($newfile,"$root")) {
 			$dapur = siteConfig('backend_folder');
 				if(siteConfig('backend_folder') != 'dapur')		
 					copy_directory("$root/dapur","$root/$dapur",true);
 				
 				$db = new FQuery();  
 				$db -> connect();
-				$db->update(FDBPrefix.'setting',array('value'=>"$p[number]"),"name='version'");
+				//$db->update(FDBPrefix.'setting',array('value'=>"$p[number]"),"name='version'");
 				$sup = $p['number'];				
-				@unlink("$root/installer.php");
+				include_once("$root/installer.php");		
+				unlink("$root/installer.php");
 				echo "<span class='installing'>".Installing_patch.$p['number']."</span>"; 
 				?>
-				<script>		
-					$(document).ready(function() {	
+				<script>	
+					$(document).ready(function() {
 						$(".installing").LoadingDot({
 							"speed": 500,
 							"maxDots": 4,
@@ -104,11 +103,11 @@ if(isset($_POST['patching']) AND $_POST['patching'] != false AND $site_version !
 							method: "POST",
 							cache:false,
 							timeout: 10000,  // I chose 10 secs for kicks
-							error:function(){ 
+							error:function(data){ console.log(data);
 									$(".update-info").html("Error Connection!") ;
 									$(".modal-footer").show();
 							},
-							success: function(data){
+							success: function(data){console.log(data);
 								$(".update-info-update").html(data);
 								$(".version-val").html("<?php echo $sup; ?>");	
 								$(".update-confirm").hide();

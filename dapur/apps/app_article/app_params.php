@@ -94,7 +94,7 @@ $(document).ready(function(){
 	
 	changer();	
 				
-	$("#format").change(function(){	
+	$("#format").change(function(){
 		var cate = $('#cat').val();				
 		var type = $("#type").val();
 		var format = $("#format").val();
@@ -206,7 +206,7 @@ $(document).ready(function(){
 						$db = new FQuery();  
 						$db->connect(); 
 						$sql = $db->select(FDBPrefix.'article_category','*','parent_id=0'); 
-						while($qrs=mysql_fetch_array($sql)){
+						foreach($sql as $qrs){
 							if("?app=article&view=category&id=$qrs[id]"== $qr['link'])$s="selected";else$s="";
 							echo "<option value='$qrs[id]' $s>$qrs[name]</option>";
 							option_sub_cat($qrs['id'],'',$qr['link']);
@@ -313,7 +313,7 @@ $(document).ready(function(){
 	      <div class="modal-body">
 			<div id="pages" class="pop_up">
 				<div id="page_id">
-				
+					Loading...
 				</div>
 			</div>
 	      </div>

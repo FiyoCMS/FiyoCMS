@@ -24,8 +24,7 @@ printAlert();
 	</thead>
 	<tbody>
 	<?php	
-	$db = new FQuery();  
-	$db->connect();
+	$db = new FQuery(); 
 	if(isset($_POST['uninstall']) AND !empty($_POST['id'])) {
 		$apps = $_POST['id'];
 		$notice = $b = $c = '';
@@ -36,35 +35,35 @@ printAlert();
 		}		
 		$fl = str_replace("app_","",$apps);
 		$db->delete(FDBPrefix.'menu',"category = 'adminpanel' AND link LIKE '%?app=$fl%'");
-		$qr = $db->delete(FDBPrefix.'apps',"folder='$apps'");
-		if($qr) $notice .= "table <i>$apps</i> ".deleted."!<br>";	
+		$row = $db->delete(FDBPrefix.'apps',"folder='$apps'");
+		if($row) $notice .= "table <i>$apps</i> ".deleted."!<br>";	
 		notice('info',"$notice",2);	
 	}	
 	$sql =	$db->select(FDBPrefix.'apps','*','',"name ASC"); 
-	while($qr=mysql_fetch_array($sql)){		
-		$file = "../apps/$qr[folder]/app_details.php";
+	foreach($sql as $row){		
+		$file = "../apps/$row[folder]/app_details.php";
 		if(file_exists($file))
 			include($file);
 		echo "<tr>";
 					
 		if(!isset($app_desc)) {
 			$app_desc = "Error Apps!";
-			$qr['name'] ="Error Apps!";
+			$row['name'] ="Error Apps!";
 		}
 		
-		if($qr['author'] == 'Fiyo CMS' AND (($qr['type'] == '0') or ($qr['type'] == '2')))
+		if($row['author'] == 'Fiyo CMS' AND (($row['type'] == '0') or ($row['type'] == '2')))
 		$action ="
 			<div class='switch s-icon activator'>
 				<label class='cb-default disable'><span>
 				<i class='icon-minus-sign'></i> Important</span></label>
 			</div>";
 		else $action ="
-			<div class='switch s-icon uninstall activator' id='$qr[folder]'>
+			<div class='switch s-icon uninstall activator' id='$row[folder]'>
 				<label class='cb-default red'><span>
 				<i class='icon-remove-sign'></i> Uninstall</span></label>				
 			</div>";
 			
-		echo "<td><a class='help' title='$app_desc'>$qr[name]</a></td><td>$qr[author]</td><td align='right'>$action</td>";
+		echo "<td><a class='help' title='$app_desc'>$row[name]</a></td><td>$row[author]</td><td align='right'>$action</td>";
 		echo "</tr>";
 	}
 	?> 

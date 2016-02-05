@@ -8,8 +8,7 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-$db = @new FQuery() or die;  
-$db->connect(); 
+$db = @new FQuery() or die; 
 ?>
 <form method="post" action="?app=config">
 	<div id="app_header">
@@ -111,6 +110,22 @@ $db->connect();
 							<label for="radio4" class="cb-disable <?php echo $u0;?>"><span>Off</span></label>
 						</p>
 					</td>
+				</tr>
+				
+				<tr>
+					<td class="row-title"><span class="tips"  title="SSL / HTTPS">SSL / HTTPS</td>
+					<td>
+						<?php 
+							if(siteConfig('https')){$u1="selected checked"; $u0 = "";}
+							else {$u0="selected checked"; $u1= "";}
+						?>
+						<p class="switch">
+							<input id="https"  value="1" name="https" type="radio" <?php echo $u1;?> class="invisible">
+							<input id="https2"  value="0" name="https" type="radio" <?php echo $u0;?> class="invisible">
+							<label for="https" class="cb-enable <?php echo $u1;?>"><span>On</span></label>
+							<label for="https2" class="cb-disable <?php echo $u0;?>"><span>Off</span></label>
+						</p>
+						</td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips"  title="<?php echo Redirect_WWW_tip; ?>"><?php echo Redirect_WWW; ?></td>
@@ -246,7 +261,7 @@ $db->connect();
 					<select name="member_group" id="select">
 					<?php
 						$sql2=$db->select(FDBPrefix.'user_group'); 
-						while($qrs=mysql_fetch_array($sql2)){
+						foreach($sql2 as $qrs){
 							if($qrs['level'] >= USER_LEVEL) {
 								if($qrs['level'] < 3){
 									echo "<option value='$qrs[level]' disabled>$qrs[group_name]</option>";

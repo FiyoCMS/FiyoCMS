@@ -13,7 +13,7 @@ $db->connect();
 
 $id = $_REQUEST['id'];
 $sql= $db->select(FDBPrefix.'comment','*','id='.$id);
-$qr	= mysql_fetch_array($sql);
+$qr	= $sql[0];
 
 if($qr['status']==1) {$status1="checked";}
 else { $status2="checked";}
@@ -29,8 +29,8 @@ $link = "<a href='".make_permalink($qr['link'])."#comment-$qr[id]' target='_blan
 		<div class="warp_app_header">		
 			<div class="app_title">Comment Manager</div>			
 			<div class="app_link">				
-				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply_comment"><i class="icon-ok"></i> <?php echo Save; ?></button>	
-				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="save_comment"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>		
+				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply_comment"><i class="icon-check"></i> <?php echo Save; ?></button>	
+				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="save_comment"><i class="icon-check-circle"></i> <?php echo Save_and_Quit; ?></button>		
 				<a class="danger btn btn-default" href="?app=article&view=comment" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 				<?php printAlert(); ?>
 				
@@ -75,11 +75,11 @@ $link = "<a href='".make_permalink($qr['link'])."#comment-$qr[id]' target='_blan
 				
 				<tr>
 					<td class="row-title" >Website</td>
-					<td><input value="<?php echo $qr['website'];?>" type="text" name="web" size="35" id="order"></td>
+					<td><input value="<?php echo $qr['website'];?>" type="text" name="web" style="width: 100%; min-width:50%; max-width: 100%;" id="order"></td>
 				</tr>
 				<tr>
 					<td class="row-title"><?php echo Comment; ?></td>
-					<td><textarea name="comment" cols="50" rows="6" style="min-width:50%; max-width: 100%;"><?php echo $qr['comment'];?></textarea></td>
+					<td><textarea name="comment" rows="6" style="width: 100%; min-width:50%; max-width: 100%;"><?php echo $qr['comment'];?></textarea></td>
 				</tr>	
 			</table>
 		</div>

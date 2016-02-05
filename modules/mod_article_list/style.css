@@ -1,7 +1,7 @@
 /* Fiyo Comment */
-.mod-article-list {
+.modules ul.mod-article-list {
 	margin:0;
-	padding: 0 0 3px 18px;
+	padding: 0;
 }
 .mod-article-list li {
 	margin-left: 10px;
@@ -13,13 +13,13 @@
 	clear: both;
 	list-style: none;
 	width: 100%;
-	margin-left: -15px;
+	margin-left: 0;
 	margin-bottom: 5px;
 }
 .mod-article-date {
 	float: left;
-	width:35px;
-	margin: 0 10px 0 0;
+	width:40px;
+	margin: 0 10px 3px 0;
 	font-size: 1.2em;
 	text-align:center;
 	border: 1px solid #ccc;
@@ -33,7 +33,7 @@
 	padding: 0;
 	font-size: 65%;
 	float: left;
-	width:35px;
+	width:100%;
 	text-align:center;
 	background: #eee;
 	border-top:1px solid #e3e3e3;

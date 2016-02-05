@@ -11,39 +11,47 @@ defined('_FINDEX_') or die('Access Denied');
 /*			 Query Function 			*/
 /****************************************/
 /* basic query function */
-function FQuery($table, $where = null, $output = null, $hide = null, $order = null, $select = null) {	
+function FQuery($table, $where = null, $output = null, $hide = null, $order = null, $select = null, $limit = null) {	
 	$db = new FQuery();  
 	if(empty($select)) $select = "*";
-	$sql = $db->select(FDBPrefix."$table","$select","$where","$order");
+	$sql = $db->select(FDBPrefix."$table","$select","$where","$order","$limit");
 	if(!$sql) {
 		if(!isset($hide))
 			alert( "<b>Error</b> :: failed to use <b>FQuery</b> function. Please check table <b>$table</b> or your sql (<b>$where</b>) or field (<b>$output</b>)<br>");	
 	}
-	else {
-		$row = mysql_fetch_array($sql); 
-		$sum = mysql_affected_rows();
-		if(!empty($output))
-			return @$row[$output] ;
+	else {	
+		if(!$output)
+			$sum = count($sql);
 		else
-			return $sum;
+			$sum = count($sql[0]);
+		
+		if($sum) {
+			$row = $sql[0];	
+			if (!empty($row["$output"]) AND strlen($row["$output"]) > 0 ) {
+				return $row["$output"];
+			}
+			else if(!$output) {		
+				return $sum;		
+			} else
+				return false;
+		} else return false;
 	}
 }
 
 //query database untuk satu output
 function oneQuery($table,$field,$value,$output = null) {
 	$value = str_replace("'","",$value);
-	$query = FQuery($table,"$field='$value'",$output);
+	$query = FQuery($table,"$field='$value'",$output,null,null,$output,1);
 	return $query;	
 }
-
 
 /********************************************/
 /*  		   Site Information	 		 	*/
 /********************************************/
 /* Website Global Information */
 function siteConfig($name) {
-	$config = new FData();  
-	$config =  $config -> Config($name);
+	$config = new FConfig();  
+	$config =  $config -> getConfig($name);
 	if(isset($config[$name]))
 	return $config[$name];
 	else return false;
@@ -82,18 +90,21 @@ function userInfo($value = null,$id = null) {
 function menuInfo($value, $url = null, $id = null, $match = false) {
 	if(empty($id)) {
 		if(empty($url)) $url = getLink();
-		if(!$match)  
-			return FQuery('menu',"link LIKE '%$url%' AND status=1 AND category != 'adminpanel'","$value",'',"LENGTH(`link`)");	
+		
+		if(_FINDEX_ !== 'BACK') $back = " AND category != 'adminpanel'"; else $back = "AND category = 'adminpanel'";
+		if(!$match)
+			return FQuery('menu',"link LIKE '%$url%' AND status=1 $back","$value",'',"LENGTH(`link`)");	
 		else
-			return FQuery('menu',"link LIKE '$url' AND status=1 AND category != 'adminpanel'","$value",'',"LENGTH(`link`)");
+			return FQuery('menu',"link LIKE '$url' AND status=1 $back","$value",'',"LENGTH(`link`)");
 	}
 	else {
-		return FQuery('menu',"id = $id AND status=1","$value");
+		return FQuery('menu',"id = '$id' AND status=1","$value");
 	}
 }
 
 // mengambil data halaman
-function pageInfo($id, $output, $field = null) {	
+function pageInfo($id, $output, $field = null) {
+	if($output = 'title') $output = 'name';
 	if(!$field) $field = 'id';
 	$output = oneQuery('menu',$field,$id,$output);
 	return $output;
@@ -101,16 +112,18 @@ function pageInfo($id, $output, $field = null) {
 
 // mengambil data home page
 function homeInfo($field) {
-	$output = oneQuery('menu','home',1,$field);
-	return $output;
+	return oneQuery('menu','home',1,$field);
 }
 
 /* Base site url */
 function FUrl($www = null) {
 	$furl = str_replace('index.php','',$_SERVER["HTTP_HOST"].$_SERVER["PHP_SELF"]);
-	if(_FINDEX_=='BACK') {	
-		$bfol = strpos($furl,siteConfig('backend_folder'));
-		$furl = substr($furl,0,$bfol).siteConfig('backend_folder');
+	if(_FINDEX_=='BACK') {
+		$url = $_SERVER['PHP_SELF']; 
+		$parts = explode('/',$url);
+		$i = count($parts); 
+		$dir = $parts[$i-2];
+		$furl = str_replace("$dir/","",$furl);
 	}
 	if(siteConfig('sef_www') or isset($www))
 		return $furl;
@@ -125,11 +138,13 @@ function FUrl($www = null) {
 function param_basic($x,$p,$s) {
 	$param = $x."=";
 	$stlen = strlen($param);
-	$npost = strpos($p,$param);
-	$param = substr($p,$npost);
-	$break = strpos($param,"$s")-$stlen;
-	$param = substr($p,$stlen+$npost,$break);
-	return $param;
+	(int)$npost = strpos($p,$param);
+	if($npost !== false) {
+		$param = substr($p,$npost);
+		$break = strpos($param,"$s")-$stlen;
+		$param = substr($p,$stlen+$npost,$break);
+		return $param;
+	} else return false;
 }
 
 //parameter untuk url
@@ -138,7 +153,7 @@ function url_param($value){
 		strpos($_SERVER['REQUEST_URI'],"&$value=") > 0 ) {
 		$value = param_basic("$value",$_SERVER['REQUEST_URI'].'&',"&");
 		return $value;
-	}
+	} else return false;
 }
 
 //parameter untuk link
@@ -247,24 +262,27 @@ function htmlRefresh() {
 }
 
 //fungsi membuat permalink
-function make_permalink($source, $id = null, $page = null, $like = null){			
-	if(SEF_URL)
+function make_permalink($source, $id = null, $page = null, $like = null){
+
+	if(strpos($source,'http://') !== false or strpos($source,'https://') !== false)
+			$source = $source;
+	else if(SEF_URL)
 	{
 		$db = new FQuery();  
 		$db -> connect(); 
-		$sql  = $db->select(FDBPrefix."permalink","*","link ='$source'");
 		if($like == true)
-		$sql  = $db->select(FDBPrefix."permalink","*","link LIKE '%$source%'");
-		$link = mysql_fetch_array($sql);		
-		$link = FUrl."$link[permalink]";
-		if(!empty($id)) 	{
+		$sql = $db->select(FDBPrefix."permalink","*","link LIKE '%$source%'");
+		else
+		$sql  = $db->select(FDBPrefix."permalink","*","link ='$source'");
+	
+		if(!empty($id)) {
 			$source = FUrl.$source;
 		}
 		else {
 			$source = FUrl.$source;
 		}
-		if(mysql_affected_rows()>0)
-			$source = $link;
+		if(count($sql) AND count($row = $sql[0]))
+			$source = FUrl."$row[permalink]";
 		else
 			$source = $source;
 	}
@@ -324,7 +342,7 @@ function checkHomePage(){
 function getUrl() {
 	$url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 	$url = str_replace("'","",$url);
-	if(!empty($_SERVER['HTTPs']))
+	if(!empty($_SERVER['HTTPS']))
 		$url = "https://".$url;
 	else
 		$url = "http://".$url;
@@ -333,7 +351,7 @@ function getUrl() {
 
 //mengambil url dari parameter yang ada
 function getLink() {
-	if(defined('SEF_URL') AND _FINDEX_ != 'BACK') {
+	if(defined('SEF_URL') AND _FINDEX_ !== 'BACK') {
 		$tapos = strpos($_SERVER['REQUEST_URI'],"?");
 		if(!_Page or _Page == 1)
 			$link = substr($_SERVER['REQUEST_URI'],$tapos);
@@ -349,11 +367,12 @@ function getLink() {
 		$trim = strlen(siteConfig('sef_extention'));
 		$link = str_replace(siteConfig('site_url'),"",getUrl());
 		$trim = strlen($link)-$trim;
-		if(defined('SEF_URL'))  {
+		if(defined('SEF_URL') AND  _FINDEX_ !== 'BACK')  {
 			$link = substr($link,0,$trim);
 		}
 		else {
-			$link = substr($link,0);
+			$spod = strpos($link, "?");
+			$link = substr($link,$spod);
 		}
 	}
 	
@@ -364,7 +383,8 @@ function getLink() {
 		$base = str_replace('localhost','',FBase);
 		$link = str_replace($base,'',$link);
 	}
-	if(SEF_URL AND check_permalink('permalink',$link,'link')) {
+	if(SEF_URL AND _FINDEX_ !== 'BACK') {
+		if(check_permalink('permalink',$link,'link'))
 		$link = check_permalink('permalink',$link,'link');	
 	}
 	return $link;
@@ -589,8 +609,8 @@ function loadExtention() {
 //memuat plugins yang aktif
 function loadPlugin() {	
 	$db = new FQuery();   
-	$qrs = $db->select(FDBPrefix.'plugin','*',"status=1");	
-	while($qr=mysql_fetch_array($qrs)){	
+	$qr = $db -> select(FDBPrefix.'plugin','*',"status=1");	
+	foreach($qr as $qr){	
 		$folder = "plugins/$qr[folder]/$qr[folder].php";
 		if(file_exists($folder))
 			require $folder;
@@ -622,24 +642,26 @@ function loadPaging(){
 }
 
 
+
 /********************************************/
 /*  		 Additional Function			*/
 /********************************************/
 //format angkat model pertama
 function angka($x) {
+	$x = (int)$x;
 	return number_format("$x",0,",",".");
 }
 
 //format angkat model kedua
 function angka2($x) {
+	$x = (int)$x;
 	return number_format("$x",2,",",".");
-
 }
 
 function digit($x, $d = 0, $p = '.') {
 	if($p == ',') $c = '.';
 	else $c = ',';
-	
+	$x = (int)$x;	
 	return number_format("$x",$d,"$c","$p");
 }
 
@@ -702,7 +724,7 @@ function checkLocalhost() {
 //check mobile platform
 function checkMobile()
 {
-	if(preg_match('/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|philips|phone|playbook|sagem|sharp|sie-|silk|smartphone|sony|symbian|t-mobile|telus|up\.browser|up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i', $_SERVER['HTTP_USER_AGENT']))
+	if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|iemobile|iphone|oppo|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|philips|phone|playbook|sagem|sharp|sie-|silk|smartphone|sony|symbian|t-mobile|telus|up\.browser|up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i', $_SERVER['HTTP_USER_AGENT']))
 		return true;
 
 	else
@@ -803,15 +825,15 @@ function multipleDelete($table, $source, $item = null, $cat = null, $except = nu
 					$art = $db->select(FDBPrefix."$item",'*',"$except AND $cat ='$id'");	
 				else
 					$art = $db->select(FDBPrefix."$item",'*',"$cat ='$id'");
-					
-				if(@mysql_num_rows($art)>0) {
+				
+				if(count($art)>0) {
 					$noempty = 1;					
 					break;
 				}			
 
 				if(!empty($except)) { 
 					$art = $db->select(FDBPrefix.$table,'*',"$except AND $fid = $id");	
-					if(@mysql_num_rows($art)>0) {
+					if(count($art)>0) {
 						$noempty = 1;					
 						break;
 					}
@@ -834,7 +856,7 @@ function multipleDelete($table, $source, $item = null, $cat = null, $except = nu
 			else {
 				if(!empty($except)) { 
 					$art = $db->select(FDBPrefix.$table,'*',"$except AND $fid ='$id'");		
-					if(@mysql_num_rows($art)>0) {		
+					if(count($art)>0) {		
 						$cantdelete = 1;		
 						break;
 					}	
@@ -945,29 +967,32 @@ function backup_tables($tables = '*', $directory = null, $file = null, $installe
 	if($handle) return true;
 }
 
-class FData extends FQuery {
+/* Additional class configuration */
+/* any class core adding below this line */
+/* any function core adding upper this line */
+
+class FConfig extends FQuery {
     private function conf()
     {
-		$this -> connect();
 		$sql = $this -> select(FDBPrefix."setting","name, value");				
 		$val = null;
-		while($row=mysql_fetch_row($sql))
-			$val[$row[0]] = $row[1];
+		if(!$sql) die(alert("error","Table <b>setting</b> error or invalid <b>DBPrefix</b>!",true, true));
+		foreach($sql as $row ) {
+			$val[$row['name']] = $row['value'];
+		}
 		if(!empty($type))
 		return $val[$type];
 		else
 		return $val;
     }
 	
-	public function Config() {
+	public function getConfig() {
 		static $flag ;
 		static $result ;
-		// Function has already run
 		if ( $flag === null ) {
 			$flag = true;
 			$result = $this -> conf();		
 		}
 		return $result;
-	}
-	
+	}	
 }

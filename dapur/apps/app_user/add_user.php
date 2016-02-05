@@ -17,8 +17,8 @@ $qr = null;
 		<div class="warp_app_header">
 			<div class="app_title"><?php echo New_User; ?></div>
 			<div class="app_link">
-				<button type="submit" class="btn btn-success" title="<?php echo Delete; ?>" value="Next" name="apply"><i class="icon-ok"></i> <?php echo Save; ?></button>				
-				<button type="submit" class="btn btn-metis-2" title="<?php echo Delete; ?>" value="Next" name="save"><i class="icon-ok-sign"></i>  <?php echo Save_and_Quit; ?></button>
+				<button type="submit" class="btn btn-success" title="<?php echo Delete; ?>" value="Next" name="apply"><i class="icon-check"></i> <?php echo Save; ?></button>				
+				<button type="submit" class="btn btn-metis-2" title="<?php echo Delete; ?>" value="Next" name="save"><i class="icon-check-circle"></i>  <?php echo Save_and_Quit; ?></button>
 				</button>	
 				<a class="danger btn btn-default" href="?app=user" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 				<?php printAlert(); ?>

@@ -37,10 +37,9 @@ defined('_FINDEX_') or die('Access Denied');
 		}
 		else {
 			alert('error',Please_choose_file,true);
-		}
-	
+		}	
+		delete_directory('tmp');
 	}
-	delete_directory('tmp');
 	
 	if(isset($_POST['backup_all'])) {
 		$c = backup_tables('*');
@@ -55,10 +54,10 @@ defined('_FINDEX_') or die('Access Denied');
 			alert('error',Please_choose_table,true);
 	}
 
+	/*
     $SIZE_LIMIT = siteConfig('disk_space')*1024*1024; // 5 GB
     $disk_used = folder_size("../");
-	$disk_remaining = $SIZE_LIMIT - $disk_used;
-	
+	$disk_remaining = $SIZE_LIMIT - $disk_used;*/
 	
 
 ?>
@@ -367,15 +366,15 @@ $(document).ready(function() {
 		<div>
 			<table>				
 				<tr>
-					<td class="row-title" title="Tampilkan judul  halaman">Backup Specific Tables</td>
+					<td class="row-title">Backup Specific Tables</td>
 					<td><select name="table[]" class="chosen-select tb-data" data-placeholder="<?php echo Choose_table; ?>" style="min-width:150px; width:50%;" multiple>
 					<option value=""></option>
 						<?php	
 							$_GET['id']=0;
 							$db = new FQuery(); 
 							$db->connect(); 
-							$sql = mysql_query("SHOW TABLES FROM ".FDBName);
-							while($table = mysql_fetch_array($sql)){
+							$sql = $db->query("SHOW TABLES FROM ".FDBName);
+							foreach($sql as $table){
 								$tb = str_replace(FDBPrefix,'',$table[0]);
 								echo " <option value='$tb'>$tb</option>";
 							}						

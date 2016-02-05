@@ -1,11 +1,14 @@
 /* Fiyo Comment */
-
+.mod-inner-comment {
+	overflow: hidden;
+	margin: 0 1px 8px 3px;
+}
 .mod-avatar-comment { 
-	margin:2px 0 0 3px;
+	margin: 2px 8px 0 0;
 	float: left;
 }
 .mod-right-comment { 
-	 margin: 0 1px 10px 47px;
+	 margin: 0 1px 10px 0;
 	line-height: 1.7em;
 }
 .mod-right-comment em{ 

@@ -44,7 +44,7 @@ if($sub_title==0){$sut2="selected";}
 					<select name='param1'>
 					<?php 	
 						$sql = $db->select(FDBPrefix.'menu_category','*',"category != 'adminpanel'"); 
-						while($cat = mysql_fetch_array($sql)) {		
+						foreach($sql as $cat) {		
 							if($category==$cat['category'])
 								$s="selected";
 							else

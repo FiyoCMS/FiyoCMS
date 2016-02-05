@@ -17,13 +17,11 @@ require_once ('../../../system/jscore.php');
 <table class="table table-striped tools">
   <tbody>
 	<?php	
-		$db = new FQuery();  
-		$db->connect(); 
 		$sql = $db->select(FDBPrefix."article","*,DATE_FORMAT(date,'%W, %b %d %Y') as date","",'hits DESC LIMIT 10'); 
 		$no = 0;
-		while($qr=mysql_fetch_array($sql)) {		
+		foreach($sql as $row) {		
 			$no++;	
-			$h = $qr['hits'];
+			$h = $row['hits'];
 			if($h > 999) {
 				$h = $h / 1000;
 				$h = substr($h,0,3);
@@ -32,16 +30,16 @@ require_once ('../../../system/jscore.php');
 					$h = substr($h,0,1);
 				$h = $h."k";	
 			}
-			$read = $_GET['url'].check_permalink("link","?app=article&view=item&id=$qr[id]","permalink");
-			$edit = "?app=article&act=edit&id=$qr[id]";						
-			$auth = userInfo("name","$qr[author_id]");
+			$read = $_GET['url'].check_permalink("link","?app=article&view=item&id=$row[id]","permalink");
+			$edit = "?app=article&act=edit&id=$row[id]";						
+			$auth = userInfo("name","$row[author_id]");
 			$info = "Hits : $h";
 			$read_article = Read;
 			$edit_article = Edit;		
-			echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$qr[title] <a class='tooltips icon-bar-chart' title='$info' data-placement='right'></a> 
+			echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$row[title] <a class='tooltips icon-bar-chart' title='$info' data-placement='right'></a> 
 			<div class='tool-box'>
 				<a href='$read' target='_blank'  class='btn btn-tools tips' title='$read_article'>$read_article</a>";				
-			$editor_level 	= mod_param('editor_level',$qr['parameter']);
+			$editor_level 	= mod_param('editor_level',$row['parameter']);
 			if($editor_level >= USER_LEVEL or empty($editor_level)) echo "<a href='$edit' class='btn btn-tools tips' title='$edit_article'>$edit_article</a> ";
 			echo "</div></td></tr>";
 		}		

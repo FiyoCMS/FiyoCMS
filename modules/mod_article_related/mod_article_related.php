@@ -17,6 +17,7 @@ $filter = mod_param('filter',$modParam);
 $cat 	= mod_param('cat',$modParam);
 $showImg = mod_param('showImg',$modParam);
 
+$thumbW = 100 / $limit ;
 
 $db 	= new FQuery();  
 $db->connect(); 	
@@ -48,7 +49,8 @@ $sql = $db->select(FDBPrefix."article",'*',"status = 1 AND $c AND $z $level","RA
 	
 echo "<ul id='article-related'>";
 $x = 0;
-while($qr=mysql_fetch_array($sql) AND $x < $limit){	
+foreach($sql as $qr) {
+	if($x >= $limit) break;
 	$link="?app=article&view=item&id=$qr[id]";	
 	if(defined('SEF_URL')){
 		$link = make_permalink($link);
@@ -86,7 +88,7 @@ while($qr=mysql_fetch_array($sql) AND $x < $limit){
 	
 	if($showImg) {
 		$article ="<div class='related-title' ><a title='$qr[title]' href='$link'>$img$qr[title]</a></div>";
-		echo "<li style='width:".$thumbW."px; min-height:".$height."px' class='related-img'>$article</li>";
+		echo "<li style='width:".$thumbW."%; min-height:".$height."px' class='related-img'>$article</li>";
 	}
 	else
 		echo "<li><a title='$qr[title]' href='$link'>$img$qr[title]</a></li>";

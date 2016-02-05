@@ -81,11 +81,11 @@ if(!isset($_POST['send'])) {
 				$status = "error";
 				$notice = comment_Notice_Error6;	
 		}
-		else {			
-			$auto = oneQuery('comment_setting','name',"'auto_submit'",'value');
-			if($auto == 0) {
-				if($_SESSION['USER_LEVEL'] ==1 or $_SESSION['USER_LEVEL'] ==2) $auto = 1;
-				else $auto = null;
+		else {		
+			if($_SESSION['USER_LEVEL'] ==1 or $_SESSION['USER_LEVEL'] ==2) 
+				$auto = 1;
+			else {
+				$auto = oneQuery('comment_setting','name',"'auto_submit'",'value');
 			}
 			$no = null;
 			$_POST['url'] = str_replace("<","&lt;",$_POST['url']);
@@ -104,7 +104,7 @@ if(!isset($_POST['send'])) {
 				$notice = comment_Notice_Info;
 				$red = 1;
 				$sid = $db->select(FDBPrefix.'comment','id','','date DESC LIMIT 1' );
-				$id = mysql_fetch_array($sid);
+				if(!empty($sid[0])) $id = $sid[0];
 				$id = $id['id'];
 				}		
 			else if($com) {
@@ -113,8 +113,8 @@ if(!isset($_POST['send'])) {
 				$notice = comment_Notice_Info2;
 				}
 			else {
-		$status = "error";
-		$notice = comment_Notice_Error5;
+			$status = "error";
+			$notice = comment_Notice_Error5;
 			
 			}
 		}

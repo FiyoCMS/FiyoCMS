@@ -90,6 +90,8 @@ define ("Set_disable", "Disable");
 define ("Set_enable", "Activate");
 define ("Add_New_Item", "Add new data");
 define ("Plugin_Name", "Plugin Name");
+define ("Reads","Dibaca");
+define ("times","kali");
 
 /************************************
 * 		 	  Article  				*

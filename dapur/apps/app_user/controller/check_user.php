@@ -21,17 +21,15 @@ switch($act)
 	default :
 		if(strlen($_POST['username'])<4) echo 2;
 		else{
-			$sql = $db->select(FDBPrefix.'user','*',"user='$_POST[username]'"); 
-			$user = mysql_num_rows($sql); 	
+			$user = oneQuery("user","user","$_POST[username]");
 			echo $user;
 		}
 	break;
 	case 'email':	
 		if(!preg_match("/^.+@.+\\..+$/",$_POST['email']) or substr_count($_POST['email'],"@")>1) echo 2;
 		else {
-			$sql2 = $db->select(FDBPrefix.'user','*',"email='$_POST[email]'"); 
-			$email = mysql_num_rows($sql2); 	
-		echo $email;
+			$email = oneQuery("user","email","$_POST[email]");
+			echo $email;
 		}
 	break;
 }

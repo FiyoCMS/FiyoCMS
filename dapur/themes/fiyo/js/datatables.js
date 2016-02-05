@@ -154,3 +154,30 @@ h?1:e>h?-1:0},"date-pre":function(e){e=Date.parse(e);if(isNaN(e)||""===e)e=Date.
 for(var k=1;k<e.length;k++){h=e.charAt(k);if(-1=="0123456789.".indexOf(h))return null;if("."==h){if(j)return null;j=!0}}return"numeric"},function(e){var h=Date.parse(e);return null!==h&&!isNaN(h)||"string"===typeof e&&0===e.length?"date":null},function(e){return"string"===typeof e&&-1!=e.indexOf("<")&&-1!=e.indexOf(">")?"html":null}]);h.fn.DataTable=j;h.fn.dataTable=j;h.fn.dataTableSettings=j.settings;h.fn.dataTableExt=j.ext};"function"===typeof define&&define.amd?define(["jquery"],L):jQuery&&!jQuery.fn.dataTable&&
 L(jQuery)})(window,document);$(function() { if ( $.isFunction($.fn.chosen) ) {$("select").chosen({disable_search_threshold: 10});}
 });
+
+jQuery.fn.dataTableExt.oApi.fnGetHiddenNodes = function ( settings )
+{
+    var nodes;
+    var display = jQuery('tbody tr', settings.nTable);
+ 
+    if ( jQuery.fn.dataTable.versionCheck ) {
+        // DataTables 1.10
+        var api = new jQuery.fn.dataTable.Api( settings );
+        nodes = api.rows().nodes().toArray();
+    }
+    else {
+        // 1.9-
+        nodes = this.oApi._fnGetTrNodes( settings );
+    }
+ 
+    /* Remove nodes which are being displayed */
+    for ( var i=0 ; i<display.length ; i++ ) {
+        var iIndex = jQuery.inArray( display[i], nodes );
+ 
+        if ( iIndex != -1 ) {
+            nodes.splice( iIndex, 1 );
+        }
+    }
+ 
+    return nodes;
+};

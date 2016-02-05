@@ -60,16 +60,17 @@ $(document).ready(function() {
 		<tbody>
 			<?php
 			$db = new FQuery();  
-			$db->connect(); 
 			$sql = $db->select(FDBPrefix.'contact_group'); 
 			$no = 1; 
-			while($qr=mysql_fetch_array($sql)){
-				$qr2=$db->select(FDBPrefix.'contact','*',"group_id='$qr[id]'"); 
-				$jml2= mysql_affected_rows();						
-				$checkbox ="<input type='checkbox' name='check_group[]' value='$qr[id]'>";	
-				$name ="<a class='tips' title='".Edit."' href='?app=contact&view=group&act=edit&id=$qr[id]'>$qr[name]</a>";
+			$tcc = FDBPrefix."contact";
+			foreach($sql as $row){
+				$count = "SELECT COUNT(*) FROM  `$tcc` WHERE group_id='$row[group_id]'"; 
+				$count = $db->db->query( $count)->fetchColumn();
+				
+				$checkbox ="<input type='checkbox' name='check_group[]' value='$row[group_id]'>";	
+				$name ="<a class='tips' title='".Edit."' href='?app=contact&view=group&act=edit&id=$row[group_id]'>$row[group_name]</a>";
 				echo "<tr>";
-				echo "<td align='center'>$checkbox</td><td>$name</td><td>$qr[description]</td><td align='center'>$jml2</td><td align='center'>$qr[id]</td>";
+				echo "<td align='center'>$checkbox</td><td>$name</td><td>$row[group_desc]</td><td align='center'>$count</td><td align='center'>$row[group_id]</td>";
 				echo "</tr>";
 				$no++;	
 			}

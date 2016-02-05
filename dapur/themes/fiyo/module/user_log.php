@@ -15,24 +15,24 @@ require_once ('../../../system/jscore.php');
 <table class="table table-striped tools">
   <tbody>
 	<?php	
-		$db = new FQuery();  
-		$db->connect(); 
-		$sql = $db->select(FDBPrefix."user","*,DATE_FORMAT(time_log,'%W, %Y-%m-%d %H:%i') as date","time_log != '0000-00-00 00-00-00' AND level >= $_SESSION[USER_LEVEL]",'time_log DESC LIMIT 10'); 
+		$suser = FDBPrefix."user";
+		$sgroup = FDBPrefix."user_group";
+		$sql = $db->select("$sgroup, $suser","*,DATE_FORMAT(time_log,'%W, %Y-%m-%d %H:%i') as date","time_log != '0000-00-00 00-00-00' AND $suser.level >= $_SESSION[USER_LEVEL] AND $suser.level = $sgroup.level",'time_log DESC LIMIT 10'); 
 		$no = 1;
-		while($qr=mysql_fetch_array($sql)) {
-			$id = $qr['id'];
+		foreach($sql as $row) {
+			$id = $row['id'];
 			$edit = Edit;
 			$read = Read;
 			$hide = Set_disable;	
 			$delete = Delete;
 			$approve = Set_enable;		
-			$sql2 = $db->select(FDBPrefix."user_group","*","level=$qr[level]"); 
+			$sql2 = $db->select(FDBPrefix."user_group","*","level=$row[level]"); 
 			
 			$red = '';
-			if($qr['status']) 
-				$approven = "<a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' data-id='$qr[id]' title='$hide'>$hide</a><a class='btn-tools btn btn-success btn-sm btn-grad approve-user' data-id='$qr[id]' title='$approve' style='display:none;'>$approve</a>";
+			if($row['status']) 
+				$approven = "<a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' data-id='$row[id]' title='$hide'>$hide</a><a class='btn-tools btn btn-success btn-sm btn-grad approve-user' data-id='$row[id]' title='$approve' style='display:none;'>$approve</a>";
 			else {
-				$approven = "<a class='btn-tools btn btn-success btn-sm btn-grad approve-user' data-id='$qr[id]' title='$approve'>$approve</a><a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' data-id='$qr[id]' title='$hide' style='display:none;'>$hide</a>";
+				$approven = "<a class='btn-tools btn btn-success btn-sm btn-grad approve-user' data-id='$row[id]' title='$approve'>$approve</a><a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' data-id='$row[id]' title='$hide' style='display:none;'>$hide</a>";
 				$red = "class='unapproved'";
 			}		
 			if($id == USER_ID) $approven ='';
@@ -41,19 +41,18 @@ require_once ('../../../system/jscore.php');
 			if($output) $log = "
 			<a data-toggle='tooltip' data-placement='right' title='Online' class=' icon-circle blink icon-mini tooltips'></a>&nbsp;&nbsp;&nbsp;";
 			
-			$group = mysql_fetch_array($sql2);
-			$group = $group['group_name'];			
-			$ledit = "?app=user&act=edit&id=$qr[id]";					
+			$group = $row['group_name'];			
+			$ledit = "?app=user&act=edit&id=$row[id]";					
 			echo "<tr $red>
-			<td>$qr[name] <span>($qr[user])</span>$log
-			<a data-toggle='tooltip' data-placement='right' title='$qr[email]' class=' icon-envelope-alt tooltips'></a>
+			<td>$row[name] <span>($row[user])</span>$log
+			<a data-toggle='tooltip' data-placement='right' title='$row[email]' class=' icon-envelope-alt tooltips'></a>
 			<a data-toggle='tooltip' data-placement='right' title='$group' class=' icon-info-sign tooltips'></a>
 			<br/>
 			<div class='tool-box'>
 				$approven
 				<a href='$ledit' class='btn btn-tools tips' title='$edit'>$edit</a>
 			</div></td>
-			<td align='right'>$qr[date]</td>
+			<td align='right'>$row[date]</td>
 			</tr>";
 			$no++;	
 		}					

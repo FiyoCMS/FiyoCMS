@@ -8,7 +8,6 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-$param = $qr['parameter'];
 if(checkLocalhost()) {
 	$param = str_replace("media/",FLocal."media/",$param);			
 }

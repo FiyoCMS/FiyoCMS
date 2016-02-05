@@ -6,6 +6,7 @@
 * @license		GNU/GPL, see LICENSE.
 **/
 
+header('Content-Type: application/json');
 session_start();
 if(@$_SESSION['USER_LEVEL'] > 5 or !isset($_GET['iSortCol_0'])) die ('Access Denied!');
 define('_FINDEX_','BACK');
@@ -120,24 +121,24 @@ require('../../../system/jscore.php');
 		$sOrder
 		$sLimit
 		";
-	$rResult = mysql_query( $sQuery) or die(mysql_error());
+	$rResult = $db->query( $sQuery);
 	
 	/* Data set length after filtering */
 	$sQuery = "
 		SELECT FOUND_ROWS()
 	";
-	$rResultFilterTotal = mysql_query( $sQuery) or die(mysql_error());
-	$aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
-	$iFilteredTotal = $aResultFilterTotal[0];
+	$rResultFilterTotal = $db->db->query( $sQuery)->fetchColumn();
+	$iFilteredTotal = $rResultFilterTotal;
 	
 	/* Total data set length */
 	$sQuery = "
 		SELECT COUNT(`".$sIndexColumn."`)
 		FROM   $sTable
 	";
-	$rResultTotal = mysql_query( $sQuery) or die(mysql_error());
-	$aResultTotal = mysql_fetch_array($rResultTotal);
-	$iTotal = $aResultTotal[0];
+	
+	$rResultTotal = $db->db->query( $sQuery)->fetchColumn();
+	$iTotal = $rResultTotal;
+	
 	
 	
 	/*
@@ -150,7 +151,7 @@ require('../../../system/jscore.php');
 		"aaData" => array()
 	);
 	
-	while ( $aRow = mysql_fetch_array( $rResult ) )
+	foreach ( $rResult as $aRow )
 	{
 		$row = array();
 		for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -163,7 +164,7 @@ require('../../../system/jscore.php');
 			{ $stat2 ="selected";$stat1 =""; $enable = 'disable';}
 					
 				$name = "$aRow[name]";
-				$name = "<span class='tips' title='$aRow[email]' data-placement='right'>$name</span>";	
+				$name = "<a href='?app=article&view=comment&act=edit&id=$aRow[id]' class='tips' title='$aRow[email]' data-placement='right'>$name</a>";	
 					
 				$status ="<span class='invisible'>$enable</span>
 				<div class='switch s-icon activator'>
@@ -193,15 +194,13 @@ require('../../../system/jscore.php');
 				$comm = htmlentities(htmlToText($aRow['comment']));
 				$comm = substr($comm,0,50);
 				
-				$comm ="<a class='tips' title='".Edit."' href='?app=comment&act=edit&id=$aRow[id]'>$comm ...</a>";
+				$comm ="<a class='tips' title='".Edit."' href='?app=article&view=comment&act=edit&id=$aRow[id]'>$comm ...</a>";
 				$row[] = "$comm";
 			}
 			else if ( $i == 4 )
 			{							
 				$title = oneQuery('article','id',link_param('id',$aRow['link']),'title');
-				$link = oneQuery('permalink','link',"'$aRow[link]'",'permalink');
-				if(!empty($aRow['id'])) $clink = "#comment-$aRow[id]";
-				else  $clink = "#comment";
+				$link = oneQuery('permalink','link',"'$aRow[link]'",'permalink'); $clink = "#comment-$aRow[id]";
 				$title = "<span style='display:none'>$title</span><a href='../$link$clink ' target='_blank' class='outlink'>$title</a> ";
 				$row[] = "$title";
 			}

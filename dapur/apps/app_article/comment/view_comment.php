@@ -114,7 +114,7 @@ $(function() {
 		<div class="warp_app_header">		
 		  <div class="app_title"><?php echo Article_Comments; ?></div>
 		  <div class="app_link">			
-			<!--button type="submit" class="btn btn-success approve" title="<?php echo Save; ?>" value="<?php echo Approve; ?>" name="approve_comment"><i class="icon-ok"></i> <?php echo Approve; ?></button-->	
+			<!--button type="submit" class="btn btn-success approve" title="<?php echo Save; ?>" value="<?php echo Approve; ?>" name="approve_comment"><i class="icon-check"></i> <?php echo Approve; ?></button-->	
 			<button type="submit" class="delete btn btn-danger btn-sm btn-grad" title="<?php echo Delete; ?>" value="<?php echo Delete; ?>" name="delete_comment"><i class="icon-trash"></i> &nbsp;<?php echo Delete; ?></button>
 			<a class="lbt setting tooltip link" href="?app=comment&act=config" title="<?php echo Configuration; ?>"></a>
 		  </div> 	
@@ -128,7 +128,7 @@ $(function() {
 					<input type="checkbox" id="checkall" target="check_comment[]"></th>		
 				<th style="width:18% !important;"><?php echo Author; ?></th>
 				<th style="width:5% !important;" class="no"><?php echo Status; ?></th>
-				<th style="width:30% !important;"><?php echo Comment; ?></th>
+				<th style="width:31% !important;"><?php echo Comment; ?></th>
 				<th style="width:30% !important;" ><?php echo Article_Title; ?></th>
 				<th style="width:15% !important;text-align:center" ><?php echo Date; ?></th>
 			</tr>

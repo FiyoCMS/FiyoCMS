@@ -44,7 +44,7 @@ $db->connect();
 						<td><select name="level" >
 							 <?php
 								$sql2 = $db->select(FDBPrefix.'user_group');
-								while($user=mysql_fetch_array($sql2)){
+								foreach($sql2 as $user){
 								
 										echo "<option value='$user[level]'>$user[group_name] </option>";
 								}

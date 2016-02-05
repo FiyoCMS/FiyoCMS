@@ -88,14 +88,14 @@ if(isset($_POST['upload']) or isset($_POST['copy'])) {
 						@copy_directory("../dapur","../$dapur",true);
 				} else {
 					$fail = true;						
-					alert('error',File_uploaded_not_valid,true);			
+					notice('error',File_uploaded_not_valid,true);			
 				}
 				
 				if(!isset($fail)) {
 					if(isset($folder) AND file_exists("$folder/installer.php"))
 						@unlink("$folder/installer.php",true);
 					if($copy)
-						alert('info',AddOns_installed);
+						notice('info',AddOns_installed);
 					if(isset($addons['info'])) {
 						$_SESSION['INSTALL_NOTICE'][0] = 3;
 						$_SESSION['INSTALL_NOTICE'][1] = "<div class='install_info panel box'><h2>$addons[name] ".successfully_installed."</h2>
@@ -106,24 +106,24 @@ if(isset($_POST['upload']) or isset($_POST['copy'])) {
 				}
 			}
 			else {
-				alert('error',File_uploaded_not_valid,true);
+				notice('error',File_uploaded_not_valid,true);
 			}
 		}
 		else{
-			alert('error',File_not_support,true);
+			notice('error',File_not_support,true);
 		}
 	}
 	else if(!$c) {
-		alert('error',File_uploaded_not_valid,true);
+		notice('error',File_uploaded_not_valid,true);
 	}
 	else {
-		alert('error',Please_choose_file,true);
+		notice('error',Please_choose_file,true);
 	}
 	delete_directory('tmp');
 }
 
 if(isset($_POST['config_save'])) {
-	if(empty($_POST['site_name']) AND empty($_POST['site_title']) AND empty($_POST[site_url]) AND empty($_POST['site_status']) AND empty($_POST['site_title']) AND empty($_POST['file_allowed']) AND empty($_POST['file_size'])) 
+	if(empty($_POST['site_name']) AND empty($_POST['site_title']) AND empty($_POST['site_url']) AND empty($_POST['site_status']) AND empty($_POST['site_title']) AND empty($_POST['file_allowed']) AND empty($_POST['file_size'])) 
 	{	
 		notice('error','invalid');
 	}			
@@ -182,6 +182,7 @@ if(isset($_POST['config_save'])) {
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$pxt"),"name='sef_ext'");
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[www]"),"name='sef_www'");
 		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[timezone]"),"name='timezone'");
+		$qr=$db->update(FDBPrefix."setting",array('value'=>"$_POST[https]"),"name='https'");
 		
 		/*
 		* Edit AdminPanel folder

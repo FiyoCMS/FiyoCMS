@@ -65,13 +65,13 @@ $(function() {
 			$level = Level_Access;
 			$sql = $db->select(FDBPrefix.'menu_category','*',SQL_USER_LEVEL); 
 			$no = 1; 
-			while($qr=mysql_fetch_array($sql)){
-				$qr2=$db->select(FDBPrefix.'menu','*',"category='$qr[category]'"); 
-				$jml2= mysql_affected_rows();						
-				$checkbox ="<input type='checkbox' name='check[]' value='$qr[category]' rel='ck'>";	
-				$name ="<a data-placement='right' class='tips' title='".Edit."' href='?app=menu&view=edit_category&id=$qr[id]'>$qr[title]</a>";
+			foreach($sql as $row){
+				$row2=$db->select(FDBPrefix.'menu','*',"category='$row[category]'"); 
+				$jml2= count($row2);						
+				$checkbox ="<input type='checkbox' name='check[]' value='$row[category]' rel='ck'>";	
+				$name ="<a data-placement='right' class='tips' title='".Edit."' href='?app=menu&view=edit_category&id=$row[id]'>$row[title]</a>";
 				echo "<tr>";
-				echo "<td align='center'>$checkbox</td><td><span class='visible-xs right'>$jml2 item</span>$name</td><td class='hidden-xs hidden-sm'>$qr[category]</td><td class='hidden-xs'>$qr[description]</td><td align='center' class='hidden-xs'>$jml2</td><td align='center' class='hidden-xs'>$qr[id]</td>";
+				echo "<td align='center'>$checkbox</td><td><span class='visible-xs right'>$jml2 item</span>$name</td><td class='hidden-xs hidden-sm'>$row[category]</td><td class='hidden-xs'>$row[description]</td><td align='center' class='hidden-xs'>$jml2</td><td align='center' class='hidden-xs'>$row[id]</td>";
 				echo "</tr>";
 				$no++;	
 			}

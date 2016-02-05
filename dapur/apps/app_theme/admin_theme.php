@@ -72,7 +72,7 @@ $(function() {
 <?php
 $thm = $act = '';
 $sql=$db->select(FDBPrefix.'setting','*',"name='admin_theme'"); 
-$qr_themes = mysql_fetch_array($sql); 
+$qr_themes = $sql[0]; 
 $dir=opendir("themes");  
 $no=0;
 while($folder=readdir($dir)){ 

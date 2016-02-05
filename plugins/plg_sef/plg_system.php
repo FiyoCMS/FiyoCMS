@@ -1,45 +1,67 @@
 <?php
 /**
-* @name			Plugin SEF
-* @version		2.0
-* @package		Fiyo CMS
-* @copyright	Copyright (C) 2014 Fiyo CMS.
-* @license		GNU/GPL, see LICENSE.txt
+* @name		Plugin SEF
+* @version	2.0
+* @package	Fiyo CMS
+* @copyright	Copyright (C) 2015 Fiyo CMS.
+* @license	GNU/GPL, see LICENSE.txt
 */
 
 defined('_FINDEX_') or die('Access Denied');
 /************* SEF PAGINATION FUNCTION *****************/
 function redirect_www() {
 	if($_SERVER['SERVER_ADDR'] != '127.0.0.1' AND $_SERVER['SERVER_ADDR'] != '::1' AND $_SERVER['SERVER_ADDR'] != $_SERVER['HTTP_HOST'] ) {
+		if(isset($_SERVER['HTTPS']))  $http = "https"; else $http = "http";
 		if(siteConfig('sef_www')) {
 			if(!strpos(getUrl(),"//www.")) {
 				$link = getUrl();
-				$link = str_replace("http://","http://www.",$link);
+				$link = str_replace("$http://","$http"."://www.",$link);
 				redirect($link);
 			}
 		}
 		else {
 			if(strpos(getUrl(),"//www.")) {
 				$link = getUrl();
-				$link = str_replace("http://www.","http://",$link);
+				$link = str_replace("$http"."://www.","$http"."://",$link);
 				redirect($link);
 			}
 		}
 	}
 }
 
+function redirect_https() {
+	if(siteConfig('https')) {
+		if(!isset($_SERVER['HTTPS'])) {
+			$link = getUrl();
+			$link = str_replace("http://","https://",$link);
+			redirect($link);			
+		}  
+	}
+}
+
 function redirect_link(){
 	if(!checkHomePage()){
+		$url = getUrl();
+		if(isset($_SERVER['HTTPS'])) $http = "https"; else $http = "http";
 		$app = app_param('app');	
+		if(strpos($c = str_replace("$http://","",getUrl()),"//")) {
+                    while(strpos($c,"//")) {
+			$c = str_replace("//","/",$c);
+                    }
+                    redirect("$c");
+		}
+		
 		if(SEF_URL) {	
 			if(_Page == 1) {
 				if(strpos(getUrl(),"&page="))
 					redirect(str_replace("&page="._Page,"",getUrl()));
 			}
 			if(empty($app)) {
-			//redirect for 404 page
+                header("HTTP/1.1 404 Not Found", true, 404); 
+				//redirect for 404 page
 				$link = str_replace(FUrl,"",getUrl());
 				$linl = strlen($link);
+                       
 				$max = 0;
 				while($linl) {	
 					if(substr($link,$linl-1) == "/") {					
@@ -60,9 +82,15 @@ function redirect_link(){
 				}
 				if($got AND !isset($fail_url))
 					redirect(FUrl.$link);
+				else if(_FINDEX_ !== 'BACK' or strpos(getUrl(),"?")) {
+        				redirect(FUrl);
+        				die();
+     				    }
+				
 			}
-			else if(!empty($app)) {	
-				// nothing :D
+			else if(!empty($app)) {
+				if( strlen($url) -  strpos($url,"?") < 4)
+        			redirect(substr($url,0,strpos($url,"?")));
 			}
 			else if(SEF_EXT == 0 or SEF_EXT == '') {
 				$sum = strlen(getUrl());
@@ -76,7 +104,7 @@ function redirect_link(){
 		}
 		else {
 			$direct = check_permalink('link',$_SERVER['REQUEST_URI'],'permalink');
-			$xurl =  'http://'.$_SERVER["HTTP_HOST"].$_SERVER['REQUEST_URI'];
+			$xurl =  "$http://".$_SERVER["HTTP_HOST"].$_SERVER['REQUEST_URI'];
 			$gurl = str_replace(FUrl,'',$xurl);
 			$strt = strlen($gurl);
 			$x = 1;
@@ -281,20 +309,24 @@ function add_permalink($title, $cat = NULL, $pid = null, $ext = null, $next = nu
 				$ext = str_replace(".","",$ext);
 				$permalink = "$permalink.$ext";
 			}
-			
-			if(check_permalink('link',$link))
-				redirect(FUrl.$permalink);
-			else if(!empty($permalink)){
-				if($c = check_permalink('permalink',$permalink)) {
-					$x = 2;
-					$permalink = str_replace(SEF_EXT,"",$permalink);
-					while($c) {
-						$p = "$permalink-$x";
-						$c = check_permalink('permalink',$p.SEF_EXT);
-						$x++;				
-						
+					
+			if($pml = check_permalink('link',$link,'permalink')) {
+				redirect(FUrl.$pml);
+                        }
+			else if(!empty($permalink)  AND http_response_code() !== 404){
+				if($c = check_permalink('permalink',$permalink)) {	
+					if(app_param('app') == 'article' AND app_param('view') == 'item' ) {
+						redirect(FUrl.check_permalink('link',$link,'permalink'));	
+					} else {
+						$x = 2;
+						$permalink = str_replace(SEF_EXT,"",$permalink);
+						while($c) {
+							$p = "$permalink-$x";
+							$c = check_permalink('permalink',$p.SEF_EXT);
+							$x++;	
+						}
+						$permalink = $p.SEF_EXT;
 					}
-					$permalink = $p.SEF_EXT;
 				}
 				if(!empty($permalink) AND $permalink != "-" AND !empty($link))
 					$qr=$db->insert(FDBPrefix.'permalink',array("","$link","$permalink",$pid,1,0)); 

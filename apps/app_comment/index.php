@@ -13,13 +13,16 @@ defined('_FINDEX_') or die('Access Denied');
 $db = new FQuery();  
 $db->connect();
 
-loadLang(__dir__);
+loadLang(dirname(__FILE__));
 
 if(!defined('SEF_URL')) {
 	$link = check_permalink('link',getLink(),'link');	
 	$go_link = FUrl.getLink()."&pid=$_GET[pid]";
 	}
 else {
+	if(checkHomePage())
+	$link = homeInfo('link');
+		else
 	$link = @check_permalink('permalink',$_REQUEST['link'],'link');
 	$go_link = FUrl.@$_REQUEST['link'].SEF_EXT;
 }
@@ -128,3 +131,4 @@ $email = $_SESSION['USER_EMAIL'];
 if(empty($email)) $email = @$_POST['email']; 
 
 require('form_comment.php');
+

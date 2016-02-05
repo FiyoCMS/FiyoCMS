@@ -39,7 +39,7 @@ $(document).ready(function() {
 	</thead>
 	<?php	
 	$db = new FQuery();  
-	$db->connect();			
+	
 	$folback = siteConfig('backend_folder');
 	$atheme = siteConfig('admin_theme');
 	$themes = siteConfig('site_theme');

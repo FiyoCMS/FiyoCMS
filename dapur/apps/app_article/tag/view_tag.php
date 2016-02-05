@@ -59,11 +59,11 @@ $(function() {
 			$db->connect(); 
 			$sql= $db->select(FDBPrefix.'article_tags');
 			$no=1;
-			while($qr=mysql_fetch_array($sql)){
-				$checkbox ="<input type='checkbox' data-name='rad-$qr[id]' sub-target='.sub-menu' name='check_tag[]' value='$qr[id]' rel='ck'>";
-				$name ="<a class='tips' title='".Edit."' data-placement='right'  href='?app=article&view=tag&act=edit&id=$qr[id]'>$qr[name]</a>";
+			foreach($sql as $row){
+				$checkbox ="<input type='checkbox' data-name='rad-$row[id]' sub-target='.sub-menu' name='check_tag[]' value='$row[id]' rel='ck'>";
+				$name ="<a class='tips' title='".Edit."' data-placement='right'  href='?app=article&view=tag&act=edit&id=$row[id]'>$row[name]</a>";
 				echo "<tr>";
-				echo "<td align='center'>$checkbox</td><td>$name</td><td align='center'>".digit($qr['hits'])."</td>";
+				echo "<td align='center'>$checkbox</td><td>$name</td><td align='center'>".(int)$row['hits']."</td>";
 				echo"</tr>";
 				$no++;	
 				

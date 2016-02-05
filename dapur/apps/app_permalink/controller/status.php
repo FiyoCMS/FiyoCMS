@@ -12,8 +12,6 @@ define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
 $db = new FQuery();  
-$db->connect(); 
-
 
 /****************************************/
 /*	    Enable and Disbale SEF			*/

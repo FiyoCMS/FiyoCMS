@@ -44,12 +44,12 @@ $(document).ready( function(){
 		<tr>
 				<td class="row-title">Category</td>
 				<td>	
-					<select name="param1[]" multiple style="height:160px; width:200px; ">
+					<select name="param1[]" multiple style="height:160px; width:200px;" required>
 					<?php	
 						$_GET['id']=0;
 						$db = new FQuery();  
 						$sql = $db->select(FDBPrefix.'article_category','*','parent_id=0'); 
-						while($qrs=mysql_fetch_array($sql)){
+						foreach($sql as $qrs){
 							$s = multipleSelected($cat,$qrs['id']);
 							echo "<option value='$qrs[id]' $s>$qrs[name]</option>";
 							option_sub_cat($qrs['id'],$cat,'');
@@ -58,7 +58,7 @@ $(document).ready( function(){
 						function option_sub_cat($parent_id,$cat,$pre) {
 							$db = new FQuery();  
 							$sql=$db->select(FDBPrefix."article_category","*","parent_id=$parent_id AND id!=$_REQUEST[id]"); 
-							while($qr=mysql_fetch_array($sql)){	
+							foreach($sql as $qr){	
 								$s = multipleSelected($cat,$qr['id']);
 								echo "<option value='$qr[id]' $s>$pre |_ $qr[name]</option>";
 								option_sub_cat($qr['id'],$cat,$pre."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");

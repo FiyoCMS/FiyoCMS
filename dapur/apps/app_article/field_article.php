@@ -18,30 +18,30 @@ else
 	$id = null;
 if(!isset($id)) {
 	$_GET['id']=0;	
-	$qr = $editor_level = null;
+	$row = $editor_level = null;
 	$new =1;	
 	$show_comment = $panel_top = $show_title = $panel_bottom = $show_author = $show_date = $show_category = $show_hits=$show_tags = $show_rate = 2; 
 	$rate_value = $rate_counter = 0;
 }
 else {
-	$sq = $db->select(FDBPrefix.'article','*','id='.$id); 
-	$qr = @mysql_fetch_array($sq);
+	$sql = $db->select(FDBPrefix.'article','*','id='.$id); 
+	$row = $sql[0];
 		
-	$show_comment	= mod_param('comment',$qr['parameter']);
-	$panel_top 		= mod_param('panel_top',$qr['parameter']);
-	$panel_bottom 	= mod_param('panel_bottom',$qr['parameter']);
-	$show_author 	= mod_param('show_author',$qr['parameter']);
-	$show_date  	= mod_param('show_date',$qr['parameter']);
-	$show_category	= mod_param('show_category',$qr['parameter']);
-	$show_hits  	= mod_param('show_hits',$qr['parameter']);
-	$show_tags  	= mod_param('show_tags',$qr['parameter']);
-	$show_rate	 	= mod_param('show_rate',$qr['parameter']);
-	$show_title	 	= mod_param('show_title',$qr['parameter']);
-	$rate_value		= mod_param('rate_value',$qr['parameter']);
-	$rate_counter 	= mod_param('rate_counter',$qr['parameter']);
-	$editor_level 	= mod_param('editor_level',$qr['parameter']);
+	$show_comment	= mod_param('comment',$row['parameter']);
+	$panel_top 		= mod_param('panel_top',$row['parameter']);
+	$panel_bottom 	= mod_param('panel_bottom',$row['parameter']);
+	$show_author 	= mod_param('show_author',$row['parameter']);
+	$show_date  	= mod_param('show_date',$row['parameter']);
+	$show_category	= mod_param('show_category',$row['parameter']);
+	$show_hits  	= mod_param('show_hits',$row['parameter']);
+	$show_tags  	= mod_param('show_tags',$row['parameter']);
+	$show_rate	 	= mod_param('show_rate',$row['parameter']);
+	$show_title	 	= mod_param('show_title',$row['parameter']);
+	$rate_value		= mod_param('rate_value',$row['parameter']);
+	$rate_counter 	= mod_param('rate_counter',$row['parameter']);
+	$editor_level 	= mod_param('editor_level',$row['parameter']);
 }	
-$article = $qr['article'];
+$article = $row['article'];
 if(checkLocalhost()) {
 	$article = str_replace("media/",FLocal."media/",$article);			
 }
@@ -85,8 +85,8 @@ $(function() {
 <div class="col-lg-9 box-left">
 	<div class="box article-editor">								
 		<div>
-			<input value="<?php echo $qr['id'];?>" type="hidden" name="id">
-					<input <?php formRefill('title',$qr['title']);?> placeholder="<?php echo Enter_title_here; ?>" type="text" name="title" required>
+			<input value="<?php echo $row['id'];?>" type="hidden" name="id">
+					<input <?php formRefill('title-entities',$row['title']);?> placeholder="<?php echo Enter_title_here; ?>" class="title" type="text" name="title-entities" required>
 		</div>
 		<div style="padding:10px 0 0; overflow: hidden;">
 			<div class="load-editor">
@@ -108,19 +108,17 @@ $(function() {
 	<div id="collapseOne" class="panel-collapse in">
 		<table class="data2">
 			<tr>
-				<td class="row-title" style="width: 35%; min-width:90px;"><span class="tips" title="<?php echo Hits; ?>"><?php echo Category.$qr['category']; ?></span></td>
+				<td class="row-title" style="width: 35%; min-width:90px;"><span class="tips" title="<?php echo Hits; ?>"><?php echo Category.$row['category']; ?></span></td>
 				<td> <select name="cat" class="chosen-select" data-placeholder="<?php echo Choose_category; ?>" style="min-width:120px;" required="required">
 				<option value=""></option>
 					<?php	
 						$_GET['id']=0;
-						$db = new FQuery(); 
-						$db->connect(); 
 						$sql = $db->select(FDBPrefix.'article_category','*','parent_id=0'); 
-						while($qrs=mysql_fetch_array($sql)){
-							if($qrs['level'] >= $_SESSION['USER_LEVEL']){
-								if($qr['category']==$qrs['id']) $s="selected";else$s="";
-								echo "<option value='$qrs[id]' $s>$qrs[name]</option>";
-								option_sub_cat($qrs['id'],'');
+						foreach($sql as $row1){
+							if($row1['level'] >= $_SESSION['USER_LEVEL']){
+								if($row['category']==$row1['id']) $s="selected";else$s="";
+								echo "<option value='$row1[id]' $s>$row1[name]</option>";
+								option_sub_cat($row1['id'],'');
 							}
 						}						
 					?>
@@ -130,7 +128,7 @@ $(function() {
 				<td class="row-title" title="<?php echo Active_Status; ?>">Status</td>
 				<td>
 				<?php 
-					if($qr['status'] or $_GET['act'] == 'add'){$status1="selected checked"; $status0 = "";}
+					if($row['status'] or $_GET['act'] == 'add'){$status1="selected checked"; $status0 = "";}
 					else {$status0="selected checked"; $status1= "";}
 					?>
 					<p class="switch">
@@ -145,7 +143,7 @@ $(function() {
 				<td class="row-title" title="<?php echo Featured; ?>"><?php echo Featured; ?></td>
 				<td>
 				<?php 
-					if($qr['featured'] or $_GET['act'] == 'add'){$status1="selected checked"; $status0 = "";}
+					if($row['featured'] or $_GET['act'] == 'add'){$status1="selected checked"; $status0 = "";}
 					else {$status0="selected checked"; $status1= "";}
 					?>
 					<p class="switch">
@@ -162,17 +160,15 @@ $(function() {
 				<td><select name="level" placeholder="">
 				<option value=""></option>
 					<?php
-						$db = new FQuery(); 
-						$db->connect(); 
 						$sql = $db->select(FDBPrefix.'user_group');
-						while($qrs=mysql_fetch_array($sql)){
-							if($qrs['level']==$qr['level']){
-								echo "<option value='$qrs[level]' selected>$qrs[group_name]</option>";}
+						foreach($sql as $rowU){
+							if($row['level']==$rowU['level']){
+								echo "<option value='$rowU[level]' selected>$rowU[group_name]</option>";}
 							else {
-								echo "<option value='$qrs[level]'>$qrs[group_name]</option>";
+								echo "<option value='$rowU[level]'>$rowU[group_name]</option>";
 							}
 						}
-						if($qr['level']==99 or !$qr['level']) $s="selected"; else $s="";
+						if($row['level']==99 or !$row['level']) $s="selected"; else $s="";
 						echo "<option value='99' $s>"._Public."</option>"
 					?>
 					</select>
@@ -184,12 +180,10 @@ $(function() {
 				<option value=""></option>
 					<?php	
 						$_GET['id']=0;
-						$db = new FQuery(); 
-						$db->connect(); 
 						$sql = $db->select(FDBPrefix.'article_tags'); 
-						while($qrs=mysql_fetch_array($sql)){
-							$sel = multipleSelected($qr['tags'],$qrs['name']);
-							echo "<option value='$qrs[name]' $sel>$qrs[name]</option>";
+						foreach($sql as $rowt){
+							$sel = multipleSelected($row['tags'],$rowt['name']);
+							echo "<option value='$rowt[name]' $sel>$rowt[name]</option>";
 						}						
 					?>
 				</select></td>
@@ -197,9 +191,9 @@ $(function() {
 			<?php if($_GET['act'] != 'add') : ?>
 			<tr>
 				<td class="row-title" title="<?php echo Hits; ?>"><?php echo Hits; ?></td>
-				<td><span id="hits"><?php echo digit($qr['hits']); ?></span>
-				<input name="viewed" type="hidden" value="<?php echo $qr['hits']; ?>"/> 
-				<?php if(userInfo('level') < 3 AND !empty($qr['hits'])) : ?><label class="reset" title="<?php echo Hits_Reset; ?>" style="margin-left:5px; cursor: pointer;"><input type="checkbox" value="1" name="hits_reset">Reset</label><?php else : ?><?php endif; ?></td>
+				<td><span id="hits"><?php echo digit($row['hits']); ?></span>
+				<input name="viewed" type="hidden" value="<?php echo $row['hits']; ?>"/> 
+				<?php if(userInfo('level') < 3 AND !empty($row['hits'])) : ?><label class="reset" title="<?php echo Hits_Reset; ?>" style="margin-left:5px; cursor: pointer;"><input type="checkbox" value="1" name="hits_reset">Reset</label><?php else : ?><?php endif; ?></td>
 			</tr>
 			<tr>
 				<td class="row-title" title="<?php echo Rate; ?>"><?php echo Rate; ?></td>
@@ -219,17 +213,19 @@ $(function() {
 		<table class="data2">
 			<tr>
 				<td class="row-title" style="width: 35%" title="<?php echo Author_tip; ?>"><?php echo Author; ?></td>
-				<td><input name="author_id" style="min-width: 83.5%" disabled size="15" type="hidden" value="<?php if($ui = userInfo('name',$qr['author_id'])) echo $ui; else echo USER_ID; ?>"/><input name="author_name" style="min-width: 83.5%" disabled size="15" type="text"value="<?php echo userInfo('name',$qr['author_id']); ?>"/></td>
+				<td><input name="author_id" style="min-width: 83.5%" disabled size="15" type="hidden" value="<?php 
+				$ui = userInfo('name',$row['author_id']);
+				if($ui) echo $ui; else echo USER_ID; ?>"/><input name="author_name" style="min-width: 83.5%" disabled size="15" type="text"value="<?php if($row['author_id']) echo $ui; else echo USER_NAME; ?>"/></td>
 			</tr>
 			<tr>
 				<td class="row-title" style="width: 35%" title=""><?php echo Author_Alias; ?></td>
-				<td><input name="author" style="min-width: 83.5%" size="15" type="text"value="<?php echo $qr['author']; ?>"/></td>
+				<td><input name="author" style="min-width: 83.5%" size="15" type="text"value="<?php echo $row['author']; ?>"/></td>
 			</tr>	
 			<tr>
 				<td class="row-title" style="width: 35%" title="<?php echo Date_tip; ?>"><?php echo Date; ?></td>
 				<td>		
 				 <div id="datetimepicker" class="input-append date input-group" style="  width: 160px;">
-					<input data-format="yyyy-MM-dd hh:mm:ss" type="text" name="date" id="datepicker" size="16" type="date" value="<?php if($qr['date']) echo $qr['date']; else echo date("Y-m-d H:i:t"); ?>"/>
+					<input data-format="yyyy-MM-dd hh:mm:ss" type="text" name="date" id="datepicker" size="16" type="date" value="<?php if($row['date']) echo $row['date']; else echo date("Y-m-d H:i:t"); ?>"/>
 					<span class="add-on input-group-addon">
 					 <i class="icon-calendar">
 					 </i>
@@ -241,7 +237,7 @@ $(function() {
 				<td class="row-title" style="width: 35%" title="<?php echo Last_Updated_tip; ?>"><?php echo Updated; ?></td>
 				<td>							
 				 <div class="input-append date input-group" style="  width: 160px;">
-					<input type="text" disabled value="<?php if($qr['updated']) echo $qr['updated']; ?>" size="16">
+					<input type="text" disabled value="<?php if($row['updated']) echo $row['updated']; ?>" size="16">
 					<span class="add-on input-group-addon">
 					 <i class="icon-calendar">
 					 </i>
@@ -251,23 +247,21 @@ $(function() {
 			</tr>
 			<tr>
 				<td class="row-title" style="width: 35%" title="<?php echo Editor_tip; ?>"><?php echo Editor; ?></td>
-				<td><input type="text" disabled value="<?php if(!empty($qr['editor'])) echo oneQuery("user","id",$qr['editor'],"name"); ?>" style="min-width: 83.5%" size="18"></td>
+				<td><input type="text" disabled value="<?php if(!empty($row['editor'])) echo oneQuery("user","id",$row['editor'],"name"); ?>" style="min-width: 83.5%" size="18"></td>
 			</tr>
 			<tr>
 				<td class="row-title" title="<?php echo Editor_level_tip; ?>" style="width:30%"><?php echo Editor_Level; ?></td>
 				<td><select name="param12" placeholder="">
 				<option value=""></option>
 					<?php
-						$db = new FQuery(); 
-						$db->connect(); 
 						$sql = $db->select(FDBPrefix.'user_group','*','level >= '.USER_LEVEL);
-						while($qrs=mysql_fetch_array($sql)){
-							if($qrs['level']==3 AND !$editor_level) {
-								echo "<option value='$qrs[level]' selected>$qrs[group_name]</option>";}
-							else if($qrs['level'] == $editor_level){
-								echo "<option value='$qrs[level]' selected>$qrs[group_name]</option>";}
+						foreach($sql as $rowg){
+							if($rowg['level']==3 AND !$editor_level) {
+								echo "<option value='$row[level]' selected>$rowg[group_name]</option>";}
+							else if($row['level'] == $editor_level){
+								echo "<option value='$row[level]' selected>$rowg[group_name]</option>";}
 							else {
-								echo "<option value='$qrs[level]'>$qrs[group_name]</option>";
+								echo "<option value='$row[level]'>$rowg[group_name]</option>";
 							}
 						}
 					?>
@@ -415,15 +409,15 @@ $(function() {
 		<table class="data2">
 			<!--tr>
 				<td class="row-title"  style="width: 30%" title="<?php echo Keywords_tip; ?>">SEF URLs</td>
-				<td><textarea rows="2" cols="19" type="text" name="keyword" style="min-width:100%; max-width: 100%; resize: vertical;"><?php formRefill('keyword',$qr['keyword'],'textarea'); ?></textarea></td>
+				<td><textarea rows="2" cols="19" type="text" name="keyword" style="min-width:100%; max-width: 100%; resize: vertical;"><?php formRefill('keyword',$row['keyword'],'textarea'); ?></textarea></td>
 			</tr-->			
 			<tr>
 				<td class="row-title " title="<?php echo Keywords_tip; ?>"><?php echo Keyword; ?></td>
-				<td><textarea rows="3" cols="19" type="text" name="keyword"style="min-width:100%; max-width: 100%; resize: vertical;"><?php formRefill('keyword',$qr['keyword'],'textarea'); ?></textarea></td>
+				<td><textarea rows="3" cols="19" type="text" name="keyword"style="min-width:100%; max-width: 100%; resize: vertical;"><?php formRefill('keyword',$row['keyword'],'textarea'); ?></textarea></td>
 			</tr>							
 			<tr>
 				<td class="row-title " title="<?php echo Meta_Desc_tip; ?>"><?php echo Description; ?></td>
-				<td><textarea rows="5" cols="19" type="text" name="desc"style="min-width:100%; max-width: 100%; resize: vertical;"><?php formRefill('description',$qr['description'],'textarea'); ?></textarea></td>
+				<td><textarea rows="5" cols="19" type="text" name="desc"style="min-width:100%; max-width: 100%; resize: vertical;"><?php formRefill('description',$row['description'],'textarea'); ?></textarea></td>
 			</tr>
 		</table>
   </div>

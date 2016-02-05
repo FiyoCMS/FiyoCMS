@@ -22,16 +22,16 @@ else
 if(!isset($id)) {
 	$_REQUEST['id'] = $id = 0;	
 	$name = $_POST['folder'];
-	$qr = null;
+	$row = null;
 	$css_class = null;
 	$css_style = null;
 }
 else {
 	$sql = $db->select(FDBPrefix.'module','*','id='.$id); 
-	$qr=mysql_fetch_array($sql);	
-	$name = $qr['folder'];
-	$css_class = $qr['class'];
-	$css_style = $qr['style'];
+	$row = $sql[0];	
+	$name = $row['folder'];
+	$css_class = $row['class'];
+	$css_style = $row['style'];
 }	
 
 
@@ -40,8 +40,8 @@ $params = "../modules/$name/mod_params.php";
 $editor = "../modules/$name/mod_editor.php";
 
 //variabel module parameter
-$param = $modParam = $qr['parameter'];
-define('modParam',$qr['parameter']);
+$param = $modParam = $row['parameter'];
+define('modParam',$row['parameter']);
 
 if(!isset($module_name)) $module_name = "$name";
 ?>
@@ -81,19 +81,19 @@ $(function() {
 			<table class="data2">
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Type_tip; ?>"><?php echo Module_Type; ?></span></td>
-				<td><b><i><?php echo $module_name; echo " (id=$qr[id])" ; ?></i></b>
-				<input type="hidden" name="mod_id" size="20" value="<?php echo $qr['id']; ?>">
+				<td><b><i><?php echo $module_name; echo " (id=$row[id])" ; ?></i></b>
+				<input type="hidden" name="mod_id" size="20" value="<?php echo $row['id']; ?>">
 				<input type="hidden" name="folder" size="20" value="<?php echo $name; ?>"></td>
 			</tr>
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Title_tip; ?>"><?php echo Module_Title; ?></span></td>
-				<td><input <?php  formRefill('title',$qr['name']) ; ?> type="text" name="title"  style="min-width: 60%" size="20" required></td>
+				<td><input <?php  formRefill('title',$row['name']) ; ?> type="text" name="title"  style="min-width: 60%" size="20" required></td>
 			</tr>
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Show_Title_tip; ?>"><?php echo Module_Show_Title; ?></span></td>
 				<td>
 					<?php 
-					if($qr['show_title'] or $act == 'add'){$f1="selected checked"; $f0 = "";}
+					if($row['show_title'] or $act == 'add'){$f1="selected checked"; $f0 = "";}
 					else {$f0="selected checked"; $f1= "";}
 					?>
 					<p class="switch">
@@ -107,7 +107,7 @@ $(function() {
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Status_tip; ?>"><?php echo Active_Status; ?></span></td>
 				<td><?php 
-					if($qr['status'] or $act == 'add'){$f1="selected checked"; $f0 = "";}
+					if($row['status'] or $act == 'add'){$f1="selected checked"; $f0 = "";}
 					else {$f0="selected checked"; $f1= "";}
 					?>
 					<p class="switch">
@@ -121,7 +121,7 @@ $(function() {
 				<td class="row-title"><span class="tips" title="<?php echo Module_Position_tip; ?>"><?php echo Position; ?></span></td>
 				<td>
 				<div class="input-append date input-group" style="  width: 160px;">
-					<input type="text" value="<?php echo $qr['position'] ; ?>" type="text" size="20" name="position" id="position" required class="form-control" style="border-radius: 3px 0 0 3px;">
+					<input type="text" value="<?php echo $row['position'] ; ?>" type="text" size="20" name="position" id="position" required class="form-control" style="border-radius: 3px 0 0 3px;">
 					<span class="add-on input-group-addon">
 					<a class="popup icon-magic tips" data-toggle="modal" href="#spotPosition" rel="width:940;height:400" title="<?php echo Select_position; ?>"></a>
 					</span>
@@ -131,24 +131,22 @@ $(function() {
 			</tr>
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Order_tip; ?>"><?php echo Module_Order; ?></span></td>
-				<td><input value="<?php echo $qr['short'] ; ?>" type="number" name="short" size="5" id="order" class="numeric spinner" style="width: 50px"  min="0"></td>
+				<td><input value="<?php echo $row['short'] ; ?>" type="number" name="short" size="5" id="order" class="numeric spinner" style="width: 50px"  min="0"></td>
 			</tr>
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Access_tip; ?>"><?php echo Access_Level; ?></span></td>
 				<td>
 				<select name="level">
 				<?php
-					$db = new FQuery();  
-					$db->connect(); 
 					$sql = $db->select(FDBPrefix.'user_group');
-					while($qrs=mysql_fetch_array($sql)){
-						if($qrs['level']==$qr['level']){
-							echo "<option value='$qrs[level]' selected>$qrs[group_name]</option>";}
+					foreach($sql as $rows){
+						if($rows['level']==$row['level']){
+							echo "<option value='$rows[level]' selected>$rows[group_name]</option>";}
 						else {
-							echo "<option value='$qrs[level]'>$qrs[group_name]</option>";
+							echo "<option value='$rows[level]'>$rows[group_name]</option>";
 						}
 					}
-					if($qr['level']==99 or !$id) $s="selected";else $s="";
+					if($row['level']==99 or !$id) $s="selected";else $s="";
 					echo "<option value='99' $s>"._Public."</option>"
 				?>
 				</select></td>
@@ -164,16 +162,16 @@ $(function() {
 					<div class="selections-box" style="height:150px; max-width: 280px; font-size:12px;  overflow-y: auto;">
 					<?php
 						$sql2 = $db->select(FDBPrefix.'menu_category','*',"category != 'adminpanel'"); 
-						while($qr2=mysql_fetch_array($sql2)){
-							$sql3 = $db->select(FDBPrefix.'menu','*',"parent_id=0 AND category='$qr2[category]'",'short ASC'); 
-							if(!mysql_affected_rows()) continue;
-							echo "<h6>$qr2[title]</h6><ul class='selectbox' >";
-							while($qr3=mysql_fetch_array($sql3)){
-								$sel = multipleSelected($qr['page'],$qr3['id']);
-								if($sel =='selected' or !$qr) $sel = "class='active' checked";
-								$check = "<input $sel type='checkbox' name='page[]' value='$qr3[id]' rel='ck'>";
-								echo "<li value='$qr3[id]' $sel>$check $qr3[name] </li>";
-								option_sub_menu($qr3['id'],'','',$qr['page']);
+						foreach($sql2 as $row2){
+							$sql3 = $db->select(FDBPrefix.'menu','*',"parent_id=0 AND category='$row2[category]'",'short ASC'); 
+							if(!count($sql3)) continue;
+							echo "<h6>$row2[title]</h6><ul class='selectbox' >";
+							foreach($sql3 as $row3){
+								$sel = multipleSelected($row['page'],$row3['id']);
+								if($sel =='selected' or !$row) $sel = "class='active' checked";
+								$check = "<input $sel type='checkbox' name='page[]' value='$row3[id]' rel='ck'>";
+								echo "<li value='$row3[id]' $sel>$check $row3[name] </li>";
+								option_sub_menu($row3['id'],'','',$row['page']);
 							}
 						echo "</ul>";
 						}
@@ -189,7 +187,10 @@ $(function() {
 
 <div class="panel-group box-right" id="accordion">
 	<?php 
-		if(file_exists($params))require($params);
+		if(file_exists($params)) {			
+			$modParam = $param = $row['parameter'];
+			require($params);
+		}
 		else $open =' open';
 	?>
 	<div class="panel box">								
@@ -225,7 +226,7 @@ $(function() {
 	      </div>
 			<div id="pages" class="pop_up">
 				<div id="page_id">
-					<iframe id="iframe" frameborder="0" src="<?php echo FUrl."?theme=module"; ?>" style="height:530px;width:100%; margin-bottom: -5px;"></iframe>
+					<iframe id="iframe" frameborder="0" src="<?php echo FUrl."?app=null&theme=module"; ?>" style="height:530px;width:100%; margin-bottom: -5px;"></iframe>
 				</div>
 			</div>
 	    </div>

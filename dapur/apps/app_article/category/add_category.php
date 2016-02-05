@@ -22,8 +22,8 @@ $(function() {
 		<div class="warp_app_header">		
 			<div class="app_title"><?php echo New_Category; ?></div>
 			<div class="app_link">
-				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="save_category"><i class="icon-ok"></i> <?php echo Save; ?></button>	
-				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="add_category"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>				
+				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="save_category"><i class="icon-check"></i> <?php echo Save; ?></button>	
+				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="add_category"><i class="icon-check-circle"></i> <?php echo Save_and_Quit; ?></button>				
 				<a class="danger btn btn-default" href="?app=article&view=category" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 				<?php printAlert('NOTICE_ERROR'); ?>
 			</div>			
@@ -45,7 +45,7 @@ $(function() {
 					<option value=''></option>
 					<?php			
 						$sql2=$db->select(FDBPrefix.'article_category','*','parent_id=0');
-						while($row2=mysql_fetch_array($sql2)){	
+						foreach($sql2 as $row2){	
 							echo "<option value='$row2[id]'>$row2[name]</option>";
 							option_sub_cat($row2['id'],"");
 						}
@@ -57,7 +57,7 @@ $(function() {
 					<td><select name="level" >
 						 <?php
 							$sql2 = $db->select(FDBPrefix.'user_group');
-							while($user=mysql_fetch_array($sql2)){
+							foreach($sql2 as $user){
 							
 									echo "<option value='$user[level]'>$user[group_name] </option>";
 							}

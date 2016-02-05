@@ -15,12 +15,12 @@ require_once ('../../../system/jscore.php');
 <table class="table table-striped tools">
   <tbody>
 	<?php	
-		$db = new FQuery();  
-		$db->connect(); 
-		$sql = $db->select(FDBPrefix."session_login","*,DATE_FORMAT(time,'%Y-%m-%d') as date","level >= $_SESSION[USER_LEVEL]",'time DESC LIMIT 5'); 
+		$suser = FDBPrefix."user";
+		$session = FDBPrefix."session_login";
+		$sql = $db->select("$session, $suser","*,DATE_FORMAT(time,'%Y-%m-%d') as date","$suser.level >= $_SESSION[USER_LEVEL] AND $session.user_id = $suser.id",'time DESC LIMIT 5'); 
 		$no = 1;
-		while($qr=mysql_fetch_array($sql)) {
-			$id = $qr['user_id'];
+		foreach($sql as $row) {
+			$id = $row['user_id'];
 			$edit = Edit;
 			$read = Read;
 			$kick = Kickout;
@@ -28,12 +28,9 @@ require_once ('../../../system/jscore.php');
 			$delete = Delete;
 			$approve = Set_enable;		
 			$ledit = "?app=user&act=edit&id=$id";	
-			$sql2 = $db->select(FDBPrefix."user_group","*","level=$qr[level]"); 
-			$group = mysql_fetch_array($sql2);
-			$group = $group['group_name'];	
-			$name = userInfo('name',$id);
-			$mail = userInfo('email',$id);
-			echo "<tr><td>$name <span>($qr[session_id])</span>
+			$name = $row['name'];
+			$mail =  $row['email'];;
+			echo "<tr><td>$name <span>($row[session_id])</span>
 			<a data-toggle='tooltip' data-placement='right' title='Online' class=' icon-circle blink icon-mini tooltips'></a><br/>
 			<div class='tool-box'>
 				<a class='btn-tools btn btn-danger btn-sm btn-grad kick' title='$kick' data-id='$id'>$kick</a>

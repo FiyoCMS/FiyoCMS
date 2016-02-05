@@ -18,10 +18,8 @@ $db -> connect();
 
 /* Define SEF Base URL */
 define ('FBase',FUrl());
-if(_FINDEX_ == 'BACK') 
-define ('FUrl',str_replace(siteConfig('backend_folder'),"",'http://'.FBase)); 
-else define ('FUrl','http://'.FBase);
-define ('FAdmin',FUrl.siteConfig('backend_folder'));
+define ('FUrl','http://'.FBase);
+
 /* Define deed url */
 define('_FEED_',	app_param('feed')) ;
 
@@ -216,7 +214,7 @@ else
 /*  	  Define Page_ID, PageTitle	  		*/
 /********************************************/
 if(_FINDEX_ != 'BACK') {
-		$pid = menuInfo('id',getLink());
+	$pid = menuInfo('id',getLink());
 	if(checkHomePage()) {
 		define('Page_ID', homeInfo('id'));
 		if(homeInfo('title')) 
@@ -226,7 +224,7 @@ if(_FINDEX_ != 'BACK') {
 	}
 	else if (!SEF_URL){	
 		$link = str_replace("&page="._Page,"",getLink());
-		if($pid ==  menuInfo('id')){
+		if($pid ==  menuInfo('id') AND !empty($pid)){
 			define('Page_ID', $pid);
 		}
 		else if($pid =  check_permalink('link',$link,'pid'))

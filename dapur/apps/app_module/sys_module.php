@@ -12,11 +12,11 @@ defined('_FINDEX_') or die('Access Denied');
 if($_SESSION['USER_LEVEL'] > 2)
 	redirect('index.php');
 	
-$db = new FQuery();  
+$db = new FQuery();
 $db->connect(); 
 
 /****************************************/
-/*			   Add Module				*/
+/*			 Add Module				*/
 /****************************************/
 if(isset($_POST['save_add']) or isset($_POST['apply_add'])){	
 	if(!empty($_POST['title']) AND !empty($_POST['folder']) AND !empty($_POST['position'])) {	
@@ -40,35 +40,37 @@ if(isset($_POST['save_add']) or isset($_POST['apply_add'])){
 		@$parameter=$parameter.$param;
 		
 		if(checkLocalhost()) {
-			$parameter = str_replace(FLocal."media/","media/",$parameter);			
+			$parameter = str_replace(FLocal."media/","media/",$parameter);	
+			$parameter = str_replace("http://localhost","",$parameter);			
 		}
 		
-		$qr=$db->insert(FDBPrefix.'module',array("","$_POST[title]","$_POST[folder]","$_POST[position]","$_POST[short]","$_POST[level]","$_POST[status]","$page","$parameter","$_POST[class]","$_POST[style]","$_POST[show_title]"));
+		$qr=$db->insert(FDBPrefix.'module',array("","$_POST[title]","$_POST[folder]",stripTags("$_POST[position]"),"$_POST[short]","$_POST[level]","$_POST[status]","$page","$parameter","$_POST[class]","$_POST[style]","$_POST[show_title]"));
 		if($qr AND isset($_POST['apply_add'])){
-			$db = new FQuery();  
+                print_r($_POST);
+			$db = new FQuery();
 			$db->connect(); 				
 			$sql = $db->select(FDBPrefix.'module','id','','id DESC' ); 
-			$qr=mysql_fetch_array($sql);					
+			$row = $sql[0];				
 			notice('success',New_Module_Saved);	
-			redirect('?app=module&act=edit&id='.$qr['id']);
+			redirect('?app=module&act=edit&id='.$row['id']);
 		}
 		elseif($qr AND isset($_POST['save_add'])) {
 			notice('success',New_Module_Saved);
 			if($qr)
-			redirect('?app=module',1);
+			redirect('?app=module');
 		}
 		else {
-			$_SESSION['NOTICE_ADD'] = notice('error',Status_Invalid);
+			notice('error',Status_Invalid,2);
 		}					
 	}
 	else 
 	{			
-		$_SESSION['NOTICE_ADD'] = notice('error',Status_Invalid);
+		notice('error',Status_Invalid,2);
 	}	
 }	
 
 /****************************************/
-/*			   Edit Module				*/
+/*              Edit Module		*/
 /****************************************/	
 if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){	
 	if(!empty($_POST['title']) AND !empty($_POST['folder']) AND !empty($_POST['position'])) {
@@ -92,7 +94,8 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 		@$parameter = $parameter.$param;
 		
 		if(checkLocalhost()) {
-			$parameter = str_replace(FLocal."media/","media/",$parameter);			
+			$parameter = str_replace(FLocal."media/","media/",$parameter);	
+			$parameter = str_replace("http://localhost","",$parameter);			
 		}
 		
 		$qr= $db-> update(FDBPrefix.'module',array("name"=>"$_POST[title]",
@@ -111,7 +114,7 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 			notice('success',Module_Saved);
 			redirect(getUrl());
 		}
-		elseif($qr AND isset($_POST['save_edit'])) {
+		else if($qr AND isset($_POST['save_edit'])) {
 			notice('success',Module_Saved);
 			redirect('?app=module');
 		}
@@ -125,22 +128,21 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 }
 
 /****************************************/
-/*			 Delete Module				*/
+/*		Delete Module		*/
 /****************************************/
-if(isset($_POST['delete']) or isset($_POST['delete_confirm'])){
+if(isset($_POST['delete']) or isset($_POST['check'])){
 	$source = @$_POST['check'];
 	$source = multipleSelect($source);
-	$delete = multipleDelete('module',$source);	
-	
+	$delete = multipleDelete('module',$source);
 	if(isset($delete))
-		$_SESSION['NOTICE_REF'] = notice('info',Module_Deleted);
+            notice('info',Module_Deleted);
 	else
-		$_SESSION['NOTICE_REF'] = notice('error',Module_Not_Selected);
-	redirect(getUrl());		
+            notice('error',Module_Not_Selected);
+	refresh();		
 }
 
 /****************************************/
-/*	 Redirect when Module-Id not found	*/
+/*  Redirect when Module-Id not found   */
 /****************************************/
 if(!isset($_POST['save_edit']) AND !isset($_POST['apply_edit'])) {
 	if(isset($_REQUEST['act']))
@@ -152,10 +154,9 @@ if(!isset($_POST['save_edit']) AND !isset($_POST['apply_edit'])) {
 }
 
 function option_sub_menu($parent_id,$sub = null, $pre = null, $page) {
-	$db = new FQuery();  
-	$db->connect(); 
+	$db = new FQuery();
 	$sql = $db->select(FDBPrefix."menu","*","parent_id=$parent_id");
-	while($qr=mysql_fetch_array($sql)){	
+	foreach($sql as $qr){	
 		$sel = multipleSelected($page,$qr['id']);
 		if($sel =='selected' or !$page) $sel = "class='active' checked";
 		$check = "<input $sel type='checkbox' name='page[]' value='$qr[id]' rel='ck'>";

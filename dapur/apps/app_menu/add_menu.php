@@ -74,13 +74,13 @@ $(function() {
 		$db = new FQuery();  
 		$db->connect(); 
 		$sql =	$db->select(FDBPrefix.'apps','*','type <= 1',"name ASC"); $apps_date = $apps_version = '-';
-		while($qr=mysql_fetch_array($sql)){	
-				$file = "../apps/$qr[folder]/app_details.php";
+		foreach($sql as $row){	
+				$file = "../apps/$row[folder]/app_details.php";
 				$app_desc = '';
 				if(file_exists($file))
-				include("../apps/$qr[folder]/app_details.php");
-				echo "<tr target-radio='$qr[folder]'>";
-				echo "<td align='center'><input type=\"radio\" name=\"apps\" value=\"$qr[folder]\" data-name='$qr[folder]' target-radio='$qr[folder]'></td><td><a>$qr[name]</a></td><td>$qr[author]</td>
+				include("../apps/$row[folder]/app_details.php");
+				echo "<tr target-radio='$row[folder]'>";
+				echo "<td align='center'><input type=\"radio\" name=\"apps\" value=\"$row[folder]\" data-name='$row[folder]' target-radio='$row[folder]'></td><td><a>$row[name]</a></td><td>$row[author]</td>
 				<td>$app_desc</td>";
 				echo "</tr>";
 			}

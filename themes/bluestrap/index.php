@@ -4,21 +4,17 @@
     <meta charset="utf-8">
     <title>{siteTitle}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="{metadesc}">
+    <meta name="author" content="{metaauthor}">
+    <meta name="keywords" content="{metakeys}">
 
     <!-- Le styles -->
     <script src="/assets/js/jquery-2.0.3.min.js"></script>
+    <script src="/assets/js/smoothScroll.js"></script>
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet"> 
-<?php if(!checkMobile()): ?>
 
-	<link href="/css/style.css" rel="stylesheet">
-<?php else: ?>
-
-	<link href="/css/m-style.css" rel="stylesheet">
-
-<?php endif; ?>
+	<link href="/css/{m-}style.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -36,7 +32,7 @@
 	<div  class="container">
 	<div class="logo"><h1><a href="{homeurl}"><?php echo SiteName; ?></a></h1>
 	</div>
-	<div class="right"><?php loadModule('header');?></div>
+	<div class="right">{module:header}</div>
 	</div>
   </header>
   
@@ -54,11 +50,12 @@
 				<span class="icon-bar"></span>
 			  </button>
 			  <div class="nav-collapse collapse">
-			   <?php loadModule('mainmenu'); ?>
+			   {module:mainmenu}
 			   <div>
-				<?php loadModule('search'); ?>
+				{module:search}
 			   </div>
-			  </div><!--/.nav-collapse -->
+			  </div>
+			  <!--/.nav-collapse -->
 		  </div>
 		</div>
 	</div>
@@ -78,9 +75,9 @@
 			<?php endif; ?>
 			
 			<div class="slide">
-				<?php loadModule('slide'); ?>
+				{module:slide}
 			</div>
-			<?php loadApps(); ?>
+			{loadApps}
 		  </div>
 		  
 		  <?php if(checkModule('left') AND checkModule('right')): ?>
@@ -98,7 +95,7 @@
 					<?php else: ?>
 					  <div class="span12">
 					<?php endif; ?>
-					<?php loadModule('left'); ?>
+					{module:left}
 					  </div>
 				<?php endif; ?>
 				  
@@ -108,7 +105,7 @@
 					<?php else: ?>
 					  <div class="span12">
 					<?php endif; ?>
-					<?php loadModule('right'); ?>
+					{module:right}
 					  </div> 			  
 				<?php endif; ?>
 			</div>
@@ -116,7 +113,7 @@
 			
 			<?php if(checkModule('bottom')): ?>
 			<div class="row-fluid">
-			  <div class="span12"><?php loadModule('bottom'); ?></div>
+			  <div class="span12">{module:bottom}</div>
 			</div>
 			<?php endif; ?>
 		  </div>
@@ -126,7 +123,7 @@
 	
 		<div class="breadcrumb">
 			<div class="container">
-				<?php loadModule('breadchumb'); ?>
+				{module:breadchumb}
 			</div>		
 		</div>
 	
@@ -149,7 +146,7 @@
 <?php endif; ?>
 	
 	<div class="badge-bottom-right ">
-		<?php loadModule('badge-bottom-right'); ?>
+		{module:badge-bottom-right}
 	</div>	  
 
     <!-- Le javascript

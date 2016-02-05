@@ -7,82 +7,120 @@
 **/
 
 defined('_FINDEX_') or die('Access Denied');
-printAlert();
 
 ?>	
 <script type="text/javascript" charset="utf-8">
-	$(document).ready(function() {
-		$(".cb-enable").click(function(){
-			var parent = $(this).parents('.switch');
-			if($(this).hasClass('selected')) die();
-			$('.cb-disable',parent).removeClass('selected');
-			$(this).addClass('selected');
-			$('.checkbox',parent).attr('checked', true);
-			var id = $('#id',parent).attr('value');
-			var type = $('#type',parent).attr('value');
-			
-			$.ajax({
-				url: "apps/app_permalink/controller/status.php",
-				data: type+"=1&id="+id,
-				success: function(data){
-					notice(data);
-				}
-			});
-		});
-		
-		$(".cb-disable").click(function(){
-			var parent = $(this).parents('.switch');
-			if($(this).hasClass('selected')) die();
-			$('.cb-enable',parent).removeClass('selected');
-			$(this).addClass('selected');
-			$('.checkbox',parent).attr('checked', false);
-			var id = $('#id',parent).attr('value');
-			var type = $('#type',parent).attr('value');
-			
-			$.ajax({
-				url: "apps/app_permalink/controller/status.php",
-				data: type+"=0&id="+id,
-				success: function(data){
-					notice(data);
-				}
-			});
-		});
-						
-		$("#form").submit(function(e){
-			e.preventDefault();
-			var ff = this;
-			var checked = $('input[name="check[]"]:checked').length > 0;
-			if(checked) {	
-				$('#confirmDelete').modal('show');	
-				$('#confirm').on('click', function(){
-					ff.submit();
+$(function() {	
+	$(".approve").click(function(e){
+		$(".action").val("approve");
+	});
+	$(".delete").click(function(e){
+		$(".action").val("delete");
+	});
+	$("#form").submit(function(e){
+		e.preventDefault();
+		var ff = this;
+		var checked = $('input[name="check[]"]:checked').length > 0;
+		if(checked) {
+			$('#confirmDelete').modal('show');	
+			$('#confirm').on('click', function(){
+				ff.submit();
+			});		
+		} else {
+			noticeabs("<?php echo alert('error',Please_Select_Item); ?>");
+			$('input[name="check[]"]').next().addClass('input-error');
+			return false;
+		}
+	});
+	
+	if ($.isFunction($.fn.dataTable)) {		
+		$('table.data').show();
+		oTable = $('table.data').dataTable({
+			"bProcessing": true,
+			"bServerSide": true,
+			"sAjaxSource": "apps/app_permalink/controller/permalink_list.php",
+			"bJQueryUI": true,
+			"sPaginationType": "full_numbers",
+			"fnDrawCallback": function( oSettings ) {	
+				$("tr").click(function(e){
+					var i =$("td:first-child",this).find("input[type='checkbox']");					
+					var c = i.is(':checked');
+					selectCheck();
+					if($(e.target).is('.switch *, a[href]')) {					   
+					} else {
+						if(c) {
+							i.prop('checked', 0);		
+							$(this).removeClass('active');			
+						}
+						else {
+							i.prop('checked', 1);
+							$(this).addClass('active');
+						}
+					}
 				});		
-			} else {
-				noticeabs("<?php echo alert('error',Article_Not_Select); ?>");
-				$('input[name="check[]"]').next().addClass('input-error');
-				return false;
+				$('[data-toggle=tooltip]').tooltip();
+				$('[data-tooltip=tooltip]').tooltip();
+				$('.tips').tooltip();
+				
+				$(".locker label").click(function(){
+					var parent = $(this).parents('.switch');
+					var id = $('.number',parent).attr('value');	
+					var value = $('.type',parent).attr('value');
+					if(value == 0) value = 1; else value = 0;
+					$.ajax({
+						url: "apps/app_permalink/controller/status.php",
+						data: "stat="+value+"&id="+id,
+						success: function(data){
+							$('.type',parent).attr('value',1);					
+							notice(data);		
+						}
+					});
+				});
+							
+				$(".cb-enable").click(function(){		
+					var parent = $(this).parents('.switch');
+					$('.cb-disable',parent).removeClass('selected');
+					$(this).addClass('selected');
+					$('.checkbox',parent).attr('checked', false);	
+				});
+				$(".cb-disable").click(function(){		
+					var parent = $(this).parents('.switch');
+					$('.cb-enable',parent).removeClass('selected');
+					$(this).addClass('selected');
+					$('.checkbox',parent).attr('checked', false);	
+				});
+		
+				
+				$('input[type="checkbox"],input[type="radio"]').wrap("<label>");
+				$('input[type="checkbox"],input[type="radio"]').after("<span class='input-check'>");
+				$('table.data tbody a[href]').on('click', function(e){
+				   if ($(this).attr('target') !== '_blank'){
+					e.preventDefault();	
+					loadUrl(this);
+				   }				
+				});
 			}
 		});
-		
-		loadTable();
-	});
-
+		$('table.data th input[type="checkbox"]').parents('th').unbind('click.DT');
+		if ($.isFunction($.fn.chosen) ) {
+			$("select").chosen({disable_search_threshold: 10});
+		}				
+	}
+});
 </script>
 <div id="stat"></div>
-<form method="post" id="form">
+<form method="POST" id="form">
 	<div id="app_header">
-	 <div class="warp_app_header">
-		
-		<div class="app_title">Permalink Manager</div>
-	
-		<div class="app_link">
-			<a class="add btn btn-primary" href="?app=permalink&act=add" title="<?php echo Add_New_Item; ?>"><i class="icon-plus"></i> <?php echo _New; ?></a>
-			<button class="delete btn btn-danger" type="submit" name="delete" title="<?php echo Delete; ?>" ><i class="icon-trash"></i> <?php echo Delete; ?></button>
-			<input type="hidden" value="true" name="delete_confirm"  style="display:none" />
-		</div> 	
-	  </div> 
-	</div> 	
-	
+		<div class="warp_app_header">		
+		  <div class="app_title">Permalink Manager</div>
+		  <div class="app_link">			
+			<!--button type="submit" class="btn btn-success approve" title="<?php echo Save; ?>" value="<?php echo Approve; ?>" name="approve_comment"><i class="icon-check"></i> <?php echo Approve; ?></button-->	
+			<button type="submit" class="delete btn btn-danger btn-sm btn-grad" title="<?php echo Delete; ?>" value="<?php echo Delete; ?>" name="delete"><i class="icon-trash"></i> &nbsp;<?php echo Delete; ?></button>
+			
+		  </div> 	
+		  <?php printAlert(); ?>
+		</div>
+	</div>
 	<table class="data">
 		<thead>
 			<tr>								  
@@ -93,40 +131,9 @@ printAlert();
 				<th style="width:15% !important; text-align: center">Lock</th>
 				<th style="width:5% !important; text-align: center">PID</th>
 			</tr>
-		</thead>
+		</thead>	
 		<tbody>
-		<?php		
-		$db = new FQuery();  
-		$db->connect(); 	
-		$sql=$db->select(FDBPrefix.'permalink','*','','locker DESC');
-		$no=1;
-		while($qr=mysql_fetch_array($sql)){	
-					
-				if($qr['locker']==1)
-				{ $stat1 ="selected"; $stat2 ="";}							
-				else
-				{ $stat2 ="selected";$stat1 ="";}
-				
-				$status ="
-				<p class='switch'>
-					<label class='cb-enable $stat1'><span>&nbsp;Lock&nbsp;</span></label>
-					<label class='cb-disable $stat2'><span>Unlock</span></label>
-					<input type='text' value='$qr[id]' id='id' class='invisible'><input type='text' value='stat' id='type' class='invisible'>
-				</p>";
-														
-				$name ="<a class='tips' data-placement='right' title='".Edit."' href='?app=permalink&act=edit&id=$qr[id]'>$qr[permalink]</a>";
-							
-				$permalink ="<a class='tips' data-placement='right' title='".Edit."' href='?app=permalink&act=edit&id=$qr[id]'>$qr[link]</a>";						
-				
-				$check ="<input type='checkbox' name='check[]' value='$qr[id]' rel='ck'>";
-				$menu = menuInfo("name",null,"$qr[pid]");
-				if(empty($menu)) $menu = "Default";
-				echo "<tr>";
-				echo "<td align='center'>$check</td><td>$name</td><td>$permalink</td><td align=center>$status</td><td align='center'><span class='tips' data-placement='top' title='$menu'>$qr[pid]</span></td>";
-				echo "</tr>";
-				$no++;	
-			}
-		?>
+			<tr><td colspan="6" align="center">Loading...</td></tr>	
         </tbody>			
 	</table>
 </form>

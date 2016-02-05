@@ -9,7 +9,7 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-loadLang(__dir__);
+loadLang(dirname(__FILE__));
 
 function contactInfo($output) {
 	$id = app_param('id');
@@ -19,7 +19,7 @@ function contactInfo($output) {
 
 function groupInfo($output) {	
 	$id = app_param('id');
-	$output = oneQuery('contact_group','id',$id ,$output);
+	$output = oneQuery('contact_group','group_id',$id ,$output);
 	return  $output;
 }
 
@@ -29,13 +29,13 @@ class Contact {
 		$db = new FQuery();  
 		$db->connect();
 		$sql = $db->select(FDBPrefix.'contact','*','status = 1 AND id='.$id); 
-		$qr	 = @mysql_fetch_array($sql); 	
+		$qr	 = $sql[0]; 	
 							
 		if(empty($qr['id']))
 			echo "<h3>Opps, Contact person is not found!";
 		else {		
 			//get group name
-			$group = oneQuery('contact_group','id',$qr['group_id'],'name');	
+			$group = oneQuery('contact_group','group_id',$qr['group_id'],'group_name');	
 			if(!empty($qr['email'])) $email = "<a href='mailto:$qr[email]' title=\"send mail to $qr[name]\">$qr[email]</a>";	
 			if(!empty($qr['photo'])) $photo = "<img src='$qr[photo]' title=\"$qr[name]'s contact photo\" />";
 			if(!empty($qr['tw'])) $tw = "<a href='http://twitter.com/$qr[tw]' title=\"follow $qr[name] on twitter\" target='_blank'><img src='".FUrl."apps/app_contact/theme/images/tw.png'></a>";	
@@ -92,13 +92,12 @@ class Contact {
 	function category($id,$fp = null) {	
 		$db = new FQuery();  
 		$db->connect(); 
-		
 		$param 		= menuInfo('parameter',getLink());
 		
 		$show_panel	= mod_param('show_name',$param);
 		$read_more  = mod_param('read_more',$param);
 		$per_page	= mod_param('per_page',$param);
-		$this -> sname		= mod_param('show_name',$param);
+		$this -> sname		= 1;
 		$this -> sgroup		= mod_param('show_group',$param);
 		$this -> sgender	= mod_param('show_gender',$param);
 		$this -> saddress	= mod_param('show_address',$param);
@@ -109,24 +108,21 @@ class Contact {
 		$this -> sphoto		= $sphoto= mod_param('show_photo',$param);
 
 		
-		$groupId= app_param('id');
-		
+		$groupId = app_param('id');
 		$whereCat = "AND group_id = $id";
 		$sql = $db->select(FDBPrefix.'contact','*','status = 1 AND group_id='.$id); 
-		$qr	 = @mysql_fetch_array($sql); 									
-		if(empty($qr['id']))
+		if(!count($sql))
 			echo "<h3>Opps, Contact group is empty!";
 		else {		
 			loadPaging();		
 			$paging = new paging();
 			$rowsPerPage = $per_page;
-			$result=$paging->pagerQuery(FDBPrefix.'contact',"*","status=1 $whereCat",'id ASC',$rowsPerPage);
+			$result = $paging->pagerQuery(FDBPrefix.'contact',"*","status=1 $whereCat",'id ASC',$rowsPerPage);
 			
 			$no=0;
-			$sum= mysql_affected_rows();		
-			while($qr=mysql_fetch_array($result)) {			
-			$group = oneQuery('contact_group','id',$qr['group_id'],'name');
-						
+			$sum= count($result);		
+			foreach($result as $qr) {			
+			$group = oneQuery('contact_group','group_id',$qr['group_id'],'group_name');						
 			$vlink="?app=contact&view=person&id=$qr[id]";	
 			$link = make_permalink($vlink,Page_ID);	
 			$title = "<a href=\"$link\">$qr[name]</a>";
@@ -145,14 +141,22 @@ class Contact {
 			if(!empty($qr['web'])) $web = " <a href='http://$qr[web]' title=\"visit $qr[name]'s website\" target='_blank'><img src='".FUrl."apps/app_contact/theme/images/web.png'></a>";
 			if(!empty($qr['ym'])) $ym = " <a href='ymsgr:sendIM?$qr[ym]' title=\"chat with $qr[name] via YahooMasangger\"><img src='".FUrl."apps/app_contact/theme/images/ym.png'></a>";
 			if(isset($ym) or isset($fb) or isset($tw) or isset($web))
-			$links = $ym.$fb.$tw.$web;
-			else  $links='';				
+				$links = $ym.$fb.$tw.$web;
+			else  
+				$links='';				
+			
+			if(!empty($qr['country']))
+				$address = $qr['city'].", ".$qr['country'];
+			else if(!empty($qr['city']))
+				$address = $qr['country'];
+			else $address = $qr['city'];
+			
 			$this -> perrows 		= $sum;
 			$this -> name[$no]		= $name;
 			$this -> photo[$no]		= $photo;
 			$this -> group[$no]		= $group;
 			$this -> gender[$no]	= $qr['gender'];
-			$this -> address[$no]	= $qr['city'].", ".$qr['country'];
+			$this -> address[$no]	= $address;
 			$this -> email[$no]		= @$qr['email'];
 			$this -> job[$no]		= $qr['job'];
 			$this -> links[$no]		= $links;
@@ -172,8 +176,8 @@ class Contact {
 			}
 			
 			
-			$db->select(FDBPrefix.'contact','*',"status=1 $whereCat");
-			$jml= mysql_affected_rows();
+			$c= $db->select(FDBPrefix.'contact','*',"status=1 $whereCat");
+			$jml= count($c);
 			if($jml>$rowsPerPage) 					
 				$pagelink = $paging->createPaging($link);
 			else
@@ -195,15 +199,18 @@ if(SEF_URL){
 	if($view == 'person') {
 		$item = oneQuery('contact','id',$id,'name');
 		$vcat = oneQuery('contact','id',$id,'group_id');
-		$ncat = oneQuery('contact_group','id',$vcat,'name');		
-		$page = oneQuery('menu','link',"'?app=contact&view=person&id=$vcat'",'id');
+		$ncat = oneQuery('contact_group','group_id',$vcat,'group_name');		
+		$page = oneQuery('menu','link',"'?app=contact&view=person&id=$id'",'id');
 		if(!$page) {
-			$page = oneQuery('permalink','link',"'?app=contact&view=person&id=$vcat'",'pid');
+			$page = oneQuery('permalink','link',"'?app=contact&view=person&id=$id'",'pid');
 		}	
-		add_permalink($item,"contact/".$ncat,$page);
+		if(!$page) {
+			$page = oneQuery('permalink','link',"'?app=contact&view=group&id=$vcat'",'pid');
+		}	
+		add_permalink($item,"contact/".$ncat,$page);		
 	}
 	else if($view == 'group') {
-		$ncat = oneQuery('contact_group','id',$id,'name');
+		$ncat = oneQuery('contact_group','group_id',$id,'group_name');
 		add_permalink("contact/".$ncat);
 	}
 	else if(app_param() == 'contact' AND empty($id) AND empty($view)) {
@@ -219,7 +226,7 @@ if(!checkHomePage())
 if ($view=="person") 
 	define('PageTitle', contactInfo('name'));
 else if($view=="group")
-	define('PageTitle', groupInfo('name').' Contacts');
+	define('PageTitle', groupInfo('group_name').' Contacts');
 else
 	define('PageTitle','Contact');
 

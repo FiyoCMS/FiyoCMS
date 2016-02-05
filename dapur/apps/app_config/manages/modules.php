@@ -38,7 +38,6 @@ $(document).ready(function() {
 	</thead>
 	<?php	
 	$db = new FQuery();  
-	$db->connect();	
 	
 	if(isset($_POST['uninstall']) AND !empty($_POST['id'])) {
 		$folder = $_POST['id'];

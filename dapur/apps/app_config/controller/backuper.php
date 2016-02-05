@@ -11,8 +11,6 @@ session_start();
 if(!isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] > 2) die ();
 
 require_once ('../../../system/jscore.php');
-$db = new FQuery();  
-$db->connect(); 
 
 if(isset($_GET['type'])) {		
 	if($_GET['type'] == 'database') {		
@@ -75,8 +73,7 @@ if(isset($_GET['type'])) {
 		@unlink("../../../../.backup/$_GET[file]");
 		
 		if($_GET['act'] == 'tables')	
-		@unlink("../../../../.backup/.table/$_GET[file]");
-		
+		@unlink("../../../../.backup/.table/$_GET[file]");		
 	}
 }
 

@@ -118,6 +118,7 @@ function loader() {
 	$('input[type="checkbox"],input[type="radio"]').after("<span class='input-check'>");	
 	$("input.form-control[type=password]").parent().wrapInner("<div>");		
 	$("input[required]").addClass('required').after('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').parent().wrapInner("<div>");	
+	$("textarea[required]").addClass('required').after('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').parent().wrapInner("<div>");	
 	$("select[required]").addClass('required').parent().append('<div class="required-input"><i title="Required" data-placement="top">*</i></div>').wrapInner("<div>");
     $('.required-input i').tooltip();
 	$("#editor").attr("required","required");
@@ -198,7 +199,8 @@ function selectCheck() {
 }
 function loadScrollbar() {
 	if ($.isFunction($.fn.niceScroll) ) {
-		$("html").niceScroll({cursorcolor:"#000"});
+		$(".inner").addClass("scrolling").niceScroll({cursorcolor:"#333"});
+		$(".body").addClass("scrolling").niceScroll({cursorcolor:"#333"});
 		$("#left").niceScroll({cursorcolor:"#eee"});
 		$(".modal").niceScroll();			
 		$("textarea:not(#editor)").niceScroll();			
@@ -245,7 +247,7 @@ function loadTable(url,display) {
 				$('[data-toggle=tooltip]').tooltip();
 				$('[data-tooltip=tooltip]').tooltip();
 				$('.tips').tooltip();				
-				
+				loadChoosen();
 				$("tr").click(function(e){
 					var i =$("td:first-child",this).find("input[type='checkbox']");					
 					var c = i.is(':checked');

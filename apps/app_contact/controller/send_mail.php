@@ -1,4 +1,4 @@
-<?php
+                                <?php
 /**
 * @version		2.0
 * @package		Fiyo CMS
@@ -31,16 +31,18 @@ else {
 		$_SESSION['COMMENT_DELAY'] = 0;
 		if(empty($name) or empty($email) or empty($post) or empty($subject ) )
 			echo "{ \"status\":\"0\" , \"alert\":\"".alert('error',contact_Error)."\"}";	
-		else if(!filter_var($to, FILTER_VALIDATE_EMAIL))	
+		else if(!filter_var($to, FILTER_VALIDATE_EMAIL) or !filter_var($email, FILTER_VALIDATE_EMAIL))	
 			echo "{ \"status\":\"0\" , \"alert\":\"".alert('error',contact_Error2)."\"}";	
-		else if(strlen($post) < 30)
+		else if(strlen($post) < 30 or ($subject == 'undefined'  AND strlen($post) < 150))
 			echo "{ \"status\":\"0\" , \"alert\":\"".alert('error',Message_too_short)."\"}";
 		else {
+			if($subject == 'undefined' ) $subject = 'Penawaran Proyek';
+				$post = str_replace("nnn","<br>", $post);
 				// multiple recipients
 				$site = siteConfig('site_name');
 				$to = "$to";
-				$subject = "$subject via $site";
-				$message = "$post<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><small>Sent by <b> $site</b></small></p>";		
+				$subject = "$subject dari $name";
+				$message = "$post<p>&nbsp;</p><p>&nbsp;</p><p><small>Sent by <b> $site</b></small></p>";		
 				$headers  = 'MIME-Version: 1.0' . "\r\n";
 				$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 				$headers .= "To: <$to>\r\n";
@@ -59,3 +61,5 @@ else {
 	}
 }
 
+
+                            

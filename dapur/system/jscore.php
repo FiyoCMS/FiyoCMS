@@ -7,28 +7,21 @@
 **/
 
 
-if(!isset($_SESSION['PLATFORM']) AND (!isset($_SERVER['HTTP_REFERER']) or !defined('_FINDEX_'))) die('Access Denied!');
 
 //memuat file pendukung query dan fungsi lainya
 require_once ('../../../../config.php');
-require_once ('../../../../system/query.php');
+require_once ('../../../../system/database.php');
 require_once ('../../../../system/function.php');
 require_once ('../../../../system/user.php');
+require_once ('../../../../system/site.php');
 loadLang 	 ('../../../system');
 
 $api = siteConfig('apikey');
-if(isset($_SESSION['PLATFORM'])) {
 
-} else if(!empty($api)) {
-	if(strpos(stripslashes($_SERVER['HTTP_REFERER']),stripslashes("http://".FUrl())) === false OR $_POST['apikey'] == "$api") 
-	die('Access Denied!');
-} else {
-	if(strpos(stripslashes($_SERVER['HTTP_REFERER']),stripslashes("http://".FUrl())) === false) 
-	die('Access Denied!');
-}
 
 //check table setting
-mysql_num_rows(mysql_query("SHOW TABLES LIKE '".FDBPrefix."setting'")) or die();
+$db = new FQuery();  
+if(!$db->tableExists(FDBPrefix."setting")) die("Table setting not found!");
 
 //set timezone
 $time = siteConfig('timezone');

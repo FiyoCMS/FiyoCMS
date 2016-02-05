@@ -7,7 +7,7 @@
 
 ul#article-related {
 	overflow: hidden;
-	padding:5px 0 20px;
+	padding:0;
 	margin: 0;
 }
 
@@ -19,16 +19,16 @@ ul#article-related li {
 }
 
 ul#article-related li img{
-	box-shadow: 0 0 3px #aaa;
-	border : 4px solid #fafafa;
+	border : 1px solid #fafafa;
 	position: relative;
-	width: 92%;
+	width: 100%;
 	max-height: 100%;
 	margin: 0 0 3px;
 	padding: 0;
 }
 ul#article-related a{
 	display: block;
+font-size: 113%;
 }
 ul#article-related a img{
 	-webkit-transition-duration:0.5s;
@@ -45,7 +45,13 @@ ul#article-related .related-title {
 
 ul#article-related li.related-img{
 	display:inline;
-	margin: 0 5px;
+	margin: 0;
 	position: relative;
 	float: left;
+	padding: 10px;
+	text-align: center;
+}
+
+ul#article-related li.related-img:hover{
+	background: #eee;
 }

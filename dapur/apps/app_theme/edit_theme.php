@@ -86,6 +86,23 @@ $(document).ready(function() {
 	$(".image-group .imgdiv").hover(function() {
 		$(this).toggleClass('selected');		
 	});
+	
+	
+	$(".sw-theme").click(function(){
+		var vl = $(this);
+		var value = vl.data('name');	
+		$.ajax({
+			url: "apps/app_theme/controller/status.php",
+			data: "theme="+value+"&type=site",
+			success: function(data){
+				vl.addClass('save btn theme-btn');
+				vl.removeClass('sw-theme');
+				$('.col-theme.active').removeClass('active');
+				vl.html("<?php echo Active; ?>");
+				notice(data);		
+			}
+		});
+	}); 
 });
 function openKCFinder(div) {
     window.KCFinder = {
@@ -137,9 +154,13 @@ function openKCFinder(div) {
 }
 </script>
 <div class="<?php if(file_exists($params) AND isset($theme_params)) echo "box-left col-lg-6 "; else echo "panel box"?>">
-	<div class="panel box"> 		
+	<div class="panel box active"> 		
 		<header>
 			<h5><?php echo General; ?></h5>
+			<?php 
+			if($folder == siteConfig('site_theme')) : ?>
+			<button type="submit" data-name="<?php echo $folder;?>" class="btn  theme-btn top-btn-file save-file-theme  btn-metis-2 save" id="save-file"><?php echo Active; ?></button> <?php else : ?>
+			<button type="submit"  data-name="<?php echo $folder;?>" class="btn sw-theme top-btn-file save-file-theme  btn-metis-2" id="save-file"><i class="icon-check-circle"></i> <?php echo Activate; ?></button> <?php endif; ?>
 		</header>
 		<div>
 			<table>
@@ -208,7 +229,7 @@ if($c) :
 <div class="<?php if(file_exists($params) AND isset($theme_params)) echo "box-left col-lg-6 "; else echo "panel box"?>">
 	<div class="panel box"> 		
 		<header>
-			<h5>Parameter<button type="submit" class="btn top-btn-file save-file-theme  btn-metis-2" id="save-file" style="display: block;" name="../../../../themes/bluestrap_theme/index.php"><i class="icon-ok-sign"></i> Simpan</button></h5>
+			<h5>Parameter<button type="submit" class="btn top-btn-file save-file-theme  btn-metis-2" id="save-file" style="display: block;" name="../../../../themes/bluestrap_theme/index.php"><i class="icon-check-circle"></i> Simpan</button></h5>
 		</header>
 		<div>
 		<?php include($params); ?>

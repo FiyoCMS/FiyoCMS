@@ -232,9 +232,9 @@ $(document).ready(function(){
 						$db = new FQuery();  
 						$db->connect(); 						
 						$sql2=$db->select(FDBPrefix.'contact_group'); 
-						while($qr2 = mysql_fetch_array($sql2)) {
-							if($id==$qr2['id']) $s='selected'; else $s='';
-							echo "<option value='$qr2[id]' $s>$qr2[name]</option>";		
+						foreach($sql2 as $qr2) {
+							if($id==$qr2['group_id']) $s='selected'; else $s='';
+							echo "<option value='$qr2[group_id]' $s>$qr2[group_name]</option>";		
 						}
 					?>
 					</select>
@@ -302,24 +302,9 @@ $(document).ready(function(){
 				<td id="contact_sum">Contact per-page</td>
 				<td>
 					<input type="text" name="param1" class="numeric spinner" value="<?php echo $perpage; ?>" id="per_page" size="2" />
+					
 				</td>
 			</tr>		
-			
-			<tr class="group_param">
-				<td id="contact_sum">Show Name</td>
-				<td>	
-					<?php 
-						if($name or $_GET['view'] =='add'){$s1="selected checked"; $s0 = "";}
-						else {$s0="selected checked"; $s1= "";}
-					?>
-					<p class="switch">
-						<input id="c1" value="1" name="param2" type="radio" <?php echo $s1;?> class="invisible">
-						<input id="c2" value="0" name="param2" type="radio" <?php echo $s0;?> class="invisible">
-						<label for="c1" class="cb-enable <?php echo $s1;?>"><span>Show</span></label>
-						<label for="c2" class="cb-disable <?php echo $s0;?>"><span>Hide</span></label>
-					</p>
-				</td>
-			</tr>
 			
 			<!--tr class="group_param">
 				<td id="contact_sum">Show Group</td>
@@ -341,6 +326,7 @@ $(document).ready(function(){
 			<tr class="group_param">
 				<td id="contact_sum">Show Job</td>
 				<td>	
+					<input value="1" name="param2" type="hidden" class="invisible">
 					<?php 
 						if($job or $_GET['view'] =='add'){$s1="selected checked"; $s0 = "";}
 						else {$s0="selected checked"; $s1= "";}
@@ -450,7 +436,7 @@ $(document).ready(function(){
 	      <div class="modal-body">
 			<div id="pages" class="pop_up">
 				<div id="page_id">
-				
+					Loading...
 				</div>
 			</div>
 	      </div>

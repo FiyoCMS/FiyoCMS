@@ -9,14 +9,13 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-$db = @new FQuery() or die;  
-$db->connect();
+$db = @new FQuery() or die;
 
 //set request id 
 if(!empty($_REQUEST['id'])){
 	$id=$_REQUEST['id'];	
 	$sql = $db->select(FDBPrefix.'contact','*','id='.$id); 
-	$qr	 = mysql_fetch_array($sql);
+	$qr	 = $sql[0];
 }
 else {
 	$id = null;
@@ -77,7 +76,7 @@ function openKCFinder(div) {
 }
 </script>
 <div class="col-lg-6 box-left">
-	<div class="panel box"> 		
+	<div class="box"> 		
 		<header>
 			<h5>Personal</h5>
 		</header>
@@ -100,12 +99,12 @@ function openKCFinder(div) {
 					<td><select name="group" tabindex="3">
 					<?php
 					$sql2 = $db->select(FDBPrefix.'contact_group');
-					while($qr2=mysql_fetch_array($sql2)){
-						if($qr2['id']==$qr['group_id']){ 
-							echo "<option value='$qr2[id]' selected>$qr2[name]</option>";
+					foreach($sql2 as $qr2){
+						if($qr2['group_id']==$qr['group_id']){ 
+							echo "<option value='$qr2[group_id]' selected>$qr2[group_name]</option>";
 						}
 						else {
-							echo "<option value='$qr2[id]'>$qr2[name]</option>";
+							echo "<option value='$qr2[group_id]'>$qr2[group_name]</option>";
 						}						
 					}
 					?>
@@ -113,7 +112,7 @@ function openKCFinder(div) {
 				</tr>			
 				<tr>
 					<td><?php echo Address; ?></td>
-					<td><textarea tabindex="4" rows="3" cols="45"style="margin-right:-30px;" name="address" required><?php echo $qr['address'];?></textarea></td>
+					<td><textarea tabindex="4" rows="3" cols="30"  name="address" required><?php echo $qr['address'];?></textarea></td>
 				</tr>
 				
 				<tr>
@@ -140,7 +139,7 @@ function openKCFinder(div) {
 				
 				<tr>
 					<td><?php echo Description; ?></td>
-					<td><textarea tabindex="10" rows="4" cols="40"style="margin-right:-30px;" name="desc"><?php echo $qr['description'];?></textarea></td>
+					<td><textarea tabindex="10" rows="4" cols="30"  name="desc"><?php echo $qr['description'];?></textarea></td>
 				</tr>
 				
 			</table>

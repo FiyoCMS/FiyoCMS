@@ -12,7 +12,7 @@ $db = new FQuery();
 $db->connect();  
 		
 $sql=$db->select(FDBPrefix.'setting','*',"name='site_theme'"); 
-$qr_themes = mysql_fetch_array($sql); 
+$qr_themes = $sql[0]; 
 $dir=opendir("../themes");  
 $no=0;
 
@@ -47,10 +47,11 @@ $(function() {
 		var v = $(this).val().toLowerCase();
 		$(".col-theme:contains("+v+")" ).css( "display", "block" );
 		$('.col-theme:not(:contains('+v+'))').hide(); 
-		$( ".count" ).html($(".col-theme:visible" ).length);
+		$( ".count" ).html($(".col-theme:visible" ).length + "");
 	});
 	});
 	$(".theme-btn").click(function(){
+		
 		var vl = $(this);
 		var value = vl.data('name');
 		$.ajax({

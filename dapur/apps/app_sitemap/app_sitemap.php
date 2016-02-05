@@ -12,24 +12,23 @@ defined('_FINDEX_') or die('Access Denied');
 $title = @$_GET['view'];
 $a = $b = $c = '';	
 $xml = false;
+printAlert();
 if(@$_GET['view'] == 'setup') 	{
 	if(@$_GET['action'] == 'search')	{
 		define('sitemapTitle','Search Page(s)');	
 		$c='active';
-		$page = 'sitemap.php';
+		$page = 'view/search.php';
 	}
 	else {
 		define('sitemapTitle','Expert Setting');
 		$b = 'active';
-		$page = 'sitemap.php';
+		$page = 'view/setting.php';
 	}
 }
 else {
-	define('sitemapTitle','Sitemap Page(s)');
-	$type = 'images';
-	$a = 'active';
-	$page = 'links.php'; 
-	$xml = @simplexml_load_file("../sitemap.xml");
+	define('sitemapTitle','Sitemap Built');
+		$a = 'active';
+		$page = 'view/default.php';
 }
 ?>
 
@@ -40,7 +39,7 @@ else {
 	 </div>
 </div>
 	<div class="panel box"> 
-	<?php if(!$xml) : ?>
+	<?php if($b or $c) : ?>
 		<header>
 			<h5><?php echo sitemapTitle;?></h5>
 		</header>
@@ -50,7 +49,7 @@ else {
 <div class="app_link tabs">		
 	<div class="app_link">		
 		<a class="add btn btn-default <?php echo $a; ?>" href="?app=sitemap"><i class="icon-link"></i> Links</a>		
-		<a class="add btn btn-default <?php echo $b; ?>" href="?app=sitemap&view=setup"><i class="icon-camera-retro"></i> Setup</a>		
-		<a class="add btn btn-default <?php echo $c; ?>" href="?app=sitemap&view=setup&action=search"><i class="icon-file-text-alt"></i> Search</a>			
+		<a class="add btn btn-default <?php echo $b; ?>" href="?app=sitemap&view=setup"><i class="icon-cogs"></i> Setup</a>		
+		<a class="add btn btn-default <?php echo $c; ?>" href="?app=sitemap&view=setup&action=search"><i class="icon-search"></i> Search</a>
 	</div>		
 </div>	

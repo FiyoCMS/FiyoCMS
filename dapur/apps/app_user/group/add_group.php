@@ -13,16 +13,15 @@ if($_SESSION['USER_LEVEL'] > 2){
 	alert('loading');
 	htmlRedirect('?app=user&view=group');
 }
-$db = @new FQuery() or die;  
-$db->connect(); 
+
 ?>
 <form method="post">
 	<div id="app_header">
 	 <div class="warp_app_header">		
 		<div class="app_title">User Group</div>
 		<div class="app_link">		
-			<button type="submit" class="btn btn-success" title="<?php echo Save; ?>" value="Next" name="apply_group"><i class="icon-ok"></i> <?php echo Save; ?></button>				
-			<button type="submit" class="btn btn-metis-2" title="<?php echo Save_and_Quit; ?>" value="Next" name="add_group"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>
+			<button type="submit" class="btn btn-success" title="<?php echo Save; ?>" value="Next" name="apply_group"><i class="icon-check"></i> <?php echo Save; ?></button>				
+			<button type="submit" class="btn btn-metis-2" title="<?php echo Save_and_Quit; ?>" value="Next" name="add_group"><i class="icon-check-circle"></i> <?php echo Save_and_Quit; ?></button>
 			</button>	
 			<a class="danger btn btn-default" href="?app=user&view=group" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 			<?php printAlert(); ?>

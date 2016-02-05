@@ -9,19 +9,17 @@
 defined('_FINDEX_') or die('Access Denied');
 
 $height	= mod_param('height',$modParam);
-$thumbW = mod_param('thumbW',$modParam);
-$thumbH = mod_param('thumbH',$modParam);
 $limit	= mod_param('limit',$modParam);
 $limitd = mod_param('limit',$modParam)+10;
 $filter = mod_param('filter',$modParam);
 $cat 	= mod_param('cat',$modParam);
-$showImg = mod_param('showImg',$modParam);
 
 
 $db 	= new FQuery();  
 
 $cat = explode(",",$cat);
-$c = '';
+
+$next = $prev = $c = null;
 foreach ($cat as $idx => $qry ) {
 	if($idx != 0)
 		$c .= ' OR ';	
@@ -31,38 +29,40 @@ foreach ($cat as $idx => $qry ) {
 if(function_exists('articleInfo')) :
 $level	= Level_Access;
 $date = articleInfo('date');
-$sql = $db->select(FDBPrefix."article",'*',"status = 1 AND ($c) AND date < '$date' $level ","date DESC LIMIT 1");
-$prev = mysql_fetch_array($sql);
+$prev  = $db->select(FDBPrefix."article",'*',"status = 1 AND ($c) AND date < '$date' $level ","date DESC LIMIT 1");
+$next = $db->select(FDBPrefix."article",'*',"status = 1 AND ($c) AND date > '$date' $level","date ASC LIMIT 1");
 
-$sql2 = $db->select(FDBPrefix."article",'*',"status = 1 AND ($c) AND date > '$date' $level","date ASC LIMIT 1");
-$next = mysql_fetch_array($sql2);
-
-$prev['link'] ="?app=article&view=item&id=$prev[id]";	
-$prev['link']= make_permalink($prev['link']);
-$next['link'] ="?app=article&view=item&id=$next[id]";
-$next['link'] = make_permalink($next['link']);	
-
+if(isset($prev[0])) {
+	$prev = $prev[0];
+	$prev['link'] ="?app=article&view=item&id=$prev[id]";	
+	$prev['link']= make_permalink($prev['link']);
+}
+if(isset($next[0])) {
+	$next = $next[0];	
+	$next['link'] ="?app=article&view=item&id=$next[id]";
+	$next['link'] = make_permalink($next['link']);	
+}
 
 echo "<div class='article-nextprev'>";
 
 if(!empty($prev['title'])) {
-echo"<div class='prev'>
-		<a href='$prev[link]'><span>< Prev</span> $prev[title]</a>
+echo"<span class='prv'>&laquo;</span><div class='prev'>
+		<a href='$prev[link]'> $prev[title]</a>
 	</div>";
 } else {
 echo "
 	<div class='prev'>
-		<a><span>||</span></a>
+		<em>||</em>
 	</div>";
 }
 
 if(!empty($next['title'])) {
-echo "<div class='next'>
-		<a href='$next[link]'>$next[title] <span>Next ></span></a>
+echo " <span>&raquo;</span><div class='next'>
+		<a href='$next[link]'>$next[title]</a>
 	</div>";
 } else {
 echo "<div class='next'>
-		<a><span>||</span></a>
+		<em>||</em>
 	</div>";
 }
 echo "</div>";
@@ -76,11 +76,16 @@ endif;
 <script>
 	$(function() {
 		function main() {
-		var p = $('.article-nextprev .prev').height();
+		var a = $('.article-nextprev').height();
 		var n = $('.article-nextprev .next').height();
-		if(p > n) n = p;
-		$('.article-nextprev .prev').height(n);
-		$('.article-nextprev .next').height(n);
+		var p = $('.article-nextprev .prev').height();
+		nn = (a -n)/2;
+		pn = (a -p)/2;
+		if(a<= 60) a = 30;
+		else if(a<= 80) a = 60;
+		$('.article-nextprev span').css("top",a/3);
+		$('.article-nextprev .next').css("margin-top",nn);
+		$('.article-nextprev .prev').css("margin-top",pn);
 		}
 		main();
 		$(window).resize(function() {

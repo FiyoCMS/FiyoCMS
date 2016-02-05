@@ -160,8 +160,8 @@ browser.returnFile = function(file) {
     fileURL = _.escapeDirs(fileURL);
 
     if (this.opener.CKEditor) {
-        this.opener.CKEditor.object.tools.callFunction(this.opener.CKEditor.funcNum, fileURL, '');
-        window.close();
+       var a=  this.opener.CKEditor.object.tools.callFunction(this.opener.CKEditor.funcNum, fileURL, '');
+        window.close() ;
 
     } else if (this.opener.FCKeditor) {
         window.opener.SetUrl(fileURL) ;

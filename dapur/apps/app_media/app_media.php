@@ -12,7 +12,7 @@ $a = $b = $c = '';
 if(isset($_REQUEST['type'])) {
 	$type=$_REQUEST['type'];
 	if($_REQUEST['type'] == 'files')
-		$c='active';
+		$c ='active';
 	else
 		$b = 'active';
 }
@@ -31,8 +31,8 @@ else {
 
 <div class="app_link tabs">		
 	<div class="app_link">		
-		<a class="add btn btn-default <?php echo $a; ?>" href="?app=media"><i class="icon-picture"></i> Images</a>		
-		<a class="add btn btn-default <?php echo $b; ?>" href="?app=media&type=flash"><i class="icon-camera-retro"></i> Flash</a>		
-		<a class="add btn btn-default <?php echo $c; ?>" href="?app=media&type=files"><i class="icon-file-text-alt"></i> Files</a>			
+		<a class="add btn btn-default <?php echo $a; ?>" href="?app=media"><i class="icon-image"></i> Images</a>		
+		<a class="add btn btn-default <?php echo $b; ?>" href="?app=media&type=video"><i class="icon-video-camera"></i> Video</a>		
+		<a class="add btn btn-default <?php echo $c; ?>" href="?app=media&type=files"><i class="icon-file-text-o"></i> Files</a>			
 	</div>		
 </div>	

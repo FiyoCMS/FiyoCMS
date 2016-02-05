@@ -15,23 +15,21 @@ require_once ('../../../system/jscore.php');
 <table class="table  tools">
   <tbody>
 	<?php	
-		$db = new FQuery();  
-		$db->connect(); 
 		$sql = $db->select(FDBPrefix."article","*,DATE_FORMAT(date,'%W, %b %d %Y') as dates","",'date DESC LIMIT 10'); 
 		$no = 0;		
-		while($qr=mysql_fetch_array($sql)) {
+		foreach($sql as $row) {
 			$no++;			
-			$read = check_permalink("link","?app=article&view=item&id=$qr[id]","permalink");
-			if($read) $read = $_GET['url'].$read; else $read = $_GET['url']."?app=article&view=item&id=$qr[id]";
-			$edit = "?app=article&act=edit&id=$qr[id]";						
-			$auth = userInfo("name","$qr[author_id]");
-			$info = "$qr[date]";
+			$read = check_permalink("link","?app=article&view=item&id=$row[id]","permalink");
+			if($read) $read = $_GET['url'].$read; else $read = $_GET['url']."?app=article&view=item&id=$row[id]";
+			$edit = "?app=article&act=edit&id=$row[id]";						
+			$auth = userInfo("name","$row[author_id]");
+			$info = "$row[date]";
 			$read_article = Read;
 			$edit_article = Edit;
-			echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$qr[title] <a class='tooltips icon-time' title='$info' data-placement='right'></a> 
+			echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$row[title] <a class='tooltips icon-time' title='$info' data-placement='right'></a> 
 			<div class='tool-box'>
 				<a href='$read' target='_blank'  class='btn btn-tools tips' title='$read_article'>$read_article</a>";				
-			$editor_level 	= mod_param('editor_level',$qr['parameter']);
+			$editor_level 	= mod_param('editor_level',$row['parameter']);
 			if($editor_level >= USER_LEVEL or empty($editor_level)) echo "<a href='$edit' class='btn btn-tools tips' title='$edit_article'>$edit_article</a>";
 			echo "</div>			
 			</td></tr>";

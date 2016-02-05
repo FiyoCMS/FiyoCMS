@@ -9,11 +9,9 @@
 
 
 defined('_FINDEX_') or die('Access Denied');
-
 $db = new FQuery();  
-$db->connect();
 $sql = $db->select(FDBPrefix.'comment','*',"link='$link' AND status=1","date ASC");	
-$count	= mysql_affected_rows();
+$count	= count($sql);
 if($count != 0 ) :
 if(siteConfig('lang') == 'id') {
  $count = "$count Komentar";
@@ -54,7 +52,7 @@ $(function() {
 <?php
 echo "<h3>$count</h3>";	
 $no=1;				
-while($com=mysql_fetch_array($sql)){
+foreach($sql as $com){
 	$autmail= strtolower($com['email']); 
 	$autmail = md5($autmail);
 	$img = "<span class='cmn-gravatar' data-gravatar-hash='$autmail'></span>";	

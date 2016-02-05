@@ -1,8 +1,8 @@
 <?php
 /**
-* @version		2.0
+* @version		2.0.2
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2014 Fiyo CMS.
+* @copyright	Copyright (C) 2015 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
@@ -21,10 +21,10 @@ $db->connect();
 </div>
 <div style="padding-bottom: 10px; width: 100%;">
 <div class="col-lg-12 full">	
-	<div class="box">								
+	<div class="box graph">								
 		<header>
 			<a class="accordion-toggle" data-toggle="collapse" href="#page-configuration">
-				<h5>Statistik Pengunjung</h5>
+				<h5><?php echo Visitor_Statistic; ?></h5>
 			</a>
 		</header>								
 		<div id="page-configuration" class="in">
@@ -33,7 +33,7 @@ $db->connect();
 		</div>
 	</div>
 	
-	<div class="box statistic primary">	
+	<div class="box statistic">	
 		<div class="mini-box box-1 online-user"><h3><span class="data">Loading...</span><i class="icon-circle"></i></h3><span><?php echo Online_Visitor;?></span><i class="icon icon-bullseye"></i>
 		</div>
 		<div class="mini-box box-2 today-visitor"><h3>Loading...</h3><span><?php echo Today_Visitor;?></span><i class="icon icon-calendar-empty"></i>
@@ -63,20 +63,22 @@ $db->connect();
 				<table class="table  tools">
 				  <tbody>
 					<?php	
-						$sql = $db->select(FDBPrefix."article","*,DATE_FORMAT(date,'%W, %b %d %Y') as dates","",'date DESC LIMIT 10'); 
+						$usr = FDBPrefix."user";
+						$art = FDBPrefix."article";
+						$sql = $db->select("$usr LEFT JOIN $art  ON  $usr.id = $art.author_id ","*,DATE_FORMAT(date,'%W, %b %d %Y') as dates","","$art.date DESC LIMIT 10"); 
 						$no = 0;		
-						while($qr=mysql_fetch_array($sql)) {
+						foreach($sql as $row) {
 							$no++;			
-							$read = check_permalink("link","?app=article&view=item&id=$qr[id]","permalink");
-							$edit = "?app=article&act=edit&id=$qr[id]";						
-							$auth = userInfo("name","$qr[author_id]");
-							$info = "$qr[date]";
+							$read = check_permalink("link","?app=article&view=item&id=$row[id]","permalink");
+							if($read) $read = FUrl.$read; else $read = FUrl."?app=article&view=item&id=$row[id]";
+							$edit = "?app=article&act=edit&id=$row[id]";
+							$info = "$row[date]";
 							$read_article = Read;
 							$edit_article = Edit;
-							echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$qr[title] <a class='tooltips icon-time' title='$info' data-placement='right'></a> 
+							echo "<tr><td class='no-tabs'>#$no</td><td width='100%'>$row[title] <a class='tooltips icon-time' title='$info' data-placement='right'></a> 
 							<div class='tool-box'>
-								<a href='../$read' target='_blank'  class='btn btn-tools tips' title='$read_article'>$read_article</a>";				
-							$editor_level 	= mod_param('editor_level',$qr['parameter']);
+								<a href='$read' target='_blank'  class='btn btn-tools tips' title='$read_article'>$read_article</a>";				
+							$editor_level 	= mod_param('editor_level',$row['parameter']);
 							if($editor_level >= USER_LEVEL or empty($editor_level)) echo "<a href='$edit' class='btn btn-tools tips' title='$edit_article'>$edit_article</a>";
 							echo "</div>			
 							</td></tr>";
@@ -123,41 +125,43 @@ $db->connect();
 <table class="table table-striped tools">
   <tbody>
 	<?php	
-		$sql = $db->select(FDBPrefix."user","*,DATE_FORMAT(time_reg,'%W, %Y-%m-%d %H:%i') as date","level >= $_SESSION[USER_LEVEL]",'time_reg DESC LIMIT 10'); 
+		$suser = FDBPrefix."user";
+		$sgroup = FDBPrefix."user_group";
+		$sql = $db->select("$sgroup, $suser","*,DATE_FORMAT($suser.time_reg,'%W, %Y-%m-%d %H:%i') as date","$suser.level >= $_SESSION[USER_LEVEL] AND $suser.level = $sgroup.level ","$suser.time_reg DESC LIMIT 10"); 
 		$no = 1;
-		while($qr=mysql_fetch_array($sql)) {
-			$id = $qr['id'];
+		foreach($sql as $row) {
+			$id = $row["id"];
 			$edit = Edit;
 			$read = Read;
 			$hide = Set_disable;	
 			$delete = Delete;
 			$approve = Set_enable;		
-			$sql2 = $db->select(FDBPrefix."user_group","*","level=$qr[level]"); 
 			
 			$output = oneQuery('session_login','user_id',"'$id'");				
 			$log = "";			
 			if($output) $log = "
 			<a data-toggle='tooltip' data-placement='right' title='Online' class=' icon-circle blink icon-mini tooltips'></a>&nbsp;&nbsp;&nbsp;";
 			$red = '';
-			if($qr['status']) 
-				$approven = "<a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' data-id='$qr[id]' title='$hide'>$hide</a><a class='btn-tools btn btn-success btn-sm btn-grad approve-user' data-id='$qr[id]' title='$approve' style='display:none;'>$approve</a>";
+			
+			if($row['status']) 
+				$approven = "<a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' data-id='$row[id]' title='$hide'>$hide</a><a class='btn-tools btn btn-success btn-sm btn-grad approve-user' data-id='$row[id]' title='$approve' style='display:none;'>$approve</a>";
 			else {
-				$approven = "<a class='btn-tools btn btn-success btn-sm btn-grad approve-user' data-id='$qr[id]' title='$approve'>$approve</a><a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' data-id='$qr[id]' title='$hide' style='display:none;'>$hide</a>";
+				$approven = "<a class='btn-tools btn btn-success btn-sm btn-grad approve-user' data-id='$row[id]' title='$approve'>$approve</a><a class='btn-tools btn btn-danger btn-sm btn-grad disable-user' data-id='$row[id]' title='$hide' style='display:none;'>$hide</a>";
 				$red = "class='unapproved'";
 			}
 			if($id == USER_ID) $approven ='';
-			$group = mysql_fetch_array($sql2);
-			$group = $group['group_name'];			
+			
+			$group = $row['group_name'];			
 			$ledit = "?app=user&act=edit&id=$id";					
-			echo "<tr $red><td>$qr[name] <span>($qr[user])</span>$log
-			<a data-toggle='tooltip' data-placement='right' title='$qr[date]' class=' icon-time tooltips'></a>
+			echo "<tr $red><td>$row[name] <span>($row[user])</span>$log
+			<a data-toggle='tooltip' data-placement='right' title='$row[date]' class=' icon-time tooltips'></a>
 			<a data-toggle='tooltip' data-placement='right' title='$group' class=' icon-info-sign tooltips'></a>
 			<br/>
 			<div class='tool-box'>
 				$approven
 				<a href='$ledit' class='btn btn-tools tips' title='$edit'>$edit</a>
 			</div></td>
-			<td align='right'>$qr[email]</td>
+			<td align='right'>$row[email]</td>
 			</tr>";
 			$no++;	
 		}					
@@ -192,38 +196,38 @@ $db->connect();
 		else
 			$sql = $db->select(FDBPrefix."comment","*,DATE_FORMAT(date,'%W, %b %d %Y') as dates","",'date DESC LIMIT 10'); 
 		$no = 0;		
-		while($qr=mysql_fetch_array($sql)) {					
-			$id = "$qr[id]";
-			$auth = "$qr[name]";
-			$info = "$qr[date]";
-			$imgr = md5("$qr[email]");
+		foreach($sql as $row) {					
+			$id = "$row[id]";
+			$auth = "$row[name]";
+			$info = "$row[date]";
+			$imgr = md5("$row[email]");
 			$foto = " <span class='c_gravatar' data-gravatar-hash=\"$imgr\"></span>";
-			$comment = cutWords(htmlToText($qr['comment']),10);
+			$comment = cutWords(htmlToText($row['comment']),10);
 			$hide = Hide;
 			$cedit = Edit;
 			$read = Read;
 			$delete = Delete;
 			$approve = Approve;
-			$app = link_param('app',"$qr[link]");	
-			$aid = link_param('id',"$qr[link]");	
-			$app = "$qr[apps]";
+			$app = link_param('app',"$row[link]");	
+			$aid = link_param('id',"$row[link]");	
+			$app = "$row[apps]";
 			if(empty($app)) $app = 'article';
 			$lread = check_permalink("link","?app=article&view=item&id=$aid","permalink");
 			$edit = "?app=$app&view=comment&act=edit&id=$id";			
 			$title = oneQuery('article','id',$aid ,'title');
 			$red = '';
-			if($qr['status']) 
+			if($row['status']) 
 				$approven = "<a class='btn-tools btn btn-danger btn-sm btn-grad disable-comment' title='$hide' data-id='$id'>$hide</a><a class='btn-tools btn btn-success btn-sm btn-grad approve-comment' title='$approve' style='display:none;' data-id='$id'>$approve</a>";
 			else {
 				$approven = "<a data-id='$id' class='btn-tools btn btn-success btn-sm btn-grad approve-comment' title='$approve'>$approve</a><a data-id='$id' class='btn-tools btn btn-danger btn-sm btn-grad disable-comment' title='$hide'  style='display:none;'>$hide</a>";
 				$red = "class='unapproved'";
 			}
-			echo "<tr $red><td style='text-align: center; vertical-align: middle;  padding: 7px 8px 6px 10px;'>$foto</td><td style='width: 97%; padding: 7px 8px 8px 0;'><b>$qr[name]</b> <span>on</span> $title <a data-toggle='tooltip' data-placement='right' title='$info' class='icon-time tooltips'></a> <a data-toggle='tooltip' data-placement='left' title='$qr[email]' class='icon-envelope-alt tooltips'></a>
+			echo "<tr $red><td style='text-align: center; vertical-align: middle;  padding: 7px 8px 6px 10px;'>$foto</td><td style='width: 97%; padding: 7px 8px 8px 0;'><b>$row[name]</b> <span>on</span> $title <a data-toggle='tooltip' data-placement='right' title='$info' class='icon-time tooltips'></a> <a data-toggle='tooltip' data-placement='left' title='$row[email]' class='icon-envelope-alt tooltips'></a>
 			<br/><span>$comment ...</span><br/>
 			<div class='tool-box tool-$no'>
 				$approven
 				<a href='$edit' class='btn btn-tools tips' title='$cedit'>$cedit</a>
-				<a href='../$lread#comment-$qr[id]' target='_blank'  class='btn btn-tools tips' title='$read'>$read</a>
+				<a href='../$lread#comment-$row[id]' target='_blank'  class='btn btn-tools tips' title='$read'>$read</a>
 				<!--a class='btn btn-tools tips' title='$delete'>$delete</a-->
 			</div>
 			</td></tr>";
@@ -396,15 +400,13 @@ $(function () {
 	setInterval(function(){
 		loadMemberOnline();	
 	}, 1000 * 777);
-	
-	
+		
 	
 	function loadFeeds() {	
 		$.ajax({
 			timeout: 8000, 
-			type : 'POST',
-			data: "version=<?php echo siteConfig('version'); ?>",
-			url: "http://feeds.fiy2o.org/",
+			type : 'GET',
+			url: "<?php echo FAdminPath; ?>/module/feeds.php",
 			success: function(data){
 				$(".feed").html(data);
 			},

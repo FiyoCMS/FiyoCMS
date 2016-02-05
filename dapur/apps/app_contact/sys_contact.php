@@ -17,16 +17,16 @@ $db->connect();
 /****************************************/
 if(isset($_POST['add_group']) or isset($_POST['save_group'])){
 	if(!empty($_POST['name']) AND !empty($_POST['desc'])) {
-	$qr=$db->insert(FDBPrefix.'contact_group',array("","$_POST[name]","$_POST[desc]")); 
-		if($qr AND isset($_POST['save_group'])){		
+	$row=$db->insert(FDBPrefix.'contact_group',array("","$_POST[name]","$_POST[desc]")); 
+		if($row AND isset($_POST['save_group'])){		
 			notice('success',Group_Saved);
 			redirect('?app=contact&view=group');
 		}
-		else if($qr AND isset($_POST['add_group'])){
-			$sql = $db->select(FDBPrefix.'contact_group','id','','id DESC' ); 	  
-			$qr = mysql_fetch_array($sql);
+		else if($row AND isset($_POST['add_group'])){
+			$sql = $db->select(FDBPrefix.'contact_group','group_id','','group_id DESC' ); 	  
+			$row = $sql[0];
 			notice('success',Group_Saved);
-			redirect('?app=contact&view=group&act=edit&id='.$qr['id']);
+			redirect('?app=contact&view=group&act=edit&id='.$row['group_id']);
 		}
 		else {				
 			notice('error',Status_Fail);
@@ -45,7 +45,7 @@ if(isset($_POST['add_group']) or isset($_POST['save_group'])){
 if(isset($_POST['check_group'])){
 	$source = @$_POST['check_group'];
 	$source = multipleSelect($source);
-	$delete = multipleDelete('contact_group',$source,'contact','id');		
+	$delete = multipleDelete('contact_group',$source,'contact','group_id');		
 	if($delete == 'noempty') {
 		notice('error',Group_contact_Not_Empty);
 	}
@@ -62,19 +62,19 @@ if(isset($_POST['check_group'])){
 /****************************************/
 if(isset($_POST['edit_group']) or isset($_POST['apply_group'])){
 	if(!empty($_POST['name']) AND !empty($_POST['desc'])){
-		$qr=$db->update(FDBPrefix.'contact_group',array("name"=>"$_POST[name]",
-		'description'=>"$_POST[desc]"),
-		'id='.$_POST['id']); 		
+		$row=$db->update(FDBPrefix.'contact_group',array("group_name"=>"$_POST[name]",
+		'group_desc'=>"$_POST[desc]"),
+		'group_id='.$_POST['id']); 		
 		//edit or update catgory name
 		$sql =  $db->select(FDBPrefix.'contact'); 	  
-		while(mysql_fetch_array($sql)){	
-			$qrs=$db->update(FDBPrefix.'contact',array("group_id"=>$_POST['id']),'id='.$_POST['id']);
+		foreach($sql as $sq){
+			$db->update(FDBPrefix.'contact',array("group_id"=>$_POST['id']),'id='.$_POST['id']);
 		}					
-		if($qr AND isset($_POST['edit_group'])){
+		if($row AND isset($_POST['edit_group'])){
 			notice('success',Group_Saved);
 			redirect('?app=contact&view=group');
 		}		
-		else if($qr AND isset($_POST['apply_group'])){
+		else if($row AND isset($_POST['apply_group'])){
 			notice('success',Group_Saved);
 			redirect(getUrl());
 		}
@@ -97,14 +97,14 @@ if(isset($_POST['save_add']) or isset($_POST['apply_add'])){
 	if( !empty($_POST['name']) AND 
 		!empty($_POST['gender']) AND 
 		!empty($_POST['group'])) {			
-		$qr=$db->insert(FDBPrefix.'contact',array("","$_POST[name]","$_POST[gender]","$_POST[email]","$_POST[address]","$_POST[city]","$_POST[state]","$_POST[country]","$_POST[zip]", "$_POST[phone]", "$_POST[fax]", "$_POST[job]","$_POST[photo]","$_POST[web]","$_POST[ym]","$_POST[fb]","$_POST[tw]","$_POST[desc]","$_POST[group]",1));
-		if($qr AND isset($_POST['apply_add'])){
+		$row=$db->insert(FDBPrefix.'contact',array("","$_POST[name]","$_POST[gender]","$_POST[email]","$_POST[address]","$_POST[city]","$_POST[state]","$_POST[country]","$_POST[zip]", "$_POST[phone]", "$_POST[fax]", "$_POST[job]","$_POST[photo]","$_POST[web]","$_POST[ym]","$_POST[fb]","$_POST[tw]","$_POST[desc]","$_POST[group]",1));
+		if($row AND isset($_POST['apply_add'])){
 			$sql = $db->select(FDBPrefix.'contact','id','','id DESC' ); 	  
-			$qr = mysql_fetch_array($sql);
+			$row = $sql[0];
 			notice('success',Contact_Saved);
-			redirect('?app=contact&act=edit&id='.$qr['id'],2);
+			redirect('?app=contact&act=edit&id='.$row['id'],2);
 		}
-		elseif($qr AND isset($_POST['save_add'])) {	
+		elseif($row AND isset($_POST['save_add'])) {	
 			notice('success',Contact_Saved);
 			redirect('?app=contact',2);
 		}
@@ -122,7 +122,7 @@ if(isset($_POST['save_add']) or isset($_POST['apply_add'])){
 /****************************************/ 		
 if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){	
 	if( !empty($_POST['name']) AND !empty($_POST['gender']) AND !empty($_POST['group'])) {	
-		$qr=$db->update(FDBPrefix.'contact',array(
+		$row=$db->update(FDBPrefix.'contact',array(
 		"name"=>"$_POST[name]",			
 		"gender"=>"$_POST[gender]",
 		"group_id"=>"$_POST[group]",
@@ -142,17 +142,17 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 		"tw"=>"$_POST[tw]",
 		"description"=>"$_POST[desc]"),
 		"id=$_POST[id]");
-		if($qr AND isset($_POST['save_edit'])){	
+		if($row AND isset($_POST['save_edit'])){	
 			notice('success',Contact_Saved);
 			redirect('?app=contact');
 		}
-		else if($qr AND isset($_POST['apply_edit'])){ 
+		else if($row AND isset($_POST['apply_edit'])){ 
 			notice('success',Contact_Saved);
 			refresh();
 		}
-		else {notice('error',Status_Fail);}					
+		else {notice('error',Status_Fail, 2);}					
 	}
-	else {notice('error',Status_Invalid);}
+	else {notice('error',Status_Invalid, 2);}
 }
 
 

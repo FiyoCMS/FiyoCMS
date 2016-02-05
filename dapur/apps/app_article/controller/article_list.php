@@ -10,10 +10,8 @@ session_start();
 if(@$_SESSION['USER_LEVEL'] > 5 or !isset($_GET['iSortCol_0'])) die ('Access Denied!');
 define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
+header('Content-Type: application/json');
 
-	/* Connect to database */
-	$db = new FQuery();  
-	$db -> connect();
 
 	/* Array of database columns which should be read and sent back to DataTables. Use a space where
 	 * you want to insert a non-database field (for example a counter or static image)
@@ -74,13 +72,13 @@ require('../../../system/jscore.php');
 	if(!empty($_GET['level'])) $level = " level = '$_GET[level]'  AND "; 
 	else $level = '';
 	
-	$sWhere = "WHERE  $cat $user $level level >=$_SESSION[USER_LEVEL] ";
+	$sWhere = "WHERE  $cat $user $level level >= $_SESSION[USER_LEVEL] ";
 	if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 	{
 		$sWhere .= " AND(";
 		for ( $i=0 ; $i<count($aColumns) ; $i++ )
 		{
-			$sWhere .= "`".$aColumns[$i]."` LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ";
+			$sWhere .= "`".$aColumns[$i]."` LIKE '%".addslashes( $_GET['sSearch'] )."%' OR ";
 		}
 		$sWhere = substr_replace( $sWhere, "", -3 );
 		$sWhere .= ')';
@@ -99,7 +97,7 @@ require('../../../system/jscore.php');
 			{
 				$sWhere .= " AND ";
 			}
-			$sWhere .= "`".$aColumns[$i]."` LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
+			$sWhere .= "`".$aColumns[$i]."` LIKE '%".addslashes($_GET['sSearch_'.$i])."%' ";
 		}
 	}
 	
@@ -115,24 +113,23 @@ require('../../../system/jscore.php');
 		$sOrder
 		$sLimit
 		";
-	$rResult = mysql_query( $sQuery) or die(mysql_error());
+	$rResult = $db->query( $sQuery);
 	
 	/* Data set length after filtering */
 	$sQuery = "
 		SELECT FOUND_ROWS()
 	";
-	$rResultFilterTotal = mysql_query( $sQuery) or die(mysql_error());
-	$aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
-	$iFilteredTotal = $aResultFilterTotal[0];
+	$rResultFilterTotal = $db->db->query( $sQuery)->fetchColumn();
+	$iFilteredTotal = $rResultFilterTotal;
 	
 	/* Total data set length */
 	$sQuery = "
 		SELECT COUNT(`".$sIndexColumn."`)
 		FROM   $sTable
 	";
-	$rResultTotal = mysql_query( $sQuery) or die(mysql_error());
-	$aResultTotal = mysql_fetch_array($rResultTotal);
-	$iTotal = $aResultTotal[0];
+	
+	$rResultTotal = $db->db->query( $sQuery)->fetchColumn();
+	$iTotal = $rResultTotal;
 	
 	
 	/*
@@ -145,7 +142,7 @@ require('../../../system/jscore.php');
 		"aaData" => array()
 	);
 	
-	while ( $aRow = mysql_fetch_array( $rResult ) )
+	foreach ( $rResult as $aRow )
 	{
 		$row = array();
 		for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -176,7 +173,7 @@ require('../../../system/jscore.php');
 					<label class='cb-enable $stat1 tips' data-placement='right' title='".Disable."'><span>
 					<i class='icon-remove-sign'></i></span></label>
 					<label class='cb-disable $stat2 tips' data-placement='right' title='".Enable."'><span>
-					<i class='icon-ok-sign'></i></span></label>
+					<i class='icon-check-circle'></i></span></label>
 					<input type='hidden' value='$aRow[id]' class='number invisible'>
 					<input type='hidden' value='$aRow[status]'  class='type invisible'>
 				</div>";
@@ -201,7 +198,7 @@ require('../../../system/jscore.php');
 					<label class='cb-enable $stat1 tips' data-placement='right' title='".Disable."'><span>
 					<i class='icon-remove-sign'></i></span></label>
 					<label class='cb-disable $stat2 tips' data-placement='right' title='".Enable."'><span>
-					<i class='icon-ok-sign'></i></span></label>
+					<i class='icon-check-circle'></i></span></label>
 					<input type='hidden' value='$aRow[id]' class='number invisible'>
 					<input type='hidden' value='$aRow[status]'  class='type invisible'>
 				</div>";
@@ -220,20 +217,26 @@ require('../../../system/jscore.php');
 			}					
 			if ( $i == 0 )
 			{			
+				if(!isset($_GET['param']))
 				$row[] = $checkbox; 
 			}				
 			else if ( $i == 1 )
-			{			
-				$row[] = $name;
+			{	
+				if(!isset($_GET['param']))
+					$row[] = $name;
+				else
+					$row[] ="<a class='tips select' rel='$aRow[id]' title='".Choose."' href='#' target='_self' redata-placement='right'>$title</a>";	
+				
 			}			
 			else if ( $i == 2 )
 			{			
+				if(!isset($_GET['param']))
 				$row[] = "<div class='switch-group'>$featured$status</div>";
 			}	
 			else if ( $i == 3 )
 			{			
 				$sql2 = $db->select(FDBPrefix."article_category","name","id=$aRow[category]"); 
-				$category = mysql_fetch_array($sql2);
+				$category = $sql2[0];
 				$category = $category['name'];
 				$row[] = "<div class='center'>$category</div>";
 			}
@@ -252,11 +255,14 @@ require('../../../system/jscore.php');
 			}
 			else if ( $i == 5 )
 			{		
-				//creat user group values	
-				$sql2=$db->select(FDBPrefix.'user_group','*',"level=$aRow[level]"); 
-				$level=mysql_fetch_array($sql2);				
-				if($aRow['level']==99) $level = _Public;
-				else $level = $level['group_name'];	
+				//creat user group values			
+				if($aRow['level']==99) {$level = _Public;
+				} 
+				else {
+					$lvl = $db->select(FDBPrefix.'user_group','*',"level='$aRow[level]'"); 
+					$level = $lvl[0];	
+					$level = $level['group_name'];	
+				} 	
 				
 				$row[] = "<div class='center'>$level</div>";
 			}

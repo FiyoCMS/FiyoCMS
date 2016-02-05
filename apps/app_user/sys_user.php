@@ -10,11 +10,9 @@
 defined('_FINDEX_') or die('Access Denied');
 
 $db = new FQuery();  
-loadLang(__dir__);
+loadLang(dirname(__FILE__));
 
 $view = app_param('view');
-$key = @mysql_real_escape_string($_GET['key']);
-$res = @mysql_real_escape_string($_GET['res']);
 
 $linkLogin = make_permalink('?app=user&view=login');
 $linkUser = make_permalink('?app=user');
@@ -32,7 +30,7 @@ else if($view == 'profile' or $view == 'logout' or $view == 'edit' or empty($vie
 if(isset($_POST['register']) AND siteConfig('member_registration')) {
 	$us=strlen("$_POST[user]");
 	$ps=strlen("$_POST[password]");	
-	$user = $_POST['user'];	
+	$user = addslashes($_POST['user']);
 	preg_match('/[^a-zA-Z0-9]+/', $user, $matches);
 	if(	!empty($_POST['password']) AND 
 		!empty($_POST['user'])AND 
@@ -150,7 +148,7 @@ if(isset($_POST['register']) AND siteConfig('member_registration')) {
 					$db->insert(FDBPrefix."session_login",array("$qr[id]","$qr[user]","$qr[level]",date('Y-m-d H:i:s')));
 					
 					$sql = $db->select(FDBPrefix."user","*","status=1 AND user='$_POST[user]' AND password='".MD5($_POST['password'])."'");
-					$qr = mysql_fetch_array($sql);
+					$qr = $sql[0];
 					$_SESSION['USER_ID']  	= $qr['id'];
 					$_SESSION['USER'] 		= $qr['USER'];
 					$_SESSION['USER_NAME']  = $qr['name'];
@@ -178,10 +176,11 @@ if(isset($_POST['register']) AND siteConfig('member_registration')) {
 }
 		
 if(isset($_POST['login'])) {
-	$user = mysql_real_escape_string($_POST['user']);
-	$qr = $db->select(FDBPrefix."user","*","status=1 AND user='$user' AND password='".MD5($_POST['pass'])."'"); 
-	$qr = mysql_fetch_array($qr);
-	$ok = mysql_affected_rows();
+	$user = addslashes($_POST['user']);
+	$qr = $db->select(FDBPrefix."user","*","status=1 AND user='$user' AND password='".MD5($_POST['pass'])."'","",1);
+	if($qr)
+	$qr = $qr[0];
+	$ok = count($qr);
 	if($ok > 0) {
 		$_SESSION['USER_ID']  	= $qr['id'];
 		$_SESSION['USER'] 		= $qr['user'];
@@ -209,10 +208,9 @@ if(isset($_POST['login'])) {
 	
 if(isset($_POST['edit'])){		
 	if(!empty($_POST['email']) AND @ereg("^.+@.+\\..+$",$_POST['email'])) 
-	{	
+	{
 		$qrq = false;
 		$_POST['bio']	= htmlentities($_POST['bio']);
-		$_POST['name']	= mysql_real_escape_string($_POST['name']);
 		if(empty($_POST['password']) AND empty($_POST['kpassword'])){
 			$qrq=$db->update(FDBPrefix.'user',array(	
 			"name"=>"$_POST[name]",
@@ -263,9 +261,9 @@ if(isset($_POST['forgot']))	{
 		define("userNotice",alert("error",user_Email_None));
 	} 
 	else {
-	$qr = $db->select(FDBPrefix."user","*","status=1 AND email='$_POST[email]'"); 
-	$qr = mysql_fetch_array($qr);
-	$jml = mysql_affected_rows();
+		$qr = $db->select(FDBPrefix."user","*","status=1 AND email='$_POST[email]'"); 
+		if($qr) $qr = $qr[0];
+		$jml = count($qr);
 		if($jml) {
 			$reminder = randomString(32);
 			$_SESSION['USER_REMINDER'] = $reminder;
@@ -366,5 +364,3 @@ else if($view == 'profile') {
 else  {
 	define('PageTitle','User Profile');
 }
-
-loadLang(__dir__);

@@ -1,0 +1,7 @@
+/* Fiyo Cooment StyleSheeT */
+
+.comment-null{ background: url(img/warning.png) no-repeat 8px 9px lightyellow; padding: 5px 30px; color:#484c00; }
+.comment-valid{ background: url(img/ok.png) no-repeat 8px 9px #e5ffdd; padding: 5px 30px; color :#196b00  }
+.comment-invalid{ background: url(img/error.png) no-repeat 8px 9px #ffecec; padding: 5px 30px; color:#8e0000;}
+.comment-check{ background: url(img/loading1.gif) no-repeat 8px 9px #e5ffdd; padding: 5px 30px; color :#196b00  }
+

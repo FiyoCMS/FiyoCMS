@@ -57,32 +57,31 @@ $(function() {
 		<tbody>
 			<?php		
 			$db = new FQuery();  
-			$db->connect(); 
 			$sql=$db->select(FDBPrefix.'article_category','*',"parent_id=0");
 			$no=1;
-			while($qr=mysql_fetch_array($sql)){
-				//num of total article
-				$db->select(FDBPrefix.'article','*',"category=$qr[id]"); 
-				$num = mysql_affected_rows();
+			foreach($sql as $row){
+				
+				$sql1 = $db->select(FDBPrefix.'article','*',"category=$row[id]");
+				$num = count($sql1);
 				
 				//creat user group values	
-				$sql2=$db->select(FDBPrefix.'user_group','*',"level=$qr[level]"); 
-				$level=mysql_fetch_array($sql2);				
-				if($qr['level']==99) $level = _Public;
-				else $level = $level['group_name'];
-					
+				if($row['level']==99) $level = _Public;				
+				else {						
+					$sql2 = $db->select(FDBPrefix.'user_group','*',"level=$row[level]"); 
+					$level = $sql2[0]['group_name'];
+				}					
 								
-				if($_SESSION['USER_LEVEL'] <= $qr['level']) {
-				$name = "<a class='tips' data-placement='right' title='".Edit."' href='?app=article&view=category&act=edit&id=$qr[id]'>$qr[name]</a>";
-				$checkbox ="<input type='checkbox' data-name='rad-$qr[id]' name='check_category[]' value='$qr[id]' rel='ck'>";
+				if($_SESSION['USER_LEVEL'] <= $row['level']) {
+				$name = "<a class='tips' data-placement='right' title='".Edit."' href='?app=article&view=category&act=edit&id=$row[id]'>$row[name]</a>";
+				$checkbox ="<input type='checkbox' data-name='rad-$row[id]' name='check_category[]' value='$row[id]' rel='ck'>";
 				}
 				else {$checkbox ="<span class='icon lock'></lock>";
-				$name = "$qr[name]";}
+				$name = "$row[name]";}
 				
 				echo "<tr>";
 				echo "<td align='center'>$checkbox</td><td>$name <span class='label label-primary right visible-xs'>$num</span></td><td align='center' class='hidden-xs'>$level</td><td align='center' class='hidden-xs'>$num</td>";
 				echo"</tr>";
-				sub_article($qr['id'],$no,"<span style='display: none'>$name</span>" );
+				sub_article($row['id'],$no,"<span style='display: none'>$name</span>" );
 				$no++;	
 				
 			}					

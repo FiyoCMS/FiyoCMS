@@ -11,8 +11,6 @@ if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['US
 define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
-$db = new FQuery();  
-$db->connect(); 
 
 if(checkMobile()) {
 	$d13 = 6;
@@ -31,8 +29,10 @@ for($x = $d13; $x >= 0; $x--) {
 	$dtf = date('Y-m-d 00:00:00',strtotime("-$x days"));
 	$z = $x-1;
 	$dts = date('Y-m-d 00:00:00',strtotime("-$z days"));	
-	$v = FQuery('statistic',"time BETWEEN '$dtf' AND '$dts'","","","time ASC");
-	$v = FQuery('statistic',"time BETWEEN '$dtf' AND '$dts'","","","time ASC");
+	$st = FDBPrefix."statistic";
+	$row = $db->select("$st","COUNT(*) AS val","time BETWEEN '$dtf' AND '$dts'");
+	$v = $row[0]['val'];
+	
 	if(empty($v))  $allVisitor .= 0; else $allVisitor .= $v;
 	if($x != 0) $allVisitor .= ",";
 }
@@ -42,11 +42,9 @@ for($x = $d14; $x >= 0; $x--) {
 	$t = $x-1;
 	$dtf = date('Y-m-d 00:00:00',strtotime("-$t days"));
 
-	$db = new FQuery();  
-	$db -> connect();
-	$sql = $db->select(FDBPrefix."statistic","*,COUNT(DISTINCT ip) AS q","time < '$dtf'","time ASC");
+	$sql = $db->select(FDBPrefix."statistic","COUNT(DISTINCT ip) AS q","time < '$dtf'","time ASC");
 		
-	$row = mysql_fetch_array($sql);
+	$row = $sql[0];
 	$unique = $row['q'] - $z; 
 	if($unique < 0 ) $unique = 0;
 		$z = $row['q'];
@@ -64,9 +62,9 @@ for($x = $d13; $x >= 0; $x--) {
 	$t = $x-1;
 	$dtf = date('Y-m-d 00:00:00',strtotime("-$t days"));
 	
-	$sql = $db->query("select COUNT( DISTINCT ip )  AS q FROM ".FDBPrefix."statistic WHERE time BETWEEN '$dtz' AND '$dtf'");
-	$row = mysql_fetch_array($sql);
-	if(empty($row['q']))  $newVisitor .= 0; else $newVisitor .= $row['q'];
+	$sql = $db->select(FDBPrefix."statistic"," COUNT( DISTINCT ip )  AS q","time BETWEEN '$dtz' AND '$dtf'");
+	$row = $sql;
+	if(empty($row[0]['q']))  $newVisitor .= 0; else $newVisitor .= $row[0]['q'];
 	if($x != 0) $newVisitor .= ",";
 }
 $date = date("d-m-Y",strtotime("-$d13 days"));

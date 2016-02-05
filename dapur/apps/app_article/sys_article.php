@@ -8,8 +8,7 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-$db = new FQuery();  
-	
+$db = new FQuery();  	
 /****************************************/
 /*		   Add category article			*/
 /****************************************/
@@ -19,13 +18,13 @@ if(isset($_POST['save_category']) or isset($_POST['add_category'])){
 		$_POST['name'] = str_replace("'",'',$_POST['name']);
 		$qr=$db->insert(FDBPrefix.'article_category',array("","$_POST[name]","$_POST[parent_id]","$_POST[desc]","$_POST[keys]","$_POST[level]"));
 		if($qr AND isset($_POST['add_category'])){
-			notice('success',Category_Added,2);		
+			notice('success',Category_Added);		
 			redirect('?app=article&view=category');
 		}
 		else if($qr AND isset($_POST['save_category'])){
 			$sql2 = $db->select(FDBPrefix.'article_category','id','','id DESC LIMIT 1' ); 
-			notice('success',Category_Added,2);
-			$qrs = mysql_fetch_array($sql2);			
+			$qrs = $sql2[0];	
+			notice('success',Category_Added);		
 			redirect("?app=article&view=category&act=edit&id=$qrs[id]");			
 		}
 		else {		
@@ -89,10 +88,10 @@ if(isset($_POST['check_category'])){
 	
 	
 /****************************************/
-/*			 Add New Article			*/
+/*          Add New Article		*/
 /****************************************/
 if(isset($_POST['save_add']) or isset($_POST['add_new']) or isset($_POST['apply_add']) or isset($_POST['save_as'])){
-	if( !empty($_POST['title']) AND 
+	if( !empty($_POST['title-entities']) AND 
 		!empty($_POST['cat']) AND 
 		!empty($_POST['editor'])) {
 		$param=''; // first value from $param
@@ -102,13 +101,13 @@ if(isset($_POST['save_add']) or isset($_POST['add_new']) or isset($_POST['apply_
 		$parameter = $param;			
 		if(empty($_POST['date'])) $_POST['date'] = date("Y-m-d H:i:s");
 		$article = str_replace('"',"'","$_POST[editor]");
-		$title 	= htmlentities($_POST['title']);
+		$title 	= $_POST['title-entities'];
 		$keys 	= htmlentities($_POST['keyword']);
 		$desc 	= htmlentities($_POST['desc']);
 		$tags = @$_POST['tags'];
 		$tags = @multipleSelect($tags);		
 		
-		if(checkLocalhost()) {
+		if(checkLocalhost()) {			
 			$article = str_replace(FLocal."media/","media/",$article);			
 		}
 		
@@ -116,7 +115,7 @@ if(isset($_POST['save_add']) or isset($_POST['add_new']) or isset($_POST['apply_
 		
 		if($qr AND isset($_POST['save_as'])){
 			$sql = $db->select(FDBPrefix.'article','id','','id DESC' ); 
-			$qrs = mysql_fetch_array($sql);					
+			$qrs = $sql[0];	
 			notice('success',Article_Saved);
 			$_SESSION['DUPLICATED'] = alert('success',Article_Saved);
 			$n = time();
@@ -124,8 +123,8 @@ if(isset($_POST['save_add']) or isset($_POST['add_new']) or isset($_POST['apply_
 		}
 		if($qr AND isset($_POST['apply_add'])){
 			$sql = $db->select(FDBPrefix.'article','id','','id DESC' ); 
-			$qrs = mysql_fetch_array($sql);					
-			notice('success',Article_Saved,3);
+			$qrs = $sql[0];	
+			notice('success',Article_Saved);
 			redirect('?app=article&act=edit&id='.$qrs['id']);
 		}
 		else if($qr AND isset($_POST['save_add'])) {
@@ -155,7 +154,7 @@ if(isset($_POST['save_add']) or isset($_POST['add_new']) or isset($_POST['apply_
 /*		      Edit Article				*/
 /****************************************/ 
 if(isset($_POST['save_edit']) or isset($_POST['save_new']) or isset($_POST['apply_edit'])){		
-	if( !empty($_POST['title']) AND 
+	if( !empty($_POST['title-entities']) AND 
 		!empty($_POST['cat']) AND 
 		!empty($_POST['editor'])) {	
 		
@@ -175,7 +174,7 @@ if(isset($_POST['save_edit']) or isset($_POST['save_new']) or isset($_POST['appl
 		$time = date("H:i:s");
 		$desc = htmlentities($_POST['desc']);		
 		$keys = htmlentities($_POST['keyword']);
-		$title = htmlentities($_POST['title']);
+		$title = $_POST['title-entities'];
 		$author = htmlentities($_POST['author']);	
 
 		$tags = @$_POST['tags'];
@@ -257,19 +256,21 @@ if(isset($_POST['delete']) or isset($_POST['delete_confirm'])){
 
 
 /****************************************/
-/*		  		 Add Tag				*/
+/*		   Add Tag		*/
 /****************************************/
-if(isset($_POST['add_tag']) or isset($_POST['save_tag'])){	
-	if(!empty($_POST['name'])) {
-		$qr=$db->insert(FDBPrefix.'article_tags',array("","$_POST[name]","$_POST[desc]","")); 		
+if(isset($_POST['add_tag']) or isset($_POST['save_tag'])){
+        $t = striptags($_POST['name']);
+	if(!empty($t)) {
+            
+		$qr=$db->insert(FDBPrefix.'article_tags',array("",striptags($_POST['name']),striptags($_POST['desc']),"")); 		
 		if($qr AND isset($_POST['save_tag'])){		
-			notice('success',Tag_Added,2);	
+			notice('success',Tag_Added);	
 			redirect('?app=article&view=tag');
 		}
 		else if($qr){ 
 			$sql2 = $db->select(FDBPrefix.'article_tags','*','','id DESC'); 
-			$qrs = mysql_fetch_array($sql2);
-			notice('success',Tag_Added,2);
+			$qrs = $sql2[0];
+			notice('success',Tag_Added);
 			redirect("?app=article&view=tag&act=edit&id=$qrs[id]");
 		}
 		else {			
@@ -277,7 +278,7 @@ if(isset($_POST['add_tag']) or isset($_POST['save_tag'])){
 		}					
 	}
 	else {				
-		notice('error',Status_Invalid);
+		notice('error',Status_Invalid,2);
 	}
 }
 
@@ -285,8 +286,9 @@ if(isset($_POST['add_tag']) or isset($_POST['save_tag'])){
 /*		 		Edit Tag				*/
 /****************************************/
 if(isset($_POST['edit_tag']) or isset($_POST['apply_tag']) ){
-	if(!empty($_POST['name']) AND !empty($_POST['id'])){		    
-		$qr=$db->update(FDBPrefix.'article_tags',array("name"=>"$_POST[name]","description"=>"$_POST[desc]"),
+        $t = striptags($_POST['name']);
+	if(!empty($t) AND !empty($_POST['id'])){		    
+		$qr=$db->update(FDBPrefix.'article_tags',array("name"=>striptags($_POST['name']),"description"=>striptags($_POST['desc'])),
 		'id='.$_POST['id']); 		
 		if($qr AND isset($_POST['edit_tag'])){				
 			notice('success',Tag_Saved);
@@ -301,7 +303,7 @@ if(isset($_POST['edit_tag']) or isset($_POST['apply_tag']) ){
 		}	
 	}
 	else 				
-		notice('error',Status_Invalid);
+		notice('error',Status_Invalid,2);
 	
 }	
 
@@ -326,13 +328,14 @@ if(isset($_POST['delete_tag']) or isset($_POST['check_tag'])){
 /****************************************/
 /*		       Edit comment				*/
 /****************************************/ 		
-if(isset($_POST['save_comment']) or isset($_POST['apply_comment'])){		
+if(isset($_POST['save_comment']) or isset($_POST['apply_comment'])){
 	if( !empty($_POST['name']) AND 
 		!empty($_POST['comment']) AND 
 		!empty($_POST['email'])) {
+		$comment = htmlentities($_POST['comment']);
 		
 		$qr = $db->update(FDBPrefix.'comment',array(				
-		"comment"=>"$_POST[comment]",
+		"comment"=>"$comment",
 		"name"=>"$_POST[name]",
 		"website"=>"$_POST[web]",
 		"email"=>"$_POST[email]",
@@ -377,11 +380,10 @@ if(!isset($_POST['save_edit']) AND !isset($_POST['apply_edit'])) {
 		if($_REQUEST['act']=='edit'){
 			$id = $_REQUEST['id'];
 			$level = USER_LEVEL;
-			$db = new FQuery();  
 			$sql = $db->select(FDBPrefix."article","*","id=$id");
-			$row = mysql_fetch_array($sql); 
-			$edlvl = mod_param('editor_level',$row['parameter']);
-			if(!$row['id'] or $level > $row['level'] or (!empty($edlvl) AND $level > $edlvl))
+			$rowc = $sql[0]; 
+			$edlvl = (int)mod_param('editor_level',$rowc['parameter']);
+			if(!$rowc['id'] or $level > $rowc['level'] or (!empty($edlvl) AND $level > $edlvl))
 				redirect('?app=article');
 		}
 	}
@@ -394,15 +396,14 @@ if(!isset($_POST['save_edit']) AND !isset($_POST['apply_edit'])) {
 // membuat fungsi sub-article yang akan di tampilkan dibawah parent_id	
 function sub_article($parent_id,$nos,$pre = null) {
 	$db = new FQuery();  
-	$db->connect(); 
 	$sql = $db->select(FDBPrefix."article_category","*","parent_id=$parent_id");
 	$no=1;
-	while($qr=mysql_fetch_array($sql)) {					
-		$db->select(FDBPrefix.'article','*',"category=$qr[id]"); 
-		$sum= mysql_affected_rows();
+	foreach($sql as $qr) {					
+		$c = $db->select(FDBPrefix.'article','*',"category=$qr[id]"); 
+		$sum= count($c );
 			
 		$sql2 = $db->select(FDBPrefix.'user_group');
-		while($qrs=mysql_fetch_array($sql2)){
+		foreach($sql2 as $qrs){
 			if($qrs['level']==$qr['level'])
 				$level = "$qrs[group_name]";
 			else					
@@ -437,7 +438,7 @@ function option_sub_cat($parent_id,$pre) {
 		$sql=$db->select(FDBPrefix."article_category","*","parent_id=$parent_id"); 
 	else
 		$sql=$db->select(FDBPrefix."article_category","*","parent_id=$parent_id AND id != $_REQUEST[id]"); 
-	while($qr = @mysql_fetch_array($sql)){
+	foreach($sql as $qr){
 		if($qr['level'] >= $_SESSION['USER_LEVEL'] ){		
 			$scat = $pcat = 0;			
 			if(isset($_REQUEST['id'])) {

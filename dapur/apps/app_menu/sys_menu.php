@@ -13,7 +13,6 @@ if($_SESSION['USER_LEVEL'] > 2)
 	redirect('index.php');
 	
 $db = new FQuery();  
-$db->connect();
 
 /****************************************/
 /*			 Add Category Menu			*/
@@ -23,14 +22,14 @@ if(isset($_POST['add_category']) or isset($_POST['save_category'])){
 	$db->connect();				
 	if(!empty($_POST['title']) AND !empty($_POST['cat']) AND !empty($_POST['level'])) {
 		$cat=strtolower(str_replace(" ","","$_POST[cat]"));	
-		$qr=$db->insert(FDBPrefix.'menu_category',array("","$cat","$_POST[title]","$_POST[desc]","$_POST[level]")); 
-		if(isset($_POST['add_category']) AND $qr ){	
+		$row=$db->insert(FDBPrefix.'menu_category',array("","$cat","$_POST[title]","$_POST[desc]","$_POST[level]")); 
+		if(isset($_POST['add_category']) AND $row ){	
 			$sql = $db->select(FDBPrefix.'menu_category','id','','id DESC' ); 	  
-			$qr = mysql_fetch_array($sql);	
+			$row = $sql[0];	
 			notice('success',Category_Menu_Saved);
-			redirect('?app=menu&view=edit_category&id='.$qr['id']);
+			redirect('?app=menu&view=edit_category&id='.$row['id']);
 		}		
-		else if(isset($_POST['save_category']) AND $qr){
+		else if(isset($_POST['save_category']) AND $row){
 			notice('success',Category_Menu_Saved);
 			redirect('?app=menu&view=category');
 		}
@@ -75,22 +74,22 @@ if(isset($_POST['edit_category']) or isset($_POST['apply_category'])){
 	$db->connect();
 	$cat=strtolower(str_replace(" ","","$_POST[cat]"));	
 	if(!empty($_POST['title']) AND !empty($_POST['cat'])){
-		$qr=$db->update(FDBPrefix.'menu_category',array("title"=>"$_POST[title]",
+		$row=$db->update(FDBPrefix.'menu_category',array("title"=>"$_POST[title]",
 		'category'=>"$cat",
 		'level'=>"$_POST[level]",
 		'description'=>"$_POST[desc]"),
 		'id='.$_POST['id']); 		
 		//edit or update catgory name
 		$sql =  $db->select(FDBPrefix.'menu'); 	  
-		while(mysql_fetch_array($sql)){	
-			$qrs=$db->update(FDBPrefix.'menu',array("category"=>"$cat"),"category='$_POST[cats]'");
+		foreach($sql as $s){	
+			$rows=$db->update(FDBPrefix.'menu',array("category"=>"$cat"),"category='$_POST[cats]'");
 		}					
-		if(isset($_POST['edit_category']) AND $qr){
+		if(isset($_POST['edit_category']) AND $row){
 			notice('loading');
 			notice('success',Category_Menu_Saved);
 			redirect('?app=menu&view=category',1);
 		}			
-		else if(isset($_POST['apply_category']) AND $qr){
+		else if(isset($_POST['apply_category']) AND $row){
 			notice('success',Category_Menu_Saved);
 			redirect(getUrl());
 		}
@@ -131,14 +130,14 @@ if(isset($_POST['save_add']) or isset($_POST['apply_add'])){
 		@$param = str_replace('"',"'","$_POST[editor]");
 		@$parameter .= $param;	
 		$param = str_replace('"',"'",$param);	
-		$qr=$db->insert(FDBPrefix.'menu',array("","$_POST[cat]","$_POST[name]","$_POST[link]","$_POST[apps]","$_POST[parent_id]","$_POST[status]","$_POST[short]", "$_POST[level]","0", "$_POST[title]","$_POST[show_title]","$_POST[sub_name]","$_POST[class]","$_POST[style]","$parameter",""));
-		if($qr AND isset($_POST['apply_add'])){
+		$row=$db->insert(FDBPrefix.'menu',array("","$_POST[cat]","$_POST[name]","$_POST[link]","$_POST[apps]","$_POST[parent_id]","$_POST[status]","$_POST[short]", "$_POST[level]","0", "$_POST[title]","$_POST[show_title]","$_POST[sub_name]","$_POST[class]","$_POST[style]","$parameter",""));
+		if($row AND isset($_POST['apply_add'])){
 			$sql = $db->select(FDBPrefix.'menu','id','','id DESC' ); 	  
-			$qr = mysql_fetch_array($sql);
+			$row = $sql[0];
 			notice('success',Menu_Saved,2);
-			redirect('?app=menu&view=edit&id='.$qr['id']);
+			redirect('?app=menu&view=edit&id='.$row['id']);
 		}
-		elseif($qr AND isset($_POST['save_add'])) {
+		elseif($row AND isset($_POST['save_add'])) {
 			notice('success',Menu_Saved,2);
 			redirect("?app=menu&cat=$_POST[cat]");
 		}
@@ -171,7 +170,7 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 		$db->connect();
 		$db->select(FDBPrefix.'menu');
 		$cat=$_POST['cat'];
-		$qr=$db->update(FDBPrefix.'menu',array(				
+		$row=$db->update(FDBPrefix.'menu',array(				
 		"category"=>"$_POST[cat]",
 		"name"=>"$_POST[name]",
 		"link"=>"$_POST[link]",
@@ -187,11 +186,11 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 		"short"=>"$_POST[short]",
 		"parameter"=>"$parameter"),
 		"id=$_POST[id]");
-		if($qr AND isset($_POST['save_edit'])){	
+		if($row AND isset($_POST['save_edit'])){	
 			notice('success',Menu_Updated);
 			redirect("?app=menu&cat=$_POST[cat]");
 		}
-		else if($qr AND isset($_POST['apply_edit'])){ 
+		else if($row AND isset($_POST['apply_edit'])){ 
 			notice('success',Menu_Updated);
 			redirect(getUrl());
 		}
@@ -213,10 +212,10 @@ if(isset($_POST['delete']) or isset($_POST['delete_confirm'])){
 		if($delete == 'noempty')		
 			notice('info',Menu_Contain_Submenu);
 		else
-			$_SESSION['NOTICE'] =notice('info',Menu_Deleted);
+			notice('info',Menu_Deleted);
 	else
-		$_SESSION['NOTICE'] =notice('error',Please_Select_Menu);
-	redirect(getUrl());
+		notice('error',Please_Select_Menu);
+		redirect(getUrl());
 }
 
 
@@ -240,10 +239,10 @@ function sub_menu($parent_id,$pre,$nos) {
 	$db->connect(); 
 	$sql =  $db->select(FDBPrefix."menu","*","parent_id=$parent_id","short ASC"); 
 	$no=1;
-	while($qr=mysql_fetch_array($sql)){
+	foreach($sql as $row){
 		/* logika status aktif atau tidak */
 		$sts = "<span style='display:none'>disable</span>";
-		if($qr['status']==1)
+		if($row['status']==1)
 			{ $stat1 ="selected"; $stat2 =""; $sts = "<span style='display:none'>enable</span>";}							
 		else
 			{ $stat2 ="selected";$stat1 ="";}				
@@ -251,15 +250,15 @@ function sub_menu($parent_id,$pre,$nos) {
 		<p class='switch'>
 			<label class='cb-enable $stat1'><span>On</span></label>
 			<label class='cb-disable $stat2'><span>Off</span></label>
-			<input type='text' value='$qr[id]' id='id' class='invisible'><input type='text' value='$qr[status]' id='type' class='invisible'>
+			<input type='text' value='$row[id]' id='id' class='invisible'><input type='text' value='$row[status]' id='type' class='invisible'>
 		</p>";												
 							
-		$name = "<a class='tips' title='".Edit."' data-placement='right' href='?app=menu&view=edit&id=$qr[id]'>$pre|_ $qr[name]</a>";
+		$name = "<a class='tips' title='".Edit."' data-placement='right' href='?app=menu&view=edit&id=$row[id]'>$pre|_ $row[name]</a>";
 							
-		$checkbox = "<input type='checkbox' name='check[]' value='$qr[id]' rel='ck'  data-parent='$parent_id'>";
+		$checkbox = "<input type='checkbox' name='check[]' value='$row[id]' rel='ck'  data-parent='$parent_id'>";
 					
 
-				if($qr['status']==1)
+				if($row['status']==1)
 				{ $stat1 ="selected"; $stat2 =""; $enable = ' enable';}							
 				else
 				{ $stat2 ="selected";$stat1 =""; $enable = 'disable';}
@@ -270,28 +269,28 @@ function sub_menu($parent_id,$pre,$nos) {
 					<i class='icon-remove-sign'></i></span></label>
 					<label class='cb-disable $stat2 tips' data-placement='right' title='".Enable."'><span>
 					<i class='icon-ok-sign'></i></span></label>
-					<input type='text' value='$qr[id]' id='id' class='invisible'>
-					<input type='text' value='$qr[status]' id='type' class='invisible'>
+					<input type='text' value='$row[id]' id='id' class='invisible'>
+					<input type='text' value='$row[status]' id='type' class='invisible'>
 				</div>";					
 				
 				/* change home page */
-				if($qr['home']==1)
+				if($row['home']==1)
 				{ $hm = "selected"; $hms = ""; }							
 				else
 				{ $hm = ""; $hms = "selected";  }		
 				$home ="
 				<div class='switch s-icon home'>
 					<label class='cb-enable $hm tips' data-placement='left' title='".Set_as_home_page."'>
-					<span style='padding: 3px 11px 1px 9px'>
+					<span style='padding-right:11px '>
 					<i class='icon-home'></i></span></label>
 					<label class='cb-disable $hms tips' data-placement='left' title='".As_home_page."'>
-					<span style='padding: 3px 11px 1px 9px'>
+					<span style='padding-right: 11px '>
 					<i class='icon-home'></i></span></label>
-					<input type='text' value='$qr[id]' data-category='$qr[category]' id='id' class='invisible'><input type='text' value='stat' id='type' class='invisible'>
+					<input type='text' value='$row[id]' data-category='$row[category]' id='id' class='invisible'><input type='text' value='stat' id='type' class='invisible'>
 				</div>";
 				
 		/* auto change default page */			
-		if($qr['global']==1)
+		if($row['global']==1)
 		{ $dm = "selected"; $dms = ""; }							
 		else
 		{ $dm = ""; $dms = "selected";  }		
@@ -301,19 +300,28 @@ function sub_menu($parent_id,$pre,$nos) {
 			</span></label>
 			<label class='cb-disable $dms tips' title='".As_default_page."'><span>
 			<i class='icon-star'></i></span></label>
-			<input type='text' value='$qr[id]'  class='invisible' id='id'><input type='text' value='fp' id='type' class='invisible'>
+			<input type='text' value='$row[id]'  class='invisible' id='id'><input type='text' value='fp' id='type' class='invisible'>
 		</div>";	
 				
-		//creat user group values	
-		$sql2=$db->select(FDBPrefix.'user_group','*',"level=$qr[level]"); 
-		$level=mysql_fetch_array($sql2);				
-		if($qr['level']==99) $level = _Public;
-		else $level = $level['group_name'];
+		if($row['level']==99) {		
+			$level = _Public;
+		} 
+		else {
+			$sql2 = $db->select(FDBPrefix.'user_group','*',"level=$row[level]"); 
+			if($sql2) { 
+				$level = $sql2[0];		
+				$level = $level['group_name']; }
+			else 	
+				$level = _Public;
+		}
 		
+		if($row["category"] == "adminpanel") {
+			$home = $default = null;
+		}
 		echo "<tr>";
-		echo "<td align='center'>$checkbox</td><td>$name</td><td class='hidden-xs hidden-sm' align='center'><div class='switch-group'>$home$default$status</div></td><td class='hidden-xs'>$qr[category]</td><td class='hidden-xs'>$qr[app]</td><td class='hidden-xs hidden-sm' align='center'>$qr[short]</td><td align='center' class=''>$level</td><td align='center' class=''>$qr[id]</td>";
+		echo "<td align='center'>$checkbox</td><td>$name</td><td class='' align='center'><div class='switch-group'>$home$default$status</div></td><td class='hidden-xs'>$row[category]</td><td class='hidden-xs'>$row[app]</td><td class='hidden-xs hidden-sm' align='center'>$row[short]</td><td align='center' class='hidden-xs'>$level</td><td align='center' class='hidden-xs'>$row[id]</td>";
 		echo "</tr>";
-		sub_menu($qr['id'],$pre."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;","$nos.$no");
+		sub_menu($row['id'],$pre."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;","$nos.$no");
 		$no++;	
 	}
 }
@@ -326,10 +334,10 @@ function option_sub_menu($parent_id,$sub = NULL,$pre) {
 	$db->connect(); 
 	if($_REQUEST['id']) $eid = "AND id!=$_REQUEST[id]"; else $eid = '';
 	$sql = $db->select(FDBPrefix."menu","*","parent_id=$parent_id $eid");  
-	while($qr=mysql_fetch_array($sql)){	
-		if($sub==$qr['id']) $s="selected"; else $s="";
-		echo "<option value='$qr[id]' $s>$pre|_ $qr[name]</option>";
-		option_sub_menu($qr['id'],$sub,$pre."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");	
+	foreach($sql as $row){	
+		if($sub==$row['id']) $s="selected"; else $s="";
+		echo "<option value='$row[id]' $s>$pre|_ $row[name]</option>";
+		option_sub_menu($row['id'],$sub,$pre."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");	
 	}	
 }
 
@@ -338,15 +346,15 @@ function option_sub_cat($parent_id,$pre) {
 	$db = new FQuery();  
 	$db ->connect(); 
 	$sql=$db->select(FDBPrefix."article_category","*","parent_id=$parent_id AND id!=$_REQUEST[id]"); 
-	while($qr=mysql_fetch_array($sql)){
+	foreach($sql as $row){
 		//select article 'info'rmation
 		$sql2=$db->select(FDBPrefix.'article','*',"id=$_REQUEST[id]"); 
-		$at=mysql_fetch_array($sql2);
+		$at=$sql2[0];
 		//select article category 'info'rmation		
 		$sql3=$db->select(FDBPrefix.'article_category','*',"id=$_REQUEST[id]"); 
-		$pd = mysql_fetch_array($sql3);
-		if($pd['parent_id']==$qr['id'] or $at['category']==$qr['id'])$s ="selected";else $s="";
-		echo "<option value='$qr[id]' $s>$pre |_ $qr[name]</option>";
-		option_sub_cat($qr['id'],$pre."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+		$pd = $sql3[0];
+		if($pd['parent_id']==$row['id'] or $at['category']==$row['id'])$s ="selected";else $s="";
+		echo "<option value='$row[id]' $s>$pre |_ $row[name]</option>";
+		option_sub_cat($row['id'],$pre."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 	}		
 }

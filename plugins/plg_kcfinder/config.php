@@ -15,17 +15,16 @@
 // IMPORTANT!!! Do not remove uncommented settings in this file even if
 // you are using session configuration.
 // See http://kcfinder.sunhater.com/install for setting descriptions
-
-if(empty($_SESSION['media_theme'])) $_SESSION['media_theme']="oxygen";
+if(empty($_SESSION['media_theme']))	$_SESSION['media_theme']="oxygen";
+$_SESSION['media_dir'] = "media";
 $_CONFIG = array(
     'disabled' => false,
     'denyZipDownload' => false,
     'denyUpdateCheck' => true,
     'denyExtensionRename' => false,
     'theme' => "$_SESSION[media_theme]",
-
-    'uploadURL' => "../../media",
-    'uploadDir' => "",
+    'uploadURL' => "../../$_SESSION[media_dir]",
+    'uploadDir' => "../../$_SESSION[media_dir]",
 
     'dirPerms' => 0755,
     'filePerms' => 0644,
@@ -55,6 +54,7 @@ $_CONFIG = array(
         'images'  =>  "*img",
         'files'   =>  "",
         'flash'   =>  "swf",
+        'videos'   =>  "swf flv avi mpg mpeg webm mov wmv mp4",
 
         // TinyMCE types
         'file'    =>  "",
@@ -89,16 +89,9 @@ $_CONFIG = array(
     'cookiePrefix' => 'KCFINDER_',
 
     // THE FOLLOWING SETTINGS CANNOT BE OVERRIDED WITH SESSION CONFIGURATION
-    '_check4htaccess' => false,
-	
-    '_tinyMCEPath' => "/tiny_mce",
+    '_check4htaccess' => true,
 
     '_sessionVar' => &$_SESSION['KCFINDER'],
-    //'_sessionLifetime' => 30,
-    //'_sessionDir' => "/full/directory/path",
-
-    //'_sessionDomain' => ".mysite.com",
-    //'_sessionPath' => "/my/path",
 );
 
 ?>

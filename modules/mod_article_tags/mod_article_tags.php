@@ -8,22 +8,11 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-$height	= mod_param('height',$modParam);
-$thumbW = mod_param('thumbW',$modParam);
-$thumbH = mod_param('thumbH',$modParam);
-$limit	= mod_param('limit',$modParam);
-$limitd = mod_param('limit',$modParam)+10;
-$filter = mod_param('filter',$modParam);
-$cat 	= mod_param('cat',$modParam);
-$showImg = mod_param('showImg',$modParam);
-
-
 $db 	= new FQuery();  
-
 $level	= Level_Access;
-$tags = '';
-$sql = $db->select(FDBPrefix."article",'tags',"status = 1 AND tags != '' $level","RAND() LIMIT 50");
-while($tag = mysql_fetch_array($sql)) {
+$tags	= '';
+$qry = $db->select(FDBPrefix."article",'tags',"status = 1 AND tags != '' $level","RAND() LIMIT 50");
+foreach($qry as $tag) {
 	$tags .= $tag['tags'].",";
 }
 
@@ -35,17 +24,10 @@ foreach($tagz as $tag) {
 	$link = str_replace(" ","-","?app=article&tag=$tag");
 	$link = make_permalink($link);
 	$ltag = strtolower($tag);
-	
+	$tag = str_replace(" ","_",$tag);
 	if(!empty($tag) AND $tag != $tagb)
-	$tags .= "<a class='tag$size tag-$ltag' href='$link'>$tag</a> ";		
+	$tags .= "<a class='tag$size tag-$ltag' href='$link'>#$tag</a> ";		
 	$tagb = $tag;			
 }
 
 echo "<div class='article-tags'>$tags</div>";
-
-
-
-
-
-
-

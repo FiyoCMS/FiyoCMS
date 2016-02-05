@@ -11,14 +11,15 @@ defined('_FINDEX_') or die('Access Denied');
 if($_SESSION['USER_LEVEL'] > 2){
 	alert('info','Redirecting...');
 	alert('loading');
-	htmlRedirect('?app=user&view=group');
+	redirect('?app=user&view=group');
 }
 
 $db = @new FQuery() or die;  
 $db->connect(); 
 
 $sql=$db->select(FDBPrefix."user_group","*","id=$_REQUEST[id]"); 
-$qr = mysql_fetch_array($sql); 
+$qr = $sql[0]; 
+if(!$qr) redirect('?app=user&view=group');
 if($qr['id']==1 or $qr['id']==2 or $qr['id']==3 or $qr['level']==1 or $qr['level']==2 or $qr['level']==3) {$dis="readonly"; $dis2 = ""; }
 else {$dis =  null; $dis2 = "spinner";}
 
@@ -28,8 +29,8 @@ else {$dis =  null; $dis2 = "spinner";}
 		<div class="warp_app_header">
 			<div class="app_title">User Group</div>
 			<div class="app_link">
-				<button type="submit" class="btn btn-success" title="<?php echo Save; ?>" value="Next" name="save_group"><i class="icon-ok"></i> <?php echo Save; ?></button>				
-				<button type="submit" class="btn btn-metis-2" title="<?php echo Save_and_Quit; ?>" value="Next" name="edit_group"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>
+				<button type="submit" class="btn btn-success" title="<?php echo Save; ?>" value="Next" name="save_group"><i class="icon-check"></i> <?php echo Save; ?></button>				
+				<button type="submit" class="btn btn-metis-2" title="<?php echo Save_and_Quit; ?>" value="Next" name="edit_group"><i class="icon-check-circle"></i> <?php echo Save_and_Quit; ?></button>
 				</button>	
 				<a class="danger btn btn-default" href="?app=user&view=group" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 				<?php printAlert(); ?>
@@ -48,7 +49,7 @@ else {$dis =  null; $dis2 = "spinner";}
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo User_Group_level; ?>">Level *</span></td>
-					<td><input class="numeric <?php echo "$dis2" ;?>" type="text" id="level" name="level" size="1" min="3" max="98" <?php echo "value='$qr[level]' $dis" ;?> required>
+					<td><input class="numeric <?php echo "$dis2" ;?>" type="text" id="level" name="level" size="1" min="1" max="98" <?php echo "value='$qr[level]' $dis" ;?> required>
 					
 					<input class="numeric" type="hidden"name="levels" <?php echo "value='$qr[level]'" ;?>></td>
 				</tr>

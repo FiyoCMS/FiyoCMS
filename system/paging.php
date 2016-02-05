@@ -11,12 +11,13 @@
 /**
  * Class nicePaging
  */
-class paging{
+class Paging extends FQuery {
 	private $conn;
 	private $page;
 	private $totalPages;
 	private $separator;
 	private $maxPages;
+	public  $dataCount;
 	public function __construct($conn=null){
 		$this->conn=$conn;
 		$this->separator="";
@@ -55,14 +56,21 @@ class paging{
             $sql .= ' WHERE '.$where;
         if($order != null)
             $sql .= ' ORDER BY '.$order;
-			
-		if($this->conn==null)
-			$result = mysql_query($sql);
-		else
-			$result = mysql_query($sql, $this->conn);
+		
+		static $cons = false;
+		try{
+			$pdo = $this-> connect();       
+			$pdo = $this->db->prepare($sql);
+			$pdo->bindParam(':id', $id);
+			$pdo->execute();
+		}
+		catch(PDOException $e){if(!$cons) {				
+			$cons = true;
+			}
+		}
 		
 		if($rowsPerPage<1) $rowsPerPage = 1;
-		$totalRows = mysql_num_rows($result);
+		$this-> dataCount = $totalRows = count($pdo->fetchAll(PDO::FETCH_ASSOC));
 		$this->totalPages=intval($totalRows/$rowsPerPage) + ($totalRows%$rowsPerPage==0 ? 0 : 1);
 		if($this->totalPages<1){
 			$this->totalPages=1;
@@ -81,10 +89,22 @@ class paging{
 			$this->page=0;
 		}
 		
-		$result=mysql_query($sql." LIMIT ".$this->page*$rowsPerPage.", ".$rowsPerPage);
+		$sql = $sql." LIMIT ".$this->page*$rowsPerPage.", ".$rowsPerPage;
 		$this->page+=1;
 		
-		return $result;
+		static $cons = false;
+		try{
+			$pdo = $this-> connect();       
+			$pdo = $this->db->prepare($sql);
+			$pdo->bindParam(':id', $id);
+			$pdo->execute();
+		}
+		catch(PDOException $e){if(!$cons) {				
+			$cons = true;
+			}
+		}
+		
+        return $pdo->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	/**

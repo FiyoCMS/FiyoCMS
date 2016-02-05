@@ -12,7 +12,7 @@ $db = @new FQuery() or die;
 $db->connect();  
 
 $sql = $db->select(FDBPrefix.'article_category','*',"id=$_REQUEST[id]"); 
-$row = mysql_fetch_array($sql); 
+$row = $sql[0]; 
 
 if($_SESSION['USER_LEVEL'] > $row['level'] ){
 	alert('info','Redirecting...');
@@ -31,8 +31,8 @@ $(function() {
 		<div class="warp_app_header">		
 			<div class="app_title"><?php echo Edit_Category; ?></div>
 			<div class="app_link">
-				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply_category"><i class="icon-ok"></i> <?php echo Save; ?></button>	
-				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="edit_category"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>				
+				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply_category"><i class="icon-check"></i> <?php echo Save; ?></button>	
+				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="edit_category"><i class="icon-check-circle"></i> <?php echo Save_and_Quit; ?></button>				
 				<a class="danger btn btn-default" href="?app=article&view=category" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 			</div>			
 			<?php printAlert(); ?>
@@ -56,7 +56,7 @@ $(function() {
 					<?php			
 						$level = $row['level'];	
 						$sql2=$db->select(FDBPrefix.'article_category','*','parent_id=0 AND id!='.$_REQUEST['id']);
-						while($row2=mysql_fetch_array($sql2)){	
+						foreach($sql2 as $row2){	
 							if($_SESSION['USER_LEVEL'] <= $row['level'])
 							if($row['parent_id']==$row2['id'])$s="selected";else$s="";
 							echo "<option value='$row2[id]' $s>$row2[name]</option>";
@@ -69,15 +69,14 @@ $(function() {
 					<td class="row-title"><span class="tips" title="<?php echo Category_level; ?>"><?php echo Access_Level; ?></span></td>
 					<td><select name="level" >
 						 <?php
-							$sql2 = $db->select(FDBPrefix.'user_group');
-							while($user=mysql_fetch_array($sql2)){
-							
-							if($_SESSION['USER_LEVEL'] <= $user['level'])
-								if($user['level']==$level){
-									echo "<option value='$user[level]' selected>$user[group_name]</option>";}
-								else {
-									echo "<option value='$user[level]'>$user[group_name] </option>";
-								}
+							$sql3 = $db->select(FDBPrefix.'user_group');
+							foreach($sql3 as $user){							
+								if($_SESSION['USER_LEVEL'] <= $user['level'])
+									if($user['level']==$level){
+										echo "<option value='$user[level]' selected>$user[group_name]</option>";}
+									else {
+										echo "<option value='$user[level]'>$user[group_name] </option>";
+									}
 							}
 							if($level==99) $s="selected";else $s="";
 							echo "<option value='99' $s>"._Public."</option>"

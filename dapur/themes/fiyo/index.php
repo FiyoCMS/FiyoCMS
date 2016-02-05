@@ -39,7 +39,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 					<i class="icon-reorder"></i>
 				</a>
 				<a data-placement="bottom" class="side-bar right userSideBar">
-					<i class="icon-ellipsis-horizontal"></i>
+					<i class="icon-user"></i>
 				</a>
 				<span class="navbar-logo" href="index.php"></span>
 			</header>
@@ -69,10 +69,9 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
             <div class="inner">
 				<div id="alert_top"></div>				
 				<div class="crumbs"> 
-					  <ul id="breadcrumbs" class="breadcrumb stats"> 
-						<li><a href="index.php"><i class="icon-home"></i>Dashboard</a></li>
-						<!--span>_BREADCRUMB_</span-->
-					  </ul> 
+					<span class="crumb"> 
+					<?php require('module/breadcrumb.php'); ?>
+					</span> 
 					  <span class="calendar"> 
 							<?php echo date("l, d F Y"); ?>
 					  </span> 
@@ -83,8 +82,8 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 				</div>
 				<div class="line-bottom">
 					<div class="crumbs"> 
-						<span class="right "><a href="http://www.fiyo.org/" target="_blank"><i class=" icon-globe"></i><?php echo Comunity ?></a> <span style="color:#ccc; margin: 2px;">//</span> 
-						<a href="http://docs.fiyo.org/" target="_blank"><i class="icon-book"></i><?php echo Documentation ?></a> <span style="color:#ccc; margin: 2px;">//</span> 
+						<span class="right "><a href="http://www.fiyo.org/" target="_blank" class="hidden-xs "><i class=" icon-globe"></i><?php echo Comunity ?></a> <span style="color:#ccc; margin: 2px;"  class="hidden-xs ">//</span> 
+						<a href="http://docs.fiyo.org/" target="_blank" class="hidden-xs "><i class="icon-book"></i><?php echo Documentation ?></a> <span style="color:#ccc; margin: 2px;" class="hidden-xs ">//</span> 
 						
 						<?php echo Version; ?> : <span class="version-val"><b><?php echo siteConfig('version'); ?></b></span>
 						
@@ -104,7 +103,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 </div> 
 <?php include('module/modal.php'); ?>
 <!-- /#wrap -->
-<?php if(!checkMobile() or !isset($_SESSION['PLATFORM'])) : ?>	
+<?php if(!checkMobile() AND !isset($_SESSION['PLATFORM'])) : ?>	
 <script src="<?php echo AdminPath; ?>/js/loader.js"></script>
 <?php else : ?>
 <script src="<?php echo AdminPath; ?>/js/loader.min.js"></script>

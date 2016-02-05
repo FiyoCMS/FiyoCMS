@@ -1,5 +1,4 @@
 <?php defined('_FINDEX_') or die('Access Denied!'); ?>
-{loadTime}
 <!DOCTYPE html>
 <html lang="<?php echo SiteLang;  ?>">
 <head>
@@ -10,11 +9,11 @@
 	<meta name="keywords" content="<?php echo MetaKeys;  ?>" />
 	<meta name="description" content="<?php echo MetaDesc;  ?>" />
 	<meta name="generator" content=" Fiyo CMS Integrate Design Easily!" />
-	<link rel="shortcut icon" type="image/x-icon" href="<?php echo FThemePath; ?>/css/images/favicon.ico" />
-	<link rel="stylesheet" href="<?php echo FThemePath; ?>/css/style.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="<?php echo FThemePath; ?>/css/font.css" type="text/css" media="all" />
-	<script type="text/javascript" src="<?php echo FThemePath; ?>/js/jquery-2.0.3.min.js"></script>
-	<script src="<?php echo FThemePath; ?>/js/functions.js" type="text/javascript"></script>
+	<link rel="shortcut icon" type="image/x-icon" href="/css/images/favicon.ico" />
+	<link rel="stylesheet" href="/css/style.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="/css/font.css" type="text/css" media="all" />
+	<script type="text/javascript" src="/js/jquery-2.0.3.min.js"></script>
+	<script src="/js/functions.js" type="text/javascript"></script>
 </head>
 <body>
 	<!-- wraper -->
@@ -29,7 +28,7 @@
 					<span><?php echo SiteTitle; ?></span></div>
 					<!-- search -->
 					<div class="search">
-						<?php echo loadModule('search') ?>
+					{module:search}
 					</div>
 					<!-- end of search -->
 				</header>
@@ -37,18 +36,18 @@
 				<!-- navigation -->
 				<nav id="navigation">	
 					<a href="#" class="nav-btn">HOME<span class="arr"></span></a>
-					<?php echo loadModule('mainmenu') ?>
+					{module:mainmenu}
 				</nav>
 				<!-- end of navigation -->
 				<!-- slider -->
 				<div class="m-slider">
-					<?php loadModule('slide');?>
+				{module:slide}
 				</div>		
 				<!-- end of slider -->
 				
 				<!-- main -->
 				<div class="main">
-				<?php if(checkModule('top')) : ?>		
+				{chkmod:top}	
 					<section class="cols">
 						<div class="col">							
 							<?php loadModule('top1');?>
@@ -61,14 +60,14 @@
 						</div>
 						<div class="cl"></div>
 					</section>
-				<?php endif; ?>
+					{/chkmod}
 					<section class="post">
 						<?php if(checkModule('right')) : ?>
 						<div class="col left-box">
 						<?php else : ?>
 						<div class="col">
 						<?php endif; ?>
-							<?php loadApps(); ?>
+						{loadApps}
 						</div>		
 						<?php if(checkModule('right')) : ?>
 						<div class="col  right-box">			
@@ -94,7 +93,7 @@
 				
 				<div id="footer">
 					<div class="footer-bottom">
-						<p class="copy">© Copyright <?php echo siteConfig('site_name')." ".date("Y"); ?><br/><strong>My Engine is <a href="http://www.fiyo.org" target="_blank">Fiyo CMS</a></strong></p>
+						<p class="copy">© Copyright {sitename} <?php echo date("Y"); ?><br/><strong>My Engine is <a href="http://www.fiyo.org" target="_blank">Fiyo CMS</a></strong></p>
 						<div class="cl"></div>
 					</div>
 				</div>

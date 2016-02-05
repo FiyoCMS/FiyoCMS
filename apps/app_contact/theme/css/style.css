@@ -127,7 +127,7 @@ ul.paging li,ul.tags li {display:inline; margin:0 2px; }
 	font-style: italic;
 	opacity: .7;
 }
-#contact .group-contact span + span:before{
+#contact .group-contact span.email + span:before{
 	content: " // ";
 	opacity: .4;
 }

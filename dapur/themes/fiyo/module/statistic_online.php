@@ -1,8 +1,8 @@
 <?php 
 /**
-* @version		2.0
+* @version		2.0.2
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2014 Fiyo CMS.
+* @copyright	Copyright (C) 2015 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
@@ -11,18 +11,22 @@ if(!isset($_SESSION['USER_ID']) or !isset($_SESSION['USER_ID']) or $_SESSION['US
 define('_FINDEX_','BACK');
 
 require_once ('../../../system/jscore.php');
-$db = new FQuery();  
-$db->connect(); 
 
+$so = FDBPrefix."statistic_online";
+$row = $db->select("$so","COUNT(*) AS val");
+$online = angka($row[0]['val']);
 
-$online = angka(FQuery('statistic_online'));
-$total = angka(FQuery('statistic'));
+$st = FDBPrefix."statistic";
+$row = $db->select("$st","COUNT(*) AS val");
+$total = angka($row[0]['val']);
 
 $dtf = date('Y-m-d 00:00:00');
-$today = angka(FQuery('statistic',"time >= '$dtf'","","","time ASC"));
+$row = $db->select("$st","COUNT(*) AS val","time >= '$dtf'");
+$today = angka($row[0]['val']);
 
 $dtf = date('Y-m-d 00:00:00',strtotime("-1 Months"));
-$month = angka(FQuery('statistic',"time >= '$dtf'","","","time ASC"));
+$row = $db->select("$st","COUNT(*) AS val","time >= '$dtf'");
+$month = angka($row[0]['val']);
 	
 $timer = time() - 300;
 $db->delete(FDBPrefix.'statistic_online',"time < $timer");

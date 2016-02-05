@@ -77,14 +77,14 @@ $(document).ready(function() {
 	<table class="data">
 		<thead>
 			<tr>								  
-				<th width="1%" class="no" colspan="0" id="ck">  
+				<th style="width:1% !important;" class="no" colspan="0" id="ck">  
 					<input type="checkbox" id="checkall" target="check[]"></th>				
-				<th style="width:20% !important;"><?php echo Name; ?></th>
-				<th style="width:20% !important;">Username</th>
-				<th style="width:5% !important; text-align: center;" class="no">Status</th>
-				<th style="width:25% !important; text-align: center;">Group</th>
-				<th style="width:25% !important;">Email</th>
-				<th style="width:5% !important;text-align: center;">ID</th>
+				<th style="width:30% !important;"><?php echo Name; ?></th>
+				<th style="width:30% !important;">Username</th>
+				<th style="width:10% !important; text-align: center;" class="no">Status</th>
+				<th style="width:25% !important; text-align: center;" class='hidden-xs'>Group</th>
+				<th style="width:25% !important;" class='hidden-xs'>Email</th>
+				<th style="width:5% !important;text-align: center;" class='hidden-xs'>ID</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -94,54 +94,54 @@ $(document).ready(function() {
 		$UserLevel =  userInfo('level');
 		$sql=$db->select(FDBPrefix.'user','*',"level >= $UserLevel","status ASC, ID DESC");
 		$no=1;
-		while($qr=mysql_fetch_array($sql)){
+		foreach($sql as $row){
 			$checkbox = null;
-			$group = oneQuery("user_group","level",$qr['level'],'group_name');
-			if($qr['status']==1)
+			$group = oneQuery("user_group","level",$row['level'],'group_name');
+			if($row['status']==1)
 				{ $stat1 ="selected"; $stat2 ="";}							
 			else
 				{ $stat2 ="selected";$stat1 ="";}	
 					
 			$UserId =  userInfo('id');
 				
-			if($qr['status']==1)
+			if($row['status']==1)
 			{ $stat1 ="selected"; $stat2 =""; $enable = ' enable';}							
 			else
 			{ $stat2 ="selected";$stat1 =""; $enable = 'disable';}
 				
-			if($qr['level'] != 1 AND $_SESSION['USER_LEVEL'] < $qr['level'] or $_SESSION['USER_LEVEL'] == 1 AND $qr['id'] != $_SESSION['USER_ID'] ){
+			if($row['level'] != 1 AND $_SESSION['USER_LEVEL'] < $row['level'] or $_SESSION['USER_LEVEL'] == 1 AND $row['id'] != $_SESSION['USER_ID'] ){
 				
 				$status ="<span class='invisible'>$enable</span>
 				<div class='switch s-icon activator activa'>
 					<label class='cb-enable $stat1 tips' data-placement='right' title='".Disable."'><span>
 					<i class='icon-remove-sign'></i></span></label>
-					<label class='cb-disable $stat2 tips' data-placement='right' title='".Enable."'><span>
-					<i class='icon-ok-sign'></i></span></label>
-					<input type='hidden' value='$qr[id]' class='number invisible'>
-					<input type='hidden' value='$qr[status]'  class='type invisible'>
+					<label class='cb-disable $stat2 tips' data-placement='left' title='".Enable."'><span>
+					<i class='icon-check-circle'></i></span></label>
+					<input type='hidden' value='$row[id]' class='number invisible'>
+					<input type='hidden' value='$row[status]'  class='type invisible'>
 				</div>";	
 				//checkbox
-				$checkbox = "<input type='checkbox' name='check[]' value='$qr[id]' rel='ck'>";
+				$checkbox = "<input type='checkbox' name='check[]' value='$row[id]' rel='ck'>";
 			}
 			else  {
 				$status ="<span class='invisible'>$enable</span>
-					<label class='$stat2 tips icon-active' data-placement='right' title='".Enable."'><span>
-					<i class='icon-ok-sign'></i></span></label>
+					<label class='$stat2 tips icon-active' data-placement='left' title='".Enable."'><span>
+					<i class='icon-check-circle'></i></span></label>
 				";
 				$checkbox = "<span class='icon lock'></lock>";
 			}
 			
-			if($qr['level'] >= $_SESSION['USER_LEVEL'] or $_SESSION['USER_LEVEL'] == 1) {
-				$name ="<a class='tips' data-placement='right' title='".Edit."' href='?app=user&act=edit&id=$qr[id]'>$qr[name]</a>";
-				$user ="<a class='tips' data-placement='right' title='".Edit."' href='?app=user&act=edit&id=$qr[id]'>$qr[user]</a>";
+			if($row['level'] >= $_SESSION['USER_LEVEL'] or $_SESSION['USER_LEVEL'] == 1) {
+				$name ="<a class='tips' data-placement='right' title='".Edit."' href='?app=user&act=edit&id=$row[id]'>$row[name]</a>";
+				$user ="<a class='tips' data-placement='right' title='".Edit."' href='?app=user&act=edit&id=$row[id]'>$row[user]</a>";
 			}
 			else  {
-				$name ="$qr[name]";
-				$user ="$qr[user]";
+				$name ="$row[name]";
+				$user ="$row[user]";
 			}
 			
 			echo "<tr>";
-			echo "<td align='center'>$checkbox</td><td>$name</td><td>$user</td><td align=center>$status</td><td align='center'>$group</td><td>$qr[email]</td><td align='center'>$qr[id]</td>";
+			echo "<td align='center'>$checkbox</td><td>$name</td><td>$user</td><td align='center'>$status</td><td align='center' class='hidden-xs'>$group</td><td class='hidden-xs'>$row[email]</td><td align='center' class='hidden-xs'>$row[id]</td>";
 			echo "</tr>";
 			$no++;	
 		}

@@ -49,7 +49,7 @@ addCss("apps/app_theme/libs/styles/default/default.css");
 				data: "src="+btn.attr('name')+"&content="+content,
 				success: function(data){							
 				notice("<?php alert("success",File_Saved,true); ?>");		
-				btn.html('<i class="icon-ok-sign"></i> <?php echo Save; ?>');
+				btn.html('<i class="icon-check-circle"></i> <?php echo Save; ?>');
 				}
 			});
 		});
@@ -61,8 +61,7 @@ addCss("apps/app_theme/libs/styles/default/default.css");
 	<div class="panel box"> 		
 		<header>
 			<h5><?php echo @$theme_name; ?>
-			<button type="submit" class="btn top-btn-file save-file-theme  btn-metis-2" id="save-file"><i class="icon-ok-sign"></i> <?php echo Save; ?></button>
-			<span class='file-title'></span></h5>
+			<span class='file-title'></span></h5><button type="submit" class="btn top-btn-file save-file-theme  btn-metis-2" id="save-file"><i class="icon-check-circle"></i> <?php echo Save; ?></button>
 		</header>
 		<div class="box-theme">
 		<div class="tree-theme scrolling">

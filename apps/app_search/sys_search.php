@@ -16,12 +16,12 @@ class searchArticle {
 		
 		/* Set Access_Level */
 		$accessLevel = Level_Access;	
-			
-		$q = str_replace("'","",$q);
+		
 		$q = str_replace("/","",$q);
 		$q = str_replace("\\","",$q);
-		$q = str_replace('"',"",$q);
 		$q = str_replace('  '," ",$q);
+		$q = str_replace("'",'"',$q);
+		$q = htmlentities($q);
 		
 		if(empty($q)){
 			$q = $_SESSION['search'];
@@ -43,16 +43,15 @@ class searchArticle {
 		$user 		= FQuery('user',"`name` LIKE  '%$q%'",'id');
 		
 		/* Check total article by query */
-		FQuery('article',"status=1 AND (`author_id` ='$user' $condition) $accessLevel");
-		$total = mysql_affected_rows();
 		
 		/* paging query */
-		$result=$paging->pagerQuery(FDBPrefix.'article',"*,DATE_FORMAT(date,'%d %M %Y') as date,DATE_FORMAT(date,'%Y-%m-%d %H:%i:%s') as order_date",
+		$result = $paging->pagerQuery(FDBPrefix.'article',"*,DATE_FORMAT(date,'%d %M %Y') as date,DATE_FORMAT(date,'%Y-%m-%d %H:%i:%s') as order_date",
 		"status=1 AND (`author_id` ='$user' $condition) 
 		$accessLevel",'order_date DESC',$rowsPerPage);
 		$no=0;
-		$jml = mysql_affected_rows();
-		while($qr=mysql_fetch_array($result)) {
+		$total = $paging -> dataCount;
+		$jml = count($result);
+		foreach($result as $qr) {
 			//category
 			$category = oneQuery('article_category','id',$qr['category'],'name');
 			$catlink  = make_permalink("?app=article&view=category&id=$qr[category]");	
@@ -138,8 +137,7 @@ class searchArticle {
 				$no++;
 			}
 			
-			FQuery('article',"status=1 AND (`author_id` ='$user' $condition) $accessLevel");
-			$jml= mysql_affected_rows();
+			$jml= $total;
 			if($jml>$rowsPerPage)
 				$pagelink = $paging->createPaging($link);	
 			else

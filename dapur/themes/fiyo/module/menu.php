@@ -11,6 +11,7 @@ defined('_FINDEX_') or die('Access Denied');
 $db = new FQuery();  
 $db->connect();
 
+if(isset($_SERVER['HTTPS'])) $http = "https"; else $http = "http";
 if(isset($_GET['app'])) $link = $_GET['app']; else $link = 'dashboard';
 ?>
 <!-- #menu -->
@@ -18,11 +19,11 @@ if(isset($_GET['app'])) $link = $_GET['app']; else $link = 'dashboard';
 <?php	
 $sql = $db->select(FDBPrefix."menu","*","category='adminpanel' AND status=1  AND parent_id=0 ".Level_Access,"short ASC");
 $no = 1;
-$sum = mysql_affected_rows();	
+$sum = count($sql);	
 
-while($menu=mysql_fetch_array($sql)) {				
+foreach($sql as $menu) {				
 	$subtitle = $pid = "";			
-	$app2 = str_replace("http://".siteConfig('backend_folder')."/index.php","",$menu['link']);
+	$app2 = str_replace("$http://".siteConfig('backend_folder')."/index.php","",$menu['link']);
 	$app = $menu['sub_name'];
 	$ac = false;
 	if(isset($_REQUEST['app']))
@@ -49,7 +50,7 @@ while($menu=mysql_fetch_array($sql)) {
 				$sql2=$db->select(FDBPrefix.'apps','*',"type = 1 or type = 2","name ASC");
 				$sum=mysql_num_rows($sql2);
 				echo "<ul class=\"sub-menu collapse\" id=\"nav-$menu[id]\">";
-				while($row=mysql_fetch_array($sql2)) {				
+				foreach($row=mysql_fetch_array($sql2)) {				
 					$fd=str_replace("app_","","$row[folder]");
 					echo "<li><a class='link' href='?app=$fd'><i class='icon-list-alt'></i> $row[name]</a></li>";
 				}
@@ -80,11 +81,11 @@ function subsmenu($parent_id,$sub = null){
 	if($sub == 'apps')$short = 'name ASC';  else  $short = 'short ASC';
 	$level = Level_Access;
 	$menus = $db->select(FDBPrefix."menu","*","parent_id=$parent_id AND status=1 $level","$short"); 
-	$sum = mysql_affected_rows();		
+	$sum = count($menus);
 	$no = 1;
-	if(mysql_num_rows($menus)>0) {
+	if($sum>0) {
 		echo "<ul class=\"sub-menu collapse\" id='nav-$parent_id'>";		
-		while($menu = mysql_fetch_array($menus)){	
+		foreach($menus as $menu){	
 			$link = @$menu['link'];			
 			$link = @$menu['link'];			
 			$subtitle 	= '';	
@@ -116,13 +117,14 @@ function subsmenu($parent_id,$sub = null){
 			if($app = 'menu' AND $link == '?app=menu&view=add') {
 				$level = Level_Access;
 				$sql2=$db->select(FDBPrefix.'menu_category',"*","id > 0  $level"); 
-				$sum=mysql_num_rows($sql2);
 				$no=1;
-				while($menu=mysql_fetch_array($sql2)) {
+				foreach($sql2 as $menu) {
 					$sump = FQuery("menu","category='$menu[category]' AND home=1");
 					$summ = FQuery("menu","category='$menu[category]'");
-					if($sump){$sump="<span class='label label-danger home-label'>home</span>";}
-					else $sump="";
+					if($sump)
+						$sump="<span class='label label-danger home-label'>home</span>";
+					else 
+						$sump="";
 					echo "<li class='list-menu menu-$menu[category]'><a class='link' href='?app=menu&cat=$menu[category]'><i class='icon-list-alt'></i>$menu[title]<span class='label label-primary'>$summ</span>$sump</a></li>";
 					$no++;
 				}
@@ -145,7 +147,7 @@ if(isset($_SESSION['PLATFORM'])) $f = FAdmin; else $f = '';
 
 <!-- /#menu -->
 <script language="javascript" type="text/javascript">
-function loadUrl(url) {
+function loadUrl(url) {						
 	$("#loadingbar").remove();
 	var dataurl = $(url).attr('href');
 	var n = dataurl.search('#');
@@ -157,6 +159,7 @@ function loadUrl(url) {
 	if(dataurl == 'index.php') url = '?theme=blank';
 	else if(dataurl) url = dataurl+'&theme=blank';
 	if(dataurl) {
+					var gurl = url;
 		var w = $("#loadingbar");
 	  	$.ajax({
 			url: '<?php echo $f;?>'+url,
@@ -175,31 +178,37 @@ function loadUrl(url) {
 				$('.mCSB_container').css('top',0);
 				
 				if(data == 'Redirecting...' || data == 'Access Denied!')
-				window.location.replace(location.href);
-				else
-				$("#mainApps").html(data);
-				
-				w.animate({width:'101%'},100).fadeOut('fast');
-				setTimeout(function() {
-				  w.remove();
-				}, 1100);
-				var z = $(".load-time").val();
-				$("#load-time").html(z);	
-				$('body').removeClass('hide-sidebar');
-				$('body').removeClass('user-sidebar');
-				noticeabs();
-				loader();
-				loadSpinner();
-				loadChoosen();
-				loadScrollbar();
-				$('#content a[href]').on('click', function(e){				
-					if (!$(this).attr('target') ){
-						if ($(this).attr('href')!== window.location.hash){
-							e.preventDefault();	
-							loadUrl(this);
+					window.location.replace(location.href);
+				else {
+					$("#mainApps").html(data);
+					w.animate({width:'101%'},100).fadeOut('fast');
+					setTimeout(function() {
+					  w.remove();
+					}, 1100);
+					var z = $(".load-time").val();
+					$("#load-time").html(z);	
+					$.ajax({
+						url: "<?php echo FAdminPath; ?>/module/breadcrumb.php",
+						data: gurl+"&access",
+						success: function(data){							
+							$(".crumb").html(data);
 						}
-					}
-				});
+					});
+					$('.scrolling').removeClass('hide-sidebar');
+					noticeabs();
+					loader();
+					loadSpinner();
+					loadChoosen();
+					loadScrollbar();				
+					$('#content a[href]').on('click', function(e){
+						if (!$(this).attr('target') ){
+							if ($(this).attr('href')!== window.location.hash){
+								e.preventDefault();	
+								loadUrl(this);
+							}
+						}
+					});
+				}
 			}
 		});
 	}
@@ -216,7 +225,6 @@ window.onpopstate = function(e){
 				$("#mainApps").html(data);
 				var z = $(".load-time").val();
 				$("#load-time").html(z);
-				$('body').removeClass('hide-sidebar');
 				w.animate({width:'101%'},100).delay(60).fadeOut('fast');
 				setTimeout(function() {
 				  w.remove();

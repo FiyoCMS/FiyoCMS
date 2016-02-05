@@ -47,9 +47,9 @@ if(isset($text)) :
 			<input type="hidden" value="<?php echo $id; ?>" id="article-id" />
 			<input type="hidden" value="<?php echo $_SESSION["ARTICLE_EDITOR_$id"]; ?>" id="article-revert" />
 		</div>
-		<div id="editor-panel"> 
-			<input type="submit" value="Save" class="save editor-button" title="Save"/>	
-			<input type="submit" value="Revert" class="revert editor-button" title="Revert to last saved"/>	
+		<div id="editor-panel" > 
+			<input type="submit" value="Save" style="display: none;" class="save editor-button" title="Save"/>	
+			<input type="submit" value="Revert" style="display: none;" class="revert editor-button" title="Revert to last saved"/>	
 		</div>
 		
 		<?php
@@ -256,6 +256,7 @@ $(function() {
 		$(this).focus();
 		CKEDITOR.disableAutoInline = true;
 		var editor = CKEDITOR.inline( 'article-main' );
+		$('#editor-panel').show();
 			
 		
 	});
@@ -302,7 +303,7 @@ $(function() {
 			url: "<?php echo FUrl; ?>apps/app_article/controller/editor.php",
 			type: "POST",
 			data: "flocal=<?php echo FLocal; ?>&_content_article="+content+"&id="+id+"&uid=+<?php echo USER_ID; ?>",
-			success: function(data){		
+			success: function(data){
 				$(".editor-button.save").attr('value','Saved');			
 				$("#article-main").css({opacity: "1"});
 				$("#article-main").removeClass("saving");

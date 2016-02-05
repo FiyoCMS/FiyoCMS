@@ -49,18 +49,15 @@ $(document).ready(function() {
 		<tbody>
 		<?php
 			$db = new FQuery();  
-			$db->connect(); 
-			$sql=$db->select(FDBPrefix.'contact','*','status=1',"name ASC");
-			$qr = $db->getResult();
+			$ctc = FDBPrefix.'contact';
+			$ctg = FDBPrefix.'contact_group';
+			$sql = $db->select("$ctc, $ctg","*","status=1 AND $ctc.group_id = $ctg.group_id","$ctc.id ASC");
 			$no=1;
-			while($qr=mysql_fetch_array($sql)){	
-				$sql2 = $db->select(FDBPrefix.'contact_group',"name","id=$qr[group_id]"); 
-				$category = mysql_fetch_array($sql2);
-				$category = $category['name'];		
+			foreach($sql as $row){			
 					
-				$name ="<a class='tips ctselect' title='Click to select article \"$qr[name]\"'  rel='$qr[id]' name='$qr[name]'>$qr[name]</a>";
+				$name ="<a class='tips ctselect' title='Click to select article \"$row[name]\"'  rel='$row[id]' name='$row[name]'>$row[name]</a>";
 				
-				echo "<tr><td align='center'>$no</td><td>$name</td><td  align='center'>$category</td><td>$qr[email]</td><td align='center'>$qr[phone]</td><td>$qr[city], $qr[state],$qr[country]</td></tr>";
+				echo "<tr><td align='center'>$no</td><td>$name</td><td  align='center'>$row[group_name]</td><td>$row[email]</td><td align='center'>$row[phone]</td><td>$row[city], $row[state],$row[country]</td></tr>";
 				$no++;	
 				}
 			?>				

@@ -10,12 +10,11 @@ if(!isset($_GET['user'])) die('Access Denied!');
 session_start();
 define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
-$db = new FQuery();  
-		$user =  mysql_real_escape_string($_GET['user']);
+		$user = addslashes($_GET['user']);
 		$sql = $db->select(FDBPrefix."user","*","status=1 AND user='".$user."' AND password='".MD5($_GET['pass'])."'");
-		$qr = mysql_fetch_array($sql);
-		$jml = mysql_affected_rows();
-		if($jml > 0) {
+		if(!empty($sql[0]))
+		$qr = $sql[0];
+		if(isset($qr) AND count($qr) > 0) {
 			$_SESSION['USER_ID']  	= $qr['id'];
 			$_SESSION['USER'] 		= $qr['user'];
 			$_SESSION['USER_NAME']	= $qr['name'];
@@ -28,7 +27,7 @@ $db = new FQuery();
 			$db->delete(FDBPrefix."session_login","user_id=$qr[id]");			
 			$qr = $db->insert(FDBPrefix."session_login",array("$qr[id]","$qr[user]","$qr[level]",date('Y-m-d H:i:s')));
 		}		
-		if($qr or !empty($_SESSION['USER_ID']) AND $_SESSION['USER_LEVEL'] <= 3 AND userInfo()){
+		if(isset($qr) or !empty($_SESSION['USER_ID']) AND $_SESSION['USER_LEVEL'] <= 3 AND userInfo()){
 			echo "{ \"status\":\"1\" , \"alert\":\"".alert('success',Login_Success)."\"}";	
 		}
 		else {

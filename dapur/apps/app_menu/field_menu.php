@@ -18,7 +18,7 @@ else
 	$id = null;
 if(!isset($id)) {
 	$_REQUEST['id']=0;	
-	$qr = null;
+	$row = null;
 }
 
 $act = $_REQUEST['view'];
@@ -28,7 +28,7 @@ switch($act)
 {
 	case 'add':
 		$name = $_POST['apps'];		
-		$qr = null;
+		$row = null;
 		$mod_class = null;
 		$mod_style = null;
 		$show_title = null;
@@ -38,18 +38,18 @@ switch($act)
 	break;
 	
 	case 'edit':
-		$edit = 1;
 		$sql = $db->select(FDBPrefix.'menu','*','id='.$id); 
-		$qr	 = mysql_fetch_array($sql);	
-		$name = $qr['app'];
-		$param = $qr['parameter'];
-		$mod_class = $qr['class'];
-		$mod_style = $qr['style'];
-		$show_title = $qr['show_title'];
-		$menuLink = $qr['link'];
+		$row = $sql[0];	
+		$edit = 1;
+		$name = $row['app'];
+		$param = $row['parameter'];
+		$mod_class = $row['class'];
+		$mod_style = $row['style'];
+		$show_title = $row['show_title'];
+		$menuLink = $row['link'];
 	break;
 }
-$menuParam = $qr['parameter'];
+$menuParam = $row['parameter'];
 $params ="apps/$name/app_params.php";	
 ?>
  
@@ -83,14 +83,14 @@ $(function() {
 			<table>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Menu_Type_tip; ?>"><?php echo Menu_Type; ?></span></td>
-					<td><b><i><?php echo $name; if(isset($qr)) echo " (id = $qr[id])";?></i></b>
+					<td><b><i><?php echo $name; if(isset($row)) echo " (id = $row[id])";?></i></b>
 					<input type="hidden" name="apps" value="<?php echo $name;?>"> 
-					<input type="hidden" name="id" class="menuid" value="<?php echo $qr['id'];?>"></td>
-					<input type="hidden" name="parent_id" class="parentid" value="<?php echo $qr['id'];?>"></td>
+					<input type="hidden" name="id" class="menuid" value="<?php echo $row['id'];?>"></td>
+					<input type="hidden" name="parent_id" class="parentid" value="<?php echo $row['id'];?>"></td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Menu_Name_tip; ?>"><?php echo Name; ?></span></td>
-					<td><input <?php formRefill('desc',$qr['name']); ?> style="min-width: 60%" type="text" name="name" required></td>
+					<td><input <?php formRefill('desc',$row['name']); ?> style="min-width: 60%" type="text" name="name" required></td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Menu_link_tip; ?>">Link</span></td>
@@ -100,7 +100,7 @@ $(function() {
 					<td class="row-title"><span class="tips" title="<?php echo Menu_Status_tip; ?>"><?php echo Active_Status; ?></span></td>
 					<td>
 						<?php 
-							if($qr['status'] or $act == 'add'){$f1="selected checked"; $f0 = "";}
+							if($row['status'] or $act == 'add'){$f1="selected checked"; $f0 = "";}
 							else {$f0="selected checked"; $f1= "";}
 						?>
 						<p class="switch">
@@ -115,12 +115,13 @@ $(function() {
 					<td><select name="cat" class="categorymenu chosen no-search">
 					<?php
 					$sql2 = $db->select(FDBPrefix.'menu_category');
-					while($qr2=mysql_fetch_array($sql2)){
-						if($qr2['category']==$qr['category']){ 
-							echo "<option value='$qr2[category]' selected>$qr2[title]</option>";
+					foreach($sql2 as $row2){
+						if($row2['category'] == 'adminpanel' AND USER_LEVEL > 1) continue;
+						if($row2['category']==$row['category']){ 
+							echo "<option value='$row2[category]' selected>$row2[title]</option>";
 						}
 						else {
-							echo "<option value='$qr2[category]'>$qr2[title]</option>";
+							echo "<option value='$row2[category]'>$row2[title]</option>";
 						}						
 					}
 					?>
@@ -128,7 +129,7 @@ $(function() {
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Menu_Order_tip; ?>"><?php echo Menu_Order; ?></span></td>
-					<td><input value="<?php echo $qr['short'];?>" type="number" name="short" size="2" id="order" class="numeric spinner min-0" min="0" style="width: 50px"><span id="pesan"></span></td>
+					<td><input value="<?php echo $row['short'];?>" type="number" name="short" size="2" id="order" class="numeric spinner min-0" min="0" style="width: 50px"><span id="pesan"></span></td>
 				</tr>				
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Parent_Menu_tip; ?>"><?php echo Parent_Menu; ?></span></td>
@@ -136,19 +137,19 @@ $(function() {
 					<select name="parent_id" class="parent chosen" data-placeholder="Choose...">
 					<option value=''></option>
 					<?php	
-						if($edit) $eid = "AND id!=$qr[id]";
+						if($edit) $eid = "AND id!=$row[id]";
 						if($_GET['view'] == 'add') {
 							$sql3 = $db->select(FDBPrefix.'menu','*',"parent_id = 0 ",'short ASC'); 
 						}
 						else {
-							$sql3 = $db->select(FDBPrefix.'menu','*',"parent_id = 0 $eid AND category = '$qr[category]'",'short ASC'); 
+							$sql3 = $db->select(FDBPrefix.'menu','*',"parent_id = 0 $eid AND category = '$row[category]'",'short ASC'); 
 						}
-						while($qr3=mysql_fetch_array($sql3)){	
-							if($qr3['id']==$qr['parent_id']){ 
-								echo "<option value='$qr3[id]' selected>$qr3[name]</option>";option_sub_menu($qr3['id'],$qr['parent_id'],'');
+						foreach($sql3 as $row3){	
+							if($row3['id']==$row['parent_id']){ 
+								echo "<option value='$row3[id]' selected>$row3[name]</option>";option_sub_menu($row3['id'],$row['parent_id'],'');
 							}
 							else {
-								echo "<option value='$qr3[id]'>$qr3[name]</option>";option_sub_menu($qr3['id'],$qr['parent_id'],'');
+								echo "<option value='$row3[id]'>$row3[name]</option>";option_sub_menu($row3['id'],$row['parent_id'],'');
 							}
 						}
 						
@@ -161,13 +162,13 @@ $(function() {
 					<td><select name="level" class="chosen no-search">
 					<?php
 						$sql4 = $db->select(FDBPrefix.'user_group');
-						while($qr4=mysql_fetch_array($sql4)){
-							if($qr4['level']==$qr['level']){
-								echo "<option value='$qr4[level]' selected>$qr4[group_name]</option>";}
+						foreach($sql4 as $row4){
+							if($row4['level']==$row['level']){
+								echo "<option value='$row4[level]' selected>$row4[group_name]</option>";}
 								else {
-									echo "<option value='$qr4[level]'>$qr4[group_name]</option>";}
+									echo "<option value='$row4[level]'>$row4[group_name]</option>";}
 						}
-						if($qr['level']==99 or !$edit) $s="selected";else $s="";
+						if($row['level']==99 or !$edit) $s="selected";else $s="";
 						echo "<option value='99' $s>"._Public."</option>"
 					?>
 					</select></td>
@@ -194,7 +195,7 @@ $(function() {
 			<table>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Page_Title_tip; ?>"><?php echo Page_Title; ?></span></td>
-					<td><input value="<?php echo $qr['title'] ; ?>" type="text" name="title" style="width: 70%;"></td>
+					<td><input value="<?php echo $row['title'] ; ?>" type="text" name="title" style="width: 70%;"></td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Show_title_tip; ?>" ><?php echo Show_title; ?></span></td>
@@ -225,7 +226,7 @@ $(function() {
 			<table>
 				<tr>
 					<td class="row-title"><span class="tips"  title="<?php echo Subtitle_tip; ?>"><?php echo Subtitle_Menu; ?></span></td>
-					<td><input value="<?php echo $qr['sub_name'] ; ?>" type="text" name="sub_name" style="width: 60%;"></td>
+					<td><input value="<?php echo $row['sub_name'] ; ?>" type="text" name="sub_name" style="width: 60%;"></td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips"  title="<?php echo Add_css_class_tip; ?>">CSS Class</span></td>

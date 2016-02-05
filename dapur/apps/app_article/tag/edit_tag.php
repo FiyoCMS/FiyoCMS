@@ -9,9 +9,8 @@
 defined('_FINDEX_') or die('Access Denied');
 
 $db = @new FQuery() or die;  
-$db->connect();  
 $sql = $db->select(FDBPrefix.'article_tags','*',"id=$_REQUEST[id]"); 
-$row = mysql_fetch_array($sql);
+$row = $sql[0];
 ?>
 
 <form method="post">
@@ -19,8 +18,8 @@ $row = mysql_fetch_array($sql);
 		<div class="warp_app_header">		
 			<div class="app_title"><?php echo New_Tag; ?></div>
 			<div class="app_link">
-				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply_tag"><i class="icon-ok"></i> <?php echo Save; ?></button>	
-				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="edit_tag"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>				
+				<button type="submit" class="delete btn btn-success" title="<?php echo Save; ?>" value="<?php echo Save; ?>" name="apply_tag"><i class="icon-check"></i> <?php echo Save; ?></button>	
+				<button type="submit" class="delete btn btn-metis-2 " title="<?php echo Save_and_Quit; ?>" name="edit_tag"><i class="icon-check-circle"></i> <?php echo Save_and_Quit; ?></button>				
 				<a class="danger btn btn-default" href="?app=article&view=tag" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 				<?php printAlert(); ?>
 			</div>			

@@ -48,30 +48,29 @@ $(document).ready(function() {
 			<tr>								  
 				<th style="width:1% !important;" class="no" colspan="0" id="ck">  
 					<input type="checkbox" id="checkall" target="check[]"></th>
-				<th style="width:20% !important;"><?php echo Group_name; ?></th>
+				<th style="width:30% !important;"><?php echo Group_name; ?></th>
 				<th style="width:10% !important; text-align: center;">Level</th>
-				<th style="width:60% !important;"><?php echo Description; ?></th>
-				<th style="width:5% !important;text-align: center;">ID</th>
+				<th style="width:60% !important;"  class='hidden-xs'><?php echo Description; ?></th>
+				<th style="width:5% !important;text-align: center;"  class='hidden-xs'>ID</th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php
 			$db = new FQuery();  
-			$db->connect(); 
 			$sql=$db->select(FDBPrefix.'user_group','*','','level ASC'); 		
 			$no=1;
-			while($qr = mysql_fetch_array($sql)) {
+			foreach($sql as $row) {
 				$checkbox = null;
-				if($qr['level']!=1 And $qr['level']!=2 and $qr['level']!=3 )
-				$checkbox ="<input type='checkbox' name='check_group[]' value='$qr[level]'>";
+				if($row['level']!=1 And $row['level']!=2 and $row['level']!=3 )
+				$checkbox ="<input type='checkbox' name='check_group[]' value='$row[level]'>";
 				else $checkbox = "<span class='icon lock'></lock>";
-				$name ="<a class='tips' title='".Edit."' data-placement='right' href='?app=user&view=group&act=edit&id=$qr[id]'>$qr[group_name]</a>";
+				$name ="<a class='tips' title='".Edit."' data-placement='right' href='?app=user&view=group&act=edit&id=$row[id]'>$row[group_name]</a>";
 				if($_SESSION['USER_LEVEL'] > 2) {
 					$checkbox = "<span class='icon lock'></lock>";
-					$name ="$qr[group_name]";
+					$name ="$row[group_name]";
 					}
 				echo "<tr>";
-				echo "<td align='center'>$checkbox</td><td>$name</td><td align='center'>$qr[level]</td><td>$qr[description]</td><td align='center'>$qr[id]</td>";
+				echo "<td align='center'>$checkbox</td><td>$name</td><td align='center'>$row[level]</td><td  class='hidden-xs'>$row[description]</td><td align='center'  class='hidden-xs'>$row[id]</td>";
 				echo "</tr>";
 				$no++;	
 			}					

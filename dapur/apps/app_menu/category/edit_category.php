@@ -9,11 +9,9 @@
 defined('_FINDEX_') or die('Access Denied');
 
 $db = new FQuery();  
-$db ->connect();  
-
 $level = Level_Access;
 $sql=$db->select(FDBPrefix.'menu_category','*',"id=$_REQUEST[id] $level"); 
-$qr=mysql_fetch_array($sql);
+$qr= $sql[0];
 if(!$qr) redirect('index.php');
 	
 ?>
@@ -22,7 +20,7 @@ if(!$qr) redirect('index.php');
 		<div class="warp_app_header">
 			<div class="app_title"><?php echo Edit_Category; ?></div>
 			<div class="app_link">
-				<button class="btn btn-success save" title="<?php echo Save; ?>" name="apply_category" type="submit" value="Save" ><i class="icon-ok"></i> <?php echo Save; ?></button>					
+				<button class="btn btn-success save" title="<?php echo Save; ?>" name="apply_category" type="submit" value="Save" > <?php echo Save; ?></button>					
 				<button type="submit" class="delete btn btn-metis-2" title="<?php echo Save_and_Quit; ?>" value="<?php echo Save_and_Quit; ?>" name="edit_category"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>
 				<a class="danger btn btn-default btn-sm btn-grad" href="?app=menu&view=category" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 			</div><?php printAlert(); ?>
@@ -49,7 +47,7 @@ if(!$qr) redirect('index.php');
 						<td><select name="level" >
 						 <?php
 							$sql2 = $db->select(FDBPrefix.'user_group');
-							while($user=mysql_fetch_array($sql2)){
+							foreach($sql2 as $user){
 							
 							if($_SESSION['USER_LEVEL'] <= $user['level'])
 								if($user['level']==$qr['level']){

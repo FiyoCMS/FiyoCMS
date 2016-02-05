@@ -16,18 +16,23 @@ function loadModule($position, $echo = false) {
 		ob_start();
 		$db = new FQuery();  
 		$db ->connect();	
-		$qrs = $db->select(FDBPrefix.'module','*',"status=1 AND position='$position'" .Level_Access, 'short ASC');	
-		while($qr=mysql_fetch_array($qrs)){
+		$qrs = $db->select(FDBPrefix.'module','*',"status=1 AND position='$position'" .Level_Access, 'short ASC');
+		if(is_array($qrs))
+		foreach($qrs as $qr){
 			if(!empty($qr['page'])) {
 				$page = explode(",",$qr['page']);
 				foreach($page as $val)
-				{			
+				{
 					if(Page_ID == $val)
 					{ 	
 						$qr['show_title']== 1 ? $title="<h3>$qr[name]</h3>" : $title = "";						
 						echo "<div class=\"modules $qr[class]\">$title<div class=\"mod-inner\" style=\"$qr[style]\">";
 						$modId = $qr['id'];
 						$modParam = $qr['parameter'];
+						if(checkLocalhost()) {
+							$modParam = str_replace(FLocal."media/","media/",$modParam);
+							$modParam = str_replace("/media/",FUrl."media/",$modParam);			
+						}
 						$modFolder = $qr['folder'];
 						$theme = siteConfig('site_theme');
 						$tfile = "themes/$theme/modules/$qr[folder]/$qr[folder].php";	
@@ -37,7 +42,7 @@ function loadModule($position, $echo = false) {
 						else if(file_exists($file))
 							include($file);
 						else
-							echo "Module Error : <b>$qr[folder]</b> is not installed!";
+							echo "<i>Module Error</i> : <b>$qr[folder]</b> is not installed!";
 						echo"</div></div>";
 					}
 				}
@@ -52,6 +57,10 @@ function loadModule($position, $echo = false) {
 				$modId 	= $qr['id'];
 				$modFolder 	= $qr['folder'];
 				$modParam 	= $qr['parameter'];
+				if(checkLocalhost()) {
+					$modParam = str_replace(FLocal."media/","media/",$modParam);
+					$modParam = str_replace("/media/",FUrl."media/",$modParam);			
+				}
 				if(file_exists($tfile))
 					include($tfile);
 				else if(file_exists($file))
@@ -89,8 +98,8 @@ function checkModule($position) {
 		$val = false;
 		if(!is_array($position)) $where = " position = '$position'";
 		else $where = " position IN('".implode("','",$position)."')";
-		$qrs = $db->select(FDBPrefix.'module','*',"status=1 AND $where" .Level_Access, 'short ASC');
-		while($qr=mysql_fetch_array($qrs)){
+		$sq = $db->select(FDBPrefix.'module','*',"status=1 AND $where" .Level_Access, 'short ASC');
+		foreach($sq as $qr){
 			if(!empty($qr['page'])) {
 				$pid = explode(",",$qr['page']);
 				foreach($pid as $a) {
@@ -126,8 +135,7 @@ function loadModuleCss() {
 		$db = new FQuery();  
 		$db ->connect();	
 		if(!defined('Page_ID') AND $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']==FUrl){
-			$sql=$db->select(FDBPrefix.'menu','*','home=1'); 
-			$qr = mysql_fetch_array($sql);
+			$qr = $db->select(FDBPrefix.'menu','*','home=1'); 
 			$pid= $qr['id'];
 		}
 		else{	
@@ -136,8 +144,8 @@ function loadModuleCss() {
 		}
 		$val = false;
 		$no = 1;
-		$qrs = $db->select(FDBPrefix.'module','*',"status=1 " .Level_Access, 'short ASC');
-		while($qr=mysql_fetch_array($qrs)){
+		$qr = $db->select(FDBPrefix.'module','*',"status=1 " .Level_Access, 'short ASC');
+		foreach($qr as $qr){
 			if(!empty($qr['page'])) {
 				$pid = explode(",",$qr['page']);
 				foreach($pid as $a) { 
@@ -154,4 +162,3 @@ function loadModuleCss() {
 		}	
 	}
 }
-

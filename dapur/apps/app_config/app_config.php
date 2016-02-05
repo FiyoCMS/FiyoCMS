@@ -11,6 +11,7 @@ defined('_FINDEX_') or die('Access Denied');
 $db = @new FQuery() or die;  
 $db->connect(); 
 
+printAlert();
 $type = null;
 if(isset($_REQUEST['view']))
 	$type = $_REQUEST['view']; 

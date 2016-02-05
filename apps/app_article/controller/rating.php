@@ -2,7 +2,7 @@
 /**
 * @version		2.0
 * @package		Fiyo CMS
-* @copyright	Copyright (C) 2012 Fiyo CMS.
+* @copyright	Copyright (C) 2014 Fiyo CMS.
 * @license		GNU/GPL, see LICENSE.txt
 * @description	Article Rating
 **/
@@ -10,23 +10,17 @@
 session_start();
 define('_FINDEX_',1);
 require('../../../system/jscore.php');
+
 if(!isset($_POST['id'])) { 
 	alert('error','Access Denied!',true,true);
 	die();
-}
-
-if(!isset($_POST['id']))
-	header('../../../');
-else {
-	require_once ('../../../system/jscore.php');
-	$id = $_POST['id'];
-	
+} 
+else if(isset($_POST['do']) AND isset($_POST['id'])) {
+	$id = (int)$_POST['id'];	
 	$db = new FQuery();  
 	$db->connect(); 	
-	$sql = $db->select(FDBPrefix.'article','*',"id=$id");
-	$qrs = @mysql_fetch_array($sql);
-
-	if(isset($_POST['do'])) {
+	$qrs = $db->select(FDBPrefix.'article','parameter',"id=$id","",1);
+	$qrs = $qrs[0];
 		if($_POST['do']=='rate'){
 			$rating = $_POST['rating'];
 			$va = mod_param('rate_value',$qrs['parameter']);
@@ -55,12 +49,11 @@ else {
 			if($qr)		
 				$_SESSION["article_rate_$id"] = true;
 		}
-		else if($_POST['do']=='getrate'){	
-			// get rating
+		else if($_POST['do']=='getrate'){
 			$va = mod_param('rate_value',$qrs['parameter']);
 			$vo = mod_param('rate_counter',$qrs['parameter']);
 			$rating = (@round($va / $vo,1)) * 20; 
 			echo $rating;					
 		}
-	}	
+		
 }

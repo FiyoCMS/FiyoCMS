@@ -24,17 +24,17 @@ $ori	= '../../../'.$_GET['ori'];
 if(isset($_GET['delete']) AND $_GET['delete'] == 'true' AND file_exists($ori.".ori")) {
 	unlink($ori);
 	rename($ori.".ori",$ori);
-	alert('success',dirname($_GET['ori']),1);	
+	alert('success','Logo Successfuly Restore',1);	
 }
 else if(isset($_GET['file']) AND !empty($_GET['file']) AND file_exists($file) AND file_exists($ori.".ori")) {
 	copy($file,$ori);
-	alert('success',Status_Updated,1);
+	alert('success','Logo Successfuly Updated',1);
 	
 }
 else if(isset($_GET['file']) AND !empty($_GET['file']) AND file_exists($file)){
 	copy($ori,$ori.".ori");
 	copy($file,$ori);
-	alert('success',Status_Updated,1);
+	alert('success','Logo Successfuly Updated',1);
 }
 
 ?>

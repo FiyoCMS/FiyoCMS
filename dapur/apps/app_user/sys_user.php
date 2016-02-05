@@ -25,8 +25,8 @@ if(isset($_POST['add_group']) or isset($_POST['apply_group'])){
 			redirect('?app=user&view=group');
 		}
 		else if($qr AND isset($_POST['apply_group'])){
-			$sql = $db->select(FDBPrefix.'user_group','id','','id DESC' ); 	  
-			$qr = mysql_fetch_array($sql);		
+			$sql = $db->select(FDBPrefix.'user_group','id','','id DESC',1 ); 	  
+			$qr = $sql[0];		
 			notice('success',User_Group_Added);
 			redirect('?app=user&view=group&act=edit&id='.$qr['id']);
 		}
@@ -40,6 +40,44 @@ if(isset($_POST['add_group']) or isset($_POST['apply_group'])){
 	}
 }
 	
+
+/****************************************/
+/*			 Edit Group User			*/
+/****************************************/
+if(isset($_POST['edit_group']) or isset($_POST['save_group'])){
+	$db = new FQuery();  
+	$db->connect();		
+        $group = stripTags($_POST['group']);
+	if(!empty($_POST['level']) AND !empty($group)) {
+		if($_POST['levels'] <= 3) $_POST['level'] = $_POST['levels'];
+		
+		$qr=$db->update(FDBPrefix."user_group",array(
+		"level"=>"$_POST[level]",
+		"group_name"=>stripTags("$_POST[group]"),
+		"description"=>stripTags("$_POST[desc]")),
+		"id=$_POST[id]");
+		
+		$qr=$db->update(FDBPrefix."user",array(
+		"level"=>"$_POST[level]"),
+		"level=$_POST[levels]"); 
+		
+		if($qr AND isset($_POST['save_group'])){
+			notice('success',User_Group_Saved);
+			refresh();			
+		}
+		else if($qr AND isset($_POST['edit_group'])){
+			notice('success',User_Group_Saved);
+			redirect('?app=user&view=group');
+		}
+		else {				
+			notice('error',Status_Fail,2);
+		}					
+	}		
+	else 
+	{				
+		notice('error',Status_Invalid,2);
+	}			
+}
 
 /****************************************/
 /*			Delete Group User			*/
@@ -64,40 +102,6 @@ if(isset($_POST['check_group']) or isset($_POST['delete_confirm'])){
 }
 
 	
-/****************************************/
-/*			 Edit Group User			*/
-/****************************************/
-if(isset($_POST['edit_group']) or isset($_POST['save_group'])){
-	$db = new FQuery();  
-	$db->connect();			
-	if(!empty($_POST['level']) AND !empty($_POST['group'])) {
-		if($_POST['levels'] <= 3) $_POST['level'] = $_POST['levels'];
-		$qr=$db->update(FDBPrefix."user_group",array(
-		"level"=>"$_POST[level]",
-		"group_name"=>"$_POST[group]",
-		"description"=>"$_POST[desc]"),
-		"id=$_POST[id]"); 		
-		$qr=$db->update(FDBPrefix."user",array(
-		"level"=>"$_POST[level]"),
-		"level=$_POST[levels]"); 
-		if($qr AND isset($_POST['save_group'])){
-			notice('success',User_Group_Saved);
-			refresh();			
-		}
-		else if($qr AND isset($_POST['edit_group'])){
-			notice('success',User_Group_Saved);
-			redirect('?app=user&view=group');
-		}
-		else {				
-			notice('error',Status_Fail,2);
-		}					
-	}		
-	else 
-	{				
-		notice('error',Status_Invalid,2);
-	}			
-}
-
 	
 	
 /****************************************/
@@ -116,7 +120,6 @@ if(isset($_POST['save']) or isset($_POST['apply'])){
 		!empty($_POST['level'])AND 
 		$_POST['password']==$_POST['kpassword'] AND 
 		$us>2 AND $ps>3 AND @ereg("^.+@.+\\..+$",$_POST['email']) AND !$matches) {
-		
 		$qr=$db->insert(FDBPrefix.'user',array("","$user","$name",MD5("$_POST[password]"),"$_POST[email]","$_POST[status]","$_POST[level]",date('Y-m-d H:i:s'),'',"$_POST[bio]")); 
 		
 		if($qr AND isset($_POST['save'])){			
@@ -124,8 +127,8 @@ if(isset($_POST['save']) or isset($_POST['apply'])){
 			redirect('?app=user');
 		}
 		else if($qr AND isset($_POST['apply'])){
-			$sql = $db->select(FDBPrefix.'user','id','','id DESC'); 	  
-			$qr = mysql_fetch_array($sql);		
+			$sql = $db->select(FDBPrefix.'user','id','','id DESC',1); 	  
+			$qr = $sql[0];		
 			notice('success',User_Added);
 			redirect('?app=user&act=edit&id='.$qr['id']);
 		}
@@ -147,6 +150,7 @@ if(isset($_POST['edit']) or isset($_POST['applyedit'])){
 		$ps=strlen("$_POST[password]");	
 		$user = $_POST['user'];
 		$name = $_POST['name'];
+		$_POST["bio"] = htmlentities("$_POST[bio]");
 		preg_match('/[^a-zA-Z0-9]+/', $user, $matches);
 		if(!empty($_POST['user'])AND !empty($_POST['name'])AND !empty($_POST['email'])AND !empty($_POST['level']) AND $us>2 AND @ereg("^.+@.+\\..+$",$_POST['email']) AND !$matches) 
 		{
@@ -182,12 +186,12 @@ if(isset($_POST['edit']) or isset($_POST['applyedit'])){
 				redirect(getUrl());			
 			}
 			else {				
-				notice('error',Status_Invalid);
+				notice('error',Status_Invalid,2);
 			}					
 		}
 		else 
 		{				
-			notice('error',Status_Invalid);
+			notice('error',Status_Invalid,2);
 		}
 	}
 
@@ -207,6 +211,7 @@ if(isset($_POST['delete']) or isset($_POST['delete_confirm'])){
 }
 
 
+
 /****************************************/
 /*	 Redirect when User-Id not found	*/
 /****************************************/
@@ -217,9 +222,9 @@ if(!isset($_POST['save_edit']) AND !isset($_POST['apply_edit'])) {
 		$db = new FQuery();  
 		$db->connect(); 
 		$sql=$db->select(FDBPrefix.'user','*','id='.$id); 
-		$jml=mysql_num_rows($sql);
+		$jml=count($sql);
 		if($jml<=0) {
-			notice('info','UserID is null, wait for redirecting ...');
+			notice('info','User ID is null, wait for redirecting ...');
 			redirect('?app=user',3);
 		}
 	}

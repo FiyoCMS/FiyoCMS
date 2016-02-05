@@ -450,8 +450,6 @@ ul.paging li a:hover{
 	margin: -1px 0 0;
 }
 #article  .article-author img{
-	padding: 3px !important;
-	box-shadow: 0 0 3px #aaa;
 	float: left;
 }
 
@@ -477,7 +475,6 @@ ul.paging li a:hover{
 
 #article  .article-author + .modules {
 	overflow: hidden;
-	padding:10px 10px 12px;
 	border-top: dotted 1px #ccc;
 	margin: -1px 0 0;
 }
@@ -547,13 +544,11 @@ ul.paging li a:hover{
 }
 
 #comment .avatar-comment img{ 
-	margin :4px;
-	padding :3px !important;
-	box-shadow :0 0 1px #999;
+	margin :6px;
 }
 #article .right-comment { 
 	position: relative;
-	margin: 0 1px 0 72px;
+	margin: 0 1px 0 67px;
 	border-radius: 5px;
 	line-height: 22px;
 }	

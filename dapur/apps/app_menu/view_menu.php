@@ -15,10 +15,7 @@ printAlert();
 
 ?>
 <script type="text/javascript">	
-if (!$.isFunction($.fn.dataTable) ) {
-	var script = '../plugins/plg_jquery_ui/datatables.js';
-	document.write('<'+'script src="'+script+'" type="text/javascript"><' + '/script>');
-}	
+
 $(function() {	
 	$(".activator label").click(function(){ 
 		var parent = $(this).parents('.switch');
@@ -120,14 +117,14 @@ $(function() {
 		<thead>
 			<tr>								 
 				<th style="width:1% !important;" class="no" colspan="0" id="ck" align="center">
-				<input type="checkbox" class="checkall" target='check[]'></th>		
+					<input type="checkbox" class="checkall" target='check[]'></th>		
 				<th style="width:30% !important;"><?php echo Name; ?></th>
-				<th style="width:15% !important;" class="no hidden-xs hidden-sm" align="center">Status</th>
+				<th style="width:15% !important;" class="no " align="center">Status</th>
 				<th style="width:13% !important;" class='hidden-xs'><?php echo Category; ?></th>
 				<th style="width:13% !important;" class='hidden-xs'><?php echo Type; ?></th>
 				<th style="width:5% !important; text-align: center;" class='hidden-xs hidden-sm'><?php echo Short; ?></th>
 				<th style="width:15% !important; text-align: center;" class='hidden-xs'><?php echo Access_Level; ?></th>
-				<th style="width:6% !important; text-align: center;">ID</th>
+				<th style="width:6% !important; text-align: center;" class='hidden-xs hidden-xm'>ID</th>
 			</tr>
 		</thead>		
 		<tbody>
@@ -144,24 +141,24 @@ $(function() {
 				$sql = $db->select(FDBPrefix.'menu','*',"parent_id=0 $cat_default","short ASC");		
 			}
 			$no=1;				
-			while($qr=mysql_fetch_array($sql)){
-				if($qr['status']==1)
+			foreach($sql as $row){
+				if($row['status']==1)
 				{ $stat1 ="selected"; $stat2 =""; $enable = ' enable';}							
 				else
 				{ $stat2 ="selected";$stat1 =""; $enable = 'disable';}
 				
-				$status ="<span class='invisible'>$enable</span>
+				$status ="
 					<div class='switch s-icon activator'>
 					<label class='cb-enable tips $stat1' data-placement='right' title='".Disable."'><span>
 					<i class='icon-remove-sign'></i></span></label>
 					<label class='cb-disable tips $stat2' data-placement='right' title='".Enable."'><span>
 					<i class='icon-ok-sign'></i></span></label>
-					<input type='hidden' value='$qr[id]' id='id' class='invisible'>
-					<input type='hidden' value='$qr[status]' id='type' class='invisible'>
+					<input type='hidden' value='$row[id]' id='id' class='invisible'>
+					<input type='hidden' value='$row[status]' id='type' class='invisible'>
 				</div>";					
 				
 				/* change home page */
-				if($qr['home']==1)
+				if($row['home']==1)
 				{ $hm = "selected"; $hms = ""; }							
 				else
 				{ $hm = ""; $hms = "selected"; }		
@@ -171,11 +168,11 @@ $(function() {
 					<i class='icon-home'></i></span></label>
 					<label class='cb-disable tips $hms' data-placement='left' title='".As_home_page."'><span>
 					<i class='icon-home'></i></span></label>
-					<input type='hidden' value='$qr[id]' id='id' data-category='$qr[category]' class='invisible'>
+					<input type='hidden' value='$row[id]' id='id' data-category='$row[category]' class='invisible'>
 					<input type='hidden' value='stat' id='type' class='invisible'>
 				</div>";		
 				/* change default page */				
-				if($qr['global']==1)
+				if($row['global']==1)
 				{ $dm = "selected"; $dms = ""; }							
 				else
 				{ $dm = ""; $dms = "selected"; }		
@@ -187,29 +184,39 @@ $(function() {
 						</span></label>
 						<label class='cb-disable tips $dms' title='".As_default_page."'><span>
 						<i class='icon-star'></i></span></label>
-						<input type='hidden' value='$qr[id]' class='invisible' id='id'>
+						<input type='hidden' value='$row[id]' class='invisible' id='id'>
 						<input type='hidden' value='fp' id='type' class='invisible'>
 					</div>";		
 
 				
-				$name ="<a class='tips' title='".Edit."' data-placement='right' href='?app=menu&view=edit&id=$qr[id]'>$qr[name]</a>";
+				$name ="<a class='tips' title='".Edit."' data-placement='right' href='?app=menu&view=edit&id=$row[id]'>$row[name]</a>";
 				
-				$checkbox ="<input type='checkbox' data-name='rad-$qr[id]' sub-target='.sub-menu' name='check[]' value='$qr[id]' rel='ck'>";
+				$checkbox ="<input type='checkbox' data-name='rad-$row[id]' sub-target='.sub-menu' name='check[]' value='$row[id]' rel='ck'>";
 				$tools = '<div class="tool-box visible-xs">
 				<a class="btn-tools btn btn-danger btn-sm btn-grad" title="Non-aktifkan">Non-aktifkan</a>
 				<a href="?app=user&amp;act=edit&amp;id=18" class="btn btn-tools tips" title="Edit">Edit</a>
 			</div>';		
 
 				//creat user group values	
-				$sql2=$db->select(FDBPrefix.'user_group','*',"level=$qr[level]"); 
-				$level=mysql_fetch_array($sql2);				
-				if($qr['level']==99) $level = _Public;
-				else $level = $level['group_name'];
-								
+				if($row['level']==99) {		
+					$level = _Public;
+				} 
+				else 
+				{
+					$sql2 = $db->select(FDBPrefix.'user_group','*',"level=$row[level]"); 
+					if($sql2) { 
+					$level = $sql2[0];		
+					$level = $level['group_name']; }
+					else 	
+					$level = _Public;
+				}
+				if($row["category"] == "adminpanel") {
+					$home = $default = null;
+				}
 				echo "<tr>";
-				echo "<td align='center'>$checkbox</td><td>$name $tools</td><td align='center' class='hidden-xs hidden-sm'><div class='switch-group'>$home$default$status</div></td><td class='hidden-xs'>$qr[category]</td><td class='hidden-xs'>$qr[app]</td><td align='center' class='hidden-xs hidden-sm'>$qr[short]</td><td align='center' class=''>$level</td><td align='center' class=''>$qr[id]</td>";
+				echo "<td align='center'>$checkbox</td><td>$name $tools</td><td align='center' class=''><div class='switch-group'>$home$default$status</div></td><td class='hidden-xs'>$row[category]</td><td class='hidden-xs'>$row[app]</td><td align='center' class='hidden-xs hidden-sm'>$row[short]</td><td align='center'class='hidden-xs'>$level</td><td align='center' class='hidden-xs'>$row[id]</td>";
 				echo "</tr>";
-				sub_menu($qr['id'],'',$no);
+				sub_menu($row['id'],'',$no);
 			$no++;	
 			}			
 			?>

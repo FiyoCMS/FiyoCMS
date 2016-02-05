@@ -22,10 +22,9 @@ if($item=="" or empty($item)) $item = 5;
 $db = new FQuery();  
 $db->connect(); 	
 
-$sql = $db->select(FDBPrefix.'comment','*',"status=1","date DESC");	
-	
+$sql = $db->select(FDBPrefix.'comment','*',"status=1","date DESC LIMIT $item");	
 $no = 0;
-while($com=mysql_fetch_array($sql) AND $no < $item){
+foreach($sql as $com){
 	$email = strtolower($com['email']); 
 	$email = md5($email );
 	
@@ -36,7 +35,7 @@ while($com=mysql_fetch_array($sql) AND $no < $item){
 	else
 		$s ="";
 				
-	echo "<div class='inner-comment$s'>";
+	echo "<div class='mod-inner-comment'>";
 	if($gravatar) {
 		echo "<div class='mod-avatar-comment'>$img</div>";
 		echo "<div class='mod-right-comment'>";
@@ -57,6 +56,10 @@ while($com=mysql_fetch_array($sql) AND $no < $item){
 	else if($name) echo "<span>$com[name]</span>";
 	else if($date) echo "$com[date]";
 	else if($title) echo "$ltitle";	
+	$comment = substr($com['comment'],0,$text);
+	
+	if(strlen($com['comment']) > $text) $comment .= "...";
+	if($scomment) echo "<div class='mod-comment-detail'>$comment</div>";
 	
 	echo "</div></div>";
 	$no++;

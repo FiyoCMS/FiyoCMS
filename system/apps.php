@@ -9,7 +9,7 @@
 defined('_FINDEX_') or die('Access Denied');
 
 function loadAppsSystem() {	
-	loadLang(__dir__);
+	loadLang(dirname(__FILE__));
 	$apps = app_param('app');
 	$file = "apps/app_$apps/sys_$apps.php";
 	if(file_exists($file))
@@ -42,11 +42,10 @@ function loadApps($echo = false) {
 		$view = '';
 	}
 	$sql=$db->select(FDBPrefix.'apps','*',"folder='app_$view'"); 
-	mysql_fetch_array($sql);
-	if(mysql_affected_rows()!=0) 
+	if(count($sql) !== 0)
 	{		
 		$sql2=$db->select(FDBPrefix.'menu','*',"id=".Page_ID); 
-		$qrs = @mysql_fetch_array($sql2);	
+		$qrs = $sql2[0];	
 		
 		$theme = siteConfig('site_theme');
 		$tfile = "themes/$theme/apps/app_$view/index.php";
@@ -75,14 +74,6 @@ function loadApps($echo = false) {
 			echo "<div style='border: 2px solid #e3e3e3; background: rgba(250,250,250,0.8);	color :#aaa; padding: 30px; text-align: center; margin: 5px 3px; font-weight: bold;'>Main Content</div>";
 		} 
 		else {
-			$lang = siteConfig('lang');
-		
-			echo '<div class="apps'.$qr["class"].'">'._404_.'</div><p>';		
-				$file="modules/mod_search/mod_search.php";	
-				if(file_exists($file))
-					include($file);	
-			echo '</p>';	
-				loadModule('404');
 		}
 	}
 	$apps = ob_get_contents();

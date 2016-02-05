@@ -87,19 +87,21 @@ printAlert();
 				<input type="checkbox" class="checkall" target='check[]'></th>		
 				<th style="width:20% !important;"><?php echo Name; ?></th>
 				<th style="width:10% !important;" >Gender</th>
-				<th style="width:8% !important;" class="no" align="center">Status</th>
-				<th style="width:20% !important;" >Group</th>
+				<th style="width:10% !important;" class="no visible-lg" align="center">Status</th>
+				<th style="width:20% !important;"  >Group</th>
 				<th style="width:20% !important;" >Email</th>
-				<th style="width:20% !important;" >Phone</th>
+				<th style="width:15% !important;" >Phone</th>
 			</tr>
 		</thead>		
 		<tbody>
 			<?php	
-			$sql = $db->select(FDBPrefix.'contact','*',"","name ASC");
+			$ctc = FDBPrefix.'contact';
+			$ctg = FDBPrefix.'contact_group';
+			$sql = $db->select("$ctc, $ctg","*","$ctc.group_id = $ctg.group_id","$ctc.id ASC");
 			$no=1;				
-			while($qr=mysql_fetch_array($sql)){
+			foreach($sql as $row){
 				/* logika status aktif atau tidak */
-				if($qr['status']==1)
+				if($row['status']==1)
 				{ $stat1 ="selected"; $stat2 ="";}							
 				else
 				{ $stat2 ="selected";$stat1 ="";}
@@ -108,17 +110,16 @@ printAlert();
 				<p class='switch'>
 					<label class='cb-enable $stat1'><span>On</span></label>
 					<label class='cb-disable $stat2'><span>Off</span></label>
-					<input type='text' value='$qr[id]' id='id' class='invisible'><input type='text' value='stat' id='type' class='invisible'>
+					<input type='text' value='$row[id]' id='id' class='invisible'><input type='text' value='stat' id='type' class='invisible'>
 				</p>";
 				
 				/* logika halaman depan */
-				$group = oneQuery('contact_group','id',$qr['group_id'],'name');
-				$name ="<a class='edit tips link' data-placement='right' title='".Edit."' href='?app=contact&act=edit&id=$qr[id]'>$qr[name]</a>";
+				$name ="<a class='edit tips link' data-placement='right' title='".Edit."' href='?app=contact&act=edit&id=$row[id]'>$row[name]</a>";
 				
-				$checkbox ="<input type='checkbox' data-name='rad-$qr[id]' sub-target='.sub-menu' name='check[]' value='$qr[id]' rel='ck'>";
-				if($qr['gender'] == 1) $gender = Man; else $gender = Woman; 
+				$checkbox ="<input type='checkbox' data-name='rad-$row[id]' sub-target='.sub-menu' name='check[]' value='$row[id]' rel='ck'>";
+				if($row['gender'] == 1) $gender = Man; else $gender = Woman; 
 				echo "<tr>";
-				echo "<td align='center'>$checkbox</td><td>$name</td><td>$gender</td><td  align='center'>$status</td><td>$group</td><td>$qr[email]</td><td>$qr[phone]</td>";
+				echo "<td align='center'>$checkbox</td><td>$name</td><td>$gender</td><td  class='visible-lg' align='center'>$status</td><td>$row[group_name]</td><td>$row[email]</td><td>$row[phone]</td>";
 				echo "</tr>";
 			$no++;	
 			}			
@@ -129,5 +130,5 @@ printAlert();
 
 <div class="app_link tabs" style="text-align: center;width: 90%;">	
 	<a class="btn apps active" href="?app=contact" title="<?php echo Manage_Apps; ?>"><i class="icon-user"></i> Personal</a>		
-	<a class="btn module " href="?app=contact&view=group" title="<?php echo Manage_Modules; ?>"><i class="icon-group"></i> Group</a>	
+	<a class="btn module" href="?app=contact&view=group" title="<?php echo Manage_Modules; ?>"><i class="icon-group"></i> Group</a>	
 </div>

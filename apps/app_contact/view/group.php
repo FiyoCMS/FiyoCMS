@@ -33,7 +33,7 @@ if(isset($contact->name))
 			<?php if($contact->sjob==1) echo "<span class='contact-job '>".$contact->job[$i]."</span>"; ?>
 			
 			<?php if($contact->saddress==1) echo "<div class='address'>".$contact->address[$i]."</div>"; ?>
-			<?php if($contact->semail==1) echo "<span class='email'>".$contact->email[$i]."</span>"; ?>
+			<?php if($contact->semail==1 AND !empty($contact->email[$i])) echo "<span class='email'>".$contact->email[$i]."</span>"; ?>
 			<?php if($contact->sphone==1) echo "<span class='phone'>".$contact->phone[$i]."</span>"; ?>
 			<?php if($contact->sphone==1) echo "<div class='links'>".$contact->links[$i]."</div>"; ?>
 		</div>

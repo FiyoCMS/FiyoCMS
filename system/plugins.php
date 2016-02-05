@@ -11,8 +11,8 @@ defined('_FINDEX_') or die('Access Denied');
 
 function loadPluginCss() {	
 	$db = new FQuery();   
-	$qrs = $db->select(FDBPrefix.'plugin','*',"status=1");	
-	while($qr=mysql_fetch_array($qrs)){	
+	$qr = $db->select(FDBPrefix.'plugin','*',"status=1");	
+	foreach($qr as $qr){	
 		$folder = "plugins/$qr[folder]/plg_css.php";
 		if(file_exists($folder))
 			include($folder);
@@ -21,8 +21,8 @@ function loadPluginCss() {
 
 function loadPluginJs() {	
 	$db = new FQuery();   
-	$qrs = $db->select(FDBPrefix.'plugin','*',"status=1");	
-	while($qr=mysql_fetch_array($qrs)){	
+	$qr = $db->select(FDBPrefix.'plugin','*',"status=1");	
+	foreach($qr as $qr){	
 		$folder = "plugins/$qr[folder]/plg_js.php";
 		if(file_exists($folder))
 			include($folder);

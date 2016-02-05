@@ -63,10 +63,10 @@ if(!file_exists(FThemes)) {
 	$file = str_replace(".php",".html",FThemes);
 	if(file_exists($file))
 	if(@rename($file,FThemes)) refresh();
-	echo alert("error","Theme is not found!",true,true);
+	echo alert("error",FThemes."Theme is not found!",true,true);
 	die();
 }
-else if(_FEED_ == 'rss' or _FINDEX_ == 'blank') {
+else if(_FEED_ == 'rss' or _FINDEX_ == 'blank' or (isset($_POST['theme']) AND  $_POST['theme'] == 'blank'))  {
 	loadApps();
 }
 else {
@@ -80,7 +80,7 @@ ob_end_clean();
 if(_FEED_ !== 'rss' AND _FINDEX_ !== 'blank') {
 	ob_start(); 
 		loadAppsCss();
-		if(function_exists('loadModuleCss'))		loadModuleCss();
+		if(function_exists('loadModuleCss')) loadModuleCss();
 		$cssasset = ob_get_contents();
 	ob_end_clean();
 	
@@ -91,7 +91,7 @@ if(_FEED_ !== 'rss' AND _FINDEX_ !== 'blank') {
 		$jsasset = preg_replace("/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\)\/\/.*))/", "", $jsasset);
 	ob_end_clean();
 	
-	$tlx = strpos($output,"</head");
+	$tlx = strpos($output,"<link");
 	$ntx = substr($output , 0, $tlx );
 	$output = str_replace($ntx, $ntx.$cssasset,$output);
 		
@@ -149,18 +149,20 @@ if(_FEED_ !== 'rss' AND _FINDEX_ !== 'blank') {
 		$output = str_replace(array("src=\"/media","src=\"media"), "src=\"".FUrl."/media",$output);		
 		$output = str_replace(array("href=\"/media","href=\"media"), "href=\"".FUrl."/media",$output);		
 		$output = str_replace(array("{sitetitle}","{siteTitle}"),FTitle,$output);
-		$output = str_replace(array("{siteHome}","{siteUrl}"),FUrl,$output);
-		$output = str_replace(array("{sitename}","{siteName}}"),SiteName,$output);
+		$output = str_replace(array("{siteHome}","{siteUrl}","{homeurl}"),FUrl,$output);
+		$output = str_replace(array("{sitename}","{siteName}"),SiteName,$output);
 		$output = str_replace(array("{pagetitle}","{pageTitle}"),PageTitle,$output);
 		$output = str_replace(array("{metadesc}","{metaDescription}"),MetaDesc,$output);
 		$output = str_replace(array("{metakeys}","{metaKeywords}"),MetaKeys,$output);
 		$output = str_replace(array("{metaauthor}","{metaAuthor}"),MetaAuthor,$output);
-		$output = str_replace(array("{homeurl}"),FUrl,$output);
+		$output = str_replace(array("{metarobots}","{metaRobots}"),MetaRobots,$output);
 		$output = str_replace("{lang}",SiteLang,$output);
 		$output = str_replace("{lang}",SiteLang,$output);
 		if(checkMobile()) $m = "m-"; else $m = "";
 		$output = str_replace("{m-}",$m,$output);
-		$output = str_replace("{pid}",Page_ID,$output);
+		$output = str_replace("{pid}",Page_ID,$output);		
+		if(checkHomePage()) $h = "home"; else $h = "default";
+		$output = str_replace("{home}",$h,$output);
 		if(USER_ID) {
 			$output = str_replace("{userid}",USER_ID,$output);
 			$output = str_replace("{username}",USER_NAME,$output);
@@ -186,6 +188,7 @@ $output = str_replace(array("\t","\n"), ' ', $output);
 $output = str_replace(array("  ","   "), ' ', $output);
 $output = str_replace("  ", ' ', $output);
 
+
 preg_match_all('/\{module:(.*?)\}/',$output,$position); 
 if(!empty($position[1])) {
 	$no = 1;
@@ -201,9 +204,10 @@ $output = str_replace(array("{loadApps}"),loadApps(true),$output);
 /* timer */
 $et = microtime(TRUE) - _START_TIME_;
 $et = substr($et,0,6)."s";
-if(USER_LEVEL > 2) $et = '';
+
 $output = str_replace(array("{loadtime}","{loadTime}"),$et,$output);
 /* timer */
 
+if(isset($_SERVER['HTTPS'])) $output = str_replace("http://", "https://", $output);
 echo $output;
 ob_end_flush();

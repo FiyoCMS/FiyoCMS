@@ -10,14 +10,15 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserBrowseUrl = '../plugins/plg_kcfinder/browse.php?type=files&dir=files';
 	config.filebrowserImageBrowseUrl = '../plugins/plg_kcfinder/browse.php?type=images&dir=images';
 	config.filebrowserFlashBrowseUrl = '../plugins/plg_kcfinder/browse.php?type=flash&dir=flash';	
-	
+	config.filebrowserVideoBrowseUrl = '../plugins/plg_kcfinder/browse.php?type=video&dir=videos';	
+	config.extraPlugins = 'video';
 	config.toolbar = 'Mini';
 	config.toolbar_Mini =
 	[
 		
 		{ name: 'basicstyles', items : [ 'Bold','Italic','Underline' ] },
 		{ name: 'justify', items : [ 'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
-		{ name: 'links', items : [ 'Link','Unlink','-','Image','Flash' ] },		
+		{ name: 'links', items : [ 'Link','Unlink','-','Image', 'Video' ,'Flash' ] },		
 		// Defines toolbar group without name.
 		'/',																					// Line break - next group will be placed in new line.
 		{ name: 'styles', items : ['FontSize' ] },
@@ -34,7 +35,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'basicstyles', items : [ 'Bold','Italic','Underline'] },
 		{ name: 'justify', items : [ 'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
 		{ name: 'links', items : [ 'Link','Unlink' ] },		
-		{ name: 'insert', items : [ 'Image','Flash','Table'] },	
+		{ name: 'insert', items : [ 'Image', 'Video' ,'Flash','Table'] },	
 		'/',										
 		{ name: 'styles', items : ['Format','Font','FontSize' ] },
 		{ name: 'colors', items : [ 'TextColor','BGColor' ] },
@@ -59,7 +60,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors', items : [ 'TextColor','BGColor' ] },
 		{ name: 'justify', items : [ 'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
 		{ name: 'links', items : [ 'Link','Unlink','Anchor' ] },
-		{ name: 'insert', items : [ 'Image','Flash','Table'] },
+		{ name: 'insert', items : [ 'Image','Video' ,'Flash','Table'] },
 		'/',
 		
 		{ name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },

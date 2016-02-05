@@ -68,45 +68,49 @@ function load_themes(){
 //memanggil file login jika user belum login
 function load_login() {
 	if(isset($_POST['fiyo_login']))	{
-		$db = new FQuery();  
-		$user =  mysql_real_escape_string($_POST['user']);
-		$sql = $db->select(FDBPrefix."user","*","status=1 AND user='".$user."' AND password='".MD5($_POST['pass'])."'");
-		$qr = mysql_fetch_array($sql);
-		$jml = mysql_affected_rows();
-		if($jml > 0) {
+		$db = new FQuery();
+		$user = addslashes($_POST['user']);
+		$sql = $db->select(FDBPrefix."user","*","status=1 AND user='".$user."' AND password='".MD5($_POST['pass'])."'");		
+		if(count($sql) > 0) {
+			$qr = $sql[0];
 			$_SESSION['USER_ID']  	= $qr['id'];
 			$_SESSION['USER'] 		= $qr['user'];
 			$_SESSION['USER_NAME']	= $qr['name'];
 			$_SESSION['USER_EMAIL']	= $qr['email'];
 			$_SESSION['USER_LEVEL'] = $qr['level'];
-			$_SESSION['USER_LOG'] 	= $qr['time_log'];
-			
+			$_SESSION['USER_LOG'] 	= $qr['time_log'];			
 			$time_log = date('Y-m-d H:i:s');
 			$db->update(FDBPrefix.'user',array("time_log"=>"$time_log"),"id=$qr[id]"); 
 			
 			$db->delete(FDBPrefix."session_login","user_id=$qr[id]");			
 			$qr = $db->insert(FDBPrefix."session_login",array("$qr[id]","$qr[user]","$qr[level]",date('Y-m-d H:i:s')));
-		}		
-		if($qr or !empty($_SESSION['USER_ID']) AND $_SESSION['USER_LEVEL'] <= 3 AND userInfo())	
+		}
+		if($sql or !empty($_SESSION['USER_ID']) AND $_SESSION['USER_LEVEL'] <= 3 AND userInfo())	
 			redirect(getUrl());
 		else {
 			select_themes('login');
-			alert('error',Login_Error);	
+			alert('error',Login_Error,true);	
 		}
 	}
 	else {
 		if(isset($_GET['theme']))
-			die('Access Denied!');
+			die('Redirecting...');
 		else
 			select_themes('login');
 	}
 }
-
 //memilih tema AdminPanel sesuai dengan nilai admin_theme pada tabel setting
-function select_themes($log, $stat = NULL){
+function select_themes($log, $stat = NULL){		
+	$url = $_SERVER['PHP_SELF']; //returns the current URL
+	$parts = explode('/',$url);
+	$dir = $_SERVER['SERVER_NAME'];
+	for ($i = 0; $i < count($parts) - 1; $i++) {
+	 $dir .= $parts[$i] . "/";
+	}
 	$themePath = siteConfig('admin_theme');
-	$adminPath = siteConfig('backend_folder');
-	define("FAdminPath",FUrl."$adminPath/themes/$themePath");
+	if(isset($_SERVER['HTTPS']))  $http = "https"; else $http = "http";
+	define("FAdmin","$http://$dir");
+	define("FAdminPath","themes/$themePath");
 	
 	if(isset($_SESSION['PLATFORM']) OR isset($_GET['platform'])) {	
 		if(isset($_GET['platform'])) {
@@ -132,7 +136,7 @@ function select_themes($log, $stat = NULL){
 	}
 	else if($log=="index" AND $_SESSION['USER_LEVEL'] <= 3) {	
 		$file =   "themes/$themePath/index.php";
-		if(isset($_GET['theme']) AND $_GET['theme'] =='blank' AND isset($_POST['blank'])) {
+		if(isset($_GET['theme']) AND $_GET['theme'] =='blank' AND isset($_SERVER['HTTP_REFERER'])) {
 			loadAdminApps();
 			$end_time = microtime(TRUE);
 			$n = substr($end_time - _START_TIME_,0,6);
@@ -153,14 +157,16 @@ function redirect_www() {
 		if(siteConfig('sef_www')) {
 			if(!strpos(getUrl(),"//www.")) {
 				$link = getUrl();
-				$link = str_replace("http://","http://www.",$link);
+				if(isset($_SERVER['HTTPS']))  $http = "https"; else $http = "http";
+				$link = str_replace("$http://","$http://www.",$link);
 				redirect($link);
 			}
 		}
 		else {
 			if(strpos(getUrl(),"//www.")) {
 				$link = getUrl();
-				$link = str_replace("http://www.","http://",$link);
+				if(isset($_SERVER['HTTPS']))  $http = "https"; else $http = "http";
+				$link = str_replace("$http://www.","$http://",$link);
 				redirect($link);
 			}
 		}

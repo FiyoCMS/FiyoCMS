@@ -29,7 +29,7 @@ if(!empty($filter) or !empty($filter) or !empty($filter)) :
 $sql = $db->select(FDBPrefix."article",'*',"$filter $level AND status=1","$type LIMIT $item");
 	
 echo '<ul class="mod-article-list">';
-while($qr=mysql_fetch_array($sql)){	
+foreach($sql as $qr){	
 	$link="?app=article&view=item&id=$qr[id]";	
 	if(defined('SEF_URL')){			
 		$link = make_permalink($link);

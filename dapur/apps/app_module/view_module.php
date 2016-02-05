@@ -96,23 +96,22 @@ $(document).ready(function() {
 			<tr>								  
 				<th style="width:2% !important;" class="no" colspan="0" id="ck">
 				<input type="checkbox" id="checkall" target="check[]"></th>
-				<th style="width:20% !important;"><?php echo Title; ?></th>
-				<th style="width:13% !important;" class="no" align="center">Status</th>
+				<th style="width:20% !important;" hidden-xs><?php echo Title; ?></th>
+				<th style="width:13% !important;" class='no hidden-xs' align="center">Status</th>
 				<th style="width:17% !important;"><?php echo Position; ?></th>
-				<th style="width:18% !important;"><?php echo Type; ?></th>
-				<th style="width:10% !important; text-align:center;"><?php echo Short; ?></th>
-				<th style="width:15% !important; text-align:center;"><?php echo Access_Level; ?></th>
-				<th style="width:5% !important;">ID</th>
+				<th style="width:18% !important;" class='hidden-xs'><?php echo Type; ?></th>
+				<th style="width:10% !important; text-align:center;" class='hidden-xs'><?php echo Short; ?></th>
+				<th style="width:15% !important; text-align:center;" class='hidden-xs'><?php echo Access_Level; ?></th>
+				<th style="width:5% !important;" class='hidden-xs'>ID</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
 			$db = new FQuery();  
-			$db ->connect(); 
 			$sql = $db->select(FDBPrefix.'module','*','','`position` DESC, `short` ASC, `name` ASC');
 			$no=1;
-			while($qr=mysql_fetch_array($sql)){	
-				if($qr['status']==1)
+			foreach($sql as $row){	
+				if($row['status']==1)
 				{ $stat1 ="selected"; $stat2 =""; $enable = ' enable';}							
 				else
 				{ $stat2 ="selected";$stat1 =""; $enable = 'disable';}
@@ -122,13 +121,13 @@ $(document).ready(function() {
 					<label class='cb-enable $stat1 tips' data-placement='right' title='".Disable."'><span>
 					<i class='icon-remove-sign'></i></span></label>
 					<label class='cb-disable $stat2 tips' data-placement='right' title='".Enable."'><span>
-					<i class='icon-ok-sign'></i></span></label>
-					<input type='hidden' value='$qr[id]' class='number invisible'>
-					<input type='hidden' value='$qr[status]'  class='type invisible'>
+					<i class='icon-check-circle'></i></span></label>
+					<input type='hidden' value='$row[id]' class='number invisible'>
+					<input type='hidden' value='$row[status]'  class='type invisible'>
 				</div>";	
 				
 				//switch status
-				if($qr['show_title']==1)
+				if($row['show_title']==1)
 				{ $sname1 ="selected"; $sname2 =""; $stitle = ' show';}							
 				else
 				{ $sname2 ="selected"; $sname1 =""; $stitle ='hide';}
@@ -139,20 +138,20 @@ $(document).ready(function() {
 					</span></label>
 					<label class='cb-disable $sname2 tips' data-placement='left' title='".Visible_title."'><span>
 					<i class='icon-font'></i></span></label>
-					<input type='hidden' value='$qr[id]'  class='number invisible'>
-					<input type='hidden' value='$qr[show_title]' class='type invisible'>
+					<input type='hidden' value='$row[id]'  class='number invisible'>
+					<input type='hidden' value='$row[show_title]' class='type invisible'>
 				</div>";			
 				
 				//module name
-				$name = "<a href='?app=module&act=edit&id=$qr[id]' class='tips' data-placement='right' title='".Edit."'>$qr[name]</a>";
+				$name = "<a href='?app=module&act=edit&id=$row[id]' class='tips' data-placement='right' title='".Edit."'>$row[name]</a>";
 				
 				//checkbox
-				$check = "<input type='checkbox' name='check[]' value='$qr[id]' rel='ck'>";						
+				$check = "<input type='checkbox' name='check[]' value='$row[id]' rel='ck'>";						
 				//creat user group values	
-				$level = oneQuery('user_group','level',"'$qr[level]'",'group_name');
+				$level = oneQuery('user_group','level',"'$row[level]'",'group_name');
 				if(empty($level)) $level = _Public;
 				
-				echo "<tr><td align='center'>$check</td><td>$name</td><td><div class='switch-group'>$sname$status</div></td><td>$qr[position]</td><td>$qr[folder]</td><td align='center'>$qr[short]</td><td align='center'>$level</td><td align='center'>$qr[id]</td></tr>";
+				echo "<tr><td align='center'>$check</td><td>$name</td><td class='hidden-xs'><div class='switch-group'>$sname$status</div></td><td class='hidden-xs'>$row[position]</td><td>$row[folder]</td><td align='center' class='hidden-xs'>$row[short]</td><td align='center' class='hidden-xs'>$level</td><td align='center' class='hidden-xs'>$row[id]</td></tr>";
 				$no++;	
 			}
 			?>

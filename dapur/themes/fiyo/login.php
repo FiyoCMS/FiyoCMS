@@ -42,6 +42,7 @@ defined('_FINDEX_') or die('Access Denied');
 					data: "user="+name+"&pass="+pass+"&url="+url,
 					timeout : 10000,
 					error: function(data){	
+						alert(data);
 						$(t).html("Login");
 					},	
 					success: function(data){

@@ -13,7 +13,7 @@ $end = mod_param('end',$modParam);
 $start = mod_param('start',$modParam);
 
 if(!$cat) 
-	echo "Error::please set up your <b>Article Archive</b> module!";
+	echo "Error : please set up your <b>Article Archive</b> module!";
 else {
 	if(!$start) $start = "1000-1-1";
 	if(!$end) $end = date("Y-m-d");
@@ -36,7 +36,7 @@ else {
 	$archveQuery = $db->select(FDBPrefix."article","*,DATE_FORMAT(date,'%m') as m,DATE_FORMAT(date,'%M') as mo,DATE_FORMAT(date,'%d-%b') as month,DATE_FORMAT(date,'%Y') as y"," $filter AND $catn","category ASC");
 	$no = $x = 0;
 
-	while($archveRow=mysql_fetch_array($archveQuery))
+	foreach($archveQuery as $archveRow)
 	{		
 		$link="?app=article&view=item&id=$archveRow[id]";	
 		$link = make_permalink($link);		

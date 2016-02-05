@@ -14,6 +14,8 @@ defined('_FINDEX_') or die('Access Denied');
 * load FiSef system
 */
 require ('plg_system.php'); 
+
 redirect_www();
+redirect_https();
 redirect_link();
 

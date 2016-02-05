@@ -32,4 +32,9 @@ require_once ('system/core.php');
 //melakukan pengecekan login AdminPanel
 check_backend_login();
 
+$output = ob_get_contents();
+ob_end_clean();
+
+if(isset($_SERVER['HTTPS'])) $output = str_replace("http://", "https://", $output);
+echo $output;
 ob_end_flush();

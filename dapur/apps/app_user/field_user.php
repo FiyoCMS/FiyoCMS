@@ -31,15 +31,17 @@ $(document).ready(function(){
 		 type:"POST",
 		 url:"apps/app_user/controller/check_user.php",    
 		 data: "act=user&username=" + username,
-		 success: function(data){                 
+		 success: function(data){                
 			if(data==0){
 				$("#pesan").html("<span class='form_ok'>Username availible</span>");	
+				$(".form_error").remove();	
 			} 
 			else if(data==2){
 				$("#pesan").html("<span class='form_error'>Username not valid</span>"); 
 			} 
 			else {
-				$("#pesan").html("<span class='form_error'>Username not availible</span>");   
+				$("#pesan").html("<span class='form_error'>Username not availible</span>");  
+				$(".form_ok").remove();	 
 		   }
 		}
 		}); 		
@@ -59,15 +61,17 @@ $(document).ready(function(){
 		 type:"POST",
 		 url:"apps/app_user/controller/check_user.php",    
 		 data: "act=email&email=" + email,
-		 success: function(data){                 
+		 success: function(data){              
 			if(data==0){
 				$("#email").parent().append("<span class='form_ok'>Email availible</span>");	
+				$(".form_error").remove();	
 			} 
 			else if(data==2){
-				$("#email").parent().append("<span class='form_error'>Email not valid</span>"); 
+				
 			} 
 			else {
 				$("#email").parent().append("<span class='form_error'>Email not availible</span>");   
+				$(".form_ok").remove();	
 		   }
 		}
 		}); 		
@@ -78,15 +82,16 @@ $(document).ready(function(){
 	});
 	
 	// re-password checker	
-	$("#repassword").change(function(){
-	
+	$("#repassword, #pass").change(function(){
 		var password  = $("#pass").val(); 	
 		var repassword  = $("#repassword"); 
 			if(password==repassword.val()){
 				repassword.parent().append("<span class='form_ok'>Passed</span>");	
+				$(".form_error").remove();	
 			} 
 			else {
 				repassword.parent().append("<span class='form_error'>Re-password not valid</span>");   
+				$(".form_ok").remove();	
 		   }
 		
 		setTimeout(function(){
@@ -119,7 +124,7 @@ $(document).ready(function(){
 					<td class="row-title"><span class="tips" title="<?php echo Username_tip; ?>" width="40%">Username</td>
 					<td><input type="hidden" name="id" value="<?php echo $qr['id']; ?>"><input type="hidden" name="z" id="user" value="<?php echo $qr['user']; ?>">
 					<input type="text" id="username" required  name="user" size="20" <?php echo formRefill('user',"$qr[user]"); ?> class='alphanumeric'/>
-					<input type="text" name="z" size="1" style="display:none" value="<?php echo $qr['user']; ?>"></td>
+					<input type="text" name="z" size="1" style="display:none" value="<?php echo $qr['user']; ?>"><span id="pesan"></span></td>
 				</tr>
 				<tr>
 					<td class="row-title"><span class="tips" title="<?php echo Password_tip; ?>">Password</td>
@@ -140,7 +145,7 @@ $(document).ready(function(){
 						<select name="level" id="select">
 						<?php
 							$sql2=$db->select(FDBPrefix.'user_group'); 
-							while($qrs=mysql_fetch_array($sql2)){
+							foreach($sql2 as $qrs){
 							 if($qrs['level'] >= userInfo('level')) {
 								if($qrs['level'] > 3 AND $_GET['act'] == 'add'){
 									echo "<option value='$qrs[level]' selected>$qrs[group_name]</option>";

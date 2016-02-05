@@ -19,12 +19,17 @@ defined('_FINDEX_') or die('Access Denied');
 		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		return re.test(email);
 	} 
+	function is_valid_url(url)
+	{
+		 return url.match(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/);
+	}
 	$(function() {
 		$('.send_comment').click(function() {
 			var name = $("#comment-name").val();
 			var email = $("#comment-email").val();
 			var text = $("#comment-text").val();
-			var url = $("#comment-url").val();
+			var web = $("#comment-url").val();
+			var link = "<?php echo $link;?>";
 			var captcha = $("#comment-captcha").val();
 			var t = $(this);
 			if(!text || !email || !name) {
@@ -34,29 +39,37 @@ defined('_FINDEX_') or die('Access Denied');
 				$("#comment-email").focus();
 				else if(!text)
 				$("#comment-text").focus();
-			} else {
+			} 
+			else if (url && !is_valid_url(url)) {
+				$("#comment-url").focus();
+			}			
+			else {
+			var url = "<?php echo FUrl;?>apps/app_comment/controller/insert.php";
 			t.html("Loading...").attr('disabled','');
 			$.ajax({
 				type : "POST",
-				data: "send=true&name="+name+"&email="+email+"&url="+url+"&text="+encodeURIComponent(text)+"&captcha="+captcha+"&link="+encodeURIComponent("<?php echo $link;?>"),
-				url: "<?php echo FUrl; ?>apps/app_comment/controller/insert.php",
+				data: "send=true&name="+name+"&email="+email+"&url="+web+"&text="+encodeURIComponent(text)+"&captcha="+captcha+"&link="+encodeURIComponent(link),
+				url: url,
+				timeout:5000, 
+				error:function(data){ 
+					alert("Something wrong, please refresh page! "+url);
+					t.html("<?php echo Send_Comment;?>").removeAttr('disabled');
+				},
 				success: function(data){
 					$(".notice-comment").remove();
 					var json = $.parseJSON(data);
 					$("#comments").after("<div class='alert notice-comment alert-"+json.status+"'>"+json.notice+"<\/div>");
 					if(json.redirect == 1)
 					$("#comments").after("<meta http-equiv='REFRESH' content='3; url=<?php echo getUrl();?>#comment-"+json.id+"'>");
-					if(json.status == 'success' || json.status == 'info')	$("#comment-text").val("");
-					
+					else if(json.status == 'success' || json.status == 'info')
+						$("#comment-text").val("");
 					t.html("<?php echo Send_Comment;?>").removeAttr('disabled');
-					/*reloadCaptcha();*/
 				}
 			});
 			
 			}
 		});
 	});	
-	
 </script>
 
 <h3 id="comments" ><?php echo comment_Leave_Comment; ?></h3>
