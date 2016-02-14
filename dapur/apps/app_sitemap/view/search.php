@@ -34,7 +34,7 @@ $(function() {
 				loadTable();
 				t.html('Re-Clawler');
 				$(".save.btn").remove();
-				t.before("<button type='submit' name='save_crawler' class='save btn' value='<?php echo Save; ?>'>Save</button>");
+				t.before("<button type='submit' name='save_crawler' class='save btn' value='<?php echo Save; ?>'><?php echo Save; ?></button>");
 			}		
 		});			
 	});
@@ -61,7 +61,7 @@ $(function() {
 	<footer>
 		<div style=" margin:0; padding:10px; width: 100%;"><p>
 			Please remember! It will take a long time doing the tracking link on your site.<br>
-			Please wait until the process is completed. If you understand you can start now.<br></p><button type="Submit" value="" name="getSettings" class="btn btn-grad btn-primary search"><?php echo Start_Now; ?></button>
+			Please wait until the process is completed. If you understand you can start now.<br></p><button type="Submit" value="" name="getSettings" class="btn btn-grad btn-primary search">Start Now</button>
 		</div>
 	</footer>
 	<div class="data table-sitemap">

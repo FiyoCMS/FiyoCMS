@@ -13,8 +13,8 @@ if(!isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] > 2) die ();
 require_once ('../../../system/jscore.php');
 
 
-$url = 'http://localhost/fiyo_instaler2/patch/';
-$xml = simplexml_load_file($url);
+$url = 'http://patch.fiyo.org/';
+$xml = @simplexml_load_file($url);
 $site_version	= siteConfig('version');
 if($xml) {
 	$latest_version = $xml-> version -> number ;
@@ -82,14 +82,13 @@ if(isset($_POST['patching']) AND $_POST['patching'] != false AND $site_version !
 				
 				$db = new FQuery();  
 				$db -> connect();
-				//$db->update(FDBPrefix.'setting',array('value'=>"$p[number]"),"name='version'");
+				$db->update(FDBPrefix.'setting',array('value'=>"$p[number]"),"name='version'");
 				$sup = $p['number'];				
-				include_once("$root/installer.php");		
-				unlink("$root/installer.php");
+				@unlink("$root/installer.php");
 				echo "<span class='installing'>".Installing_patch.$p['number']."</span>"; 
 				?>
-				<script>	
-					$(document).ready(function() {
+				<script>		
+					$(document).ready(function() {	
 						$(".installing").LoadingDot({
 							"speed": 500,
 							"maxDots": 4,
@@ -103,11 +102,11 @@ if(isset($_POST['patching']) AND $_POST['patching'] != false AND $site_version !
 							method: "POST",
 							cache:false,
 							timeout: 10000,  // I chose 10 secs for kicks
-							error:function(data){ console.log(data);
+							error:function(){ 
 									$(".update-info").html("Error Connection!") ;
 									$(".modal-footer").show();
 							},
-							success: function(data){console.log(data);
+							success: function(data){
 								$(".update-info-update").html(data);
 								$(".version-val").html("<?php echo $sup; ?>");	
 								$(".update-confirm").hide();

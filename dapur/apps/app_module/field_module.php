@@ -154,30 +154,17 @@ $(function() {
 			<tr>
 				<td class="row-title"><span class="tips" title="<?php echo Module_Pages_tip; ?>"><?php echo Module_Pages; ?></span></td>
 				<td>
-					<div class="selections" style=" max-width: 280px; font-size:12px; ">
-					<div style="overflow: hidden">
-					<label class="selections-all"><?php echo Select_all; ?></label>
-					<label class="selections-reset"><?php echo Reset_all; ?></label>
-					</div>
-					<div class="selections-box" style="height:150px; max-width: 280px; font-size:12px;  overflow-y: auto;">
-					<?php
-						$sql2 = $db->select(FDBPrefix.'menu_category','*',"category != 'adminpanel'"); 
-						foreach($sql2 as $row2){
-							$sql3 = $db->select(FDBPrefix.'menu','*',"parent_id=0 AND category='$row2[category]'",'short ASC'); 
-							if(!count($sql3)) continue;
-							echo "<h6>$row2[title]</h6><ul class='selectbox' >";
-							foreach($sql3 as $row3){
-								$sel = multipleSelected($row['page'],$row3['id']);
-								if($sel =='selected' or !$row) $sel = "class='active' checked";
-								$check = "<input $sel type='checkbox' name='page[]' value='$row3[id]' rel='ck'>";
-								echo "<li value='$row3[id]' $sel>$check $row3[name] </li>";
-								option_sub_menu($row3['id'],'','',$row['page']);
-							}
-						echo "</ul>";
-						}
-					?>
-					</div>
-					</div>
+                                    <select name="page[]" class="chosen-select w-max" data-placeholder="<?php echo Choose_tags; ?>" style="min-width: 60%"  multiple>
+                                    <option value=""></option>
+                                            <?php	
+                                                    $_GET['id']=0;
+                                                    $sql = $db->select(FDBPrefix.'theme_layout'); 
+                                                    foreach($sql as $rowt){
+                                                            $sel = multipleSelected($row['page'],$rowt['id']);
+                                                            echo "<option value='$rowt[id]' $sel>$rowt[name]</option>";
+                                                    }						
+                                            ?>
+                                    </select>
 				</td>
 			</tr>
 			</table>

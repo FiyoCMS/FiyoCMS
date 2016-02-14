@@ -16,46 +16,40 @@ define('FDBName', $DBName);
 define('FDBPrefix', $DBPrefix);
 
 class FQuery {
-    /*
-     * Edit the following variables
-     */ 
-    private $db_host = FDBHost;       // Database Host
-    private $db_user = FDBUser;       // Username
-    private $db_pass = FDBPass;       // Password
-    private $db_name = FDBName;       // Database
-    /*
-     * End edit
-     */
-
-    public $db   = false;              // Cek untuk melihat apakah sambungan aktif
-    public $result = null;              // Cek untuk melihat apakah sambungan aktif
-    public $last_query;              // Database
+    private static $db_host = FDBHost;       // Database Host
+    private static $db_user = FDBUser;       // Username
+    private static $db_pass = FDBPass;       // Password
+    private static $db_name = FDBName; 
+        
+    public static $db   = false;            // Cek untuk melihat apakah sambungan aktif
+    public $result = null;           // Cek untuk melihat apakah sambungan aktif
+    public static $last_query;              // Database
 
     public function connect()
-    {
-		static $conn = false;
-		if(!$conn) { 
-			try{
-				$options = array(
-				PDO::ATTR_PERSISTENT    => false,
-				PDO::ATTR_ERRMODE       => PDO::ERRMODE_EXCEPTION);
-				$this -> db = $conn = new PDO("mysql:host=$this->db_host;dbname=$this->db_name;charset=utf8",$this->db_user, $this->db_pass, $options);
-			}
-			catch(PDOException $e){				
-                alert('error','Unable to connect database!',true,true);
-			}
-		} else $this -> db = $conn;		
+    {        
+        static $conn = false;
+        if(!$conn) { 
+                try{
+                        $options = array(
+                        PDO::ATTR_PERSISTENT    => false,
+                        PDO::ATTR_ERRMODE       => PDO::ERRMODE_EXCEPTION);
+                        self::$db = $conn = new PDO("mysql:host=".self::$db_host.";dbname=".self::$db_name.";charset=utf8",self::$db_user, self::$db_pass, $options);
+                }
+                catch(PDOException $e){				
+        alert('error','Unable to connect database!',true,true);
+                }
+        } else self::$db = $conn;		
     }
 
     /*
     * Mengolah seluruh query
 	* Membuat sebuah definisi singkat query
     */
-	public function query($query, $fetch = false, $error = true){
+	public static function query($query, $fetch = false, $error = true){
 		static $cons = false;		
 		try{
-			$result = $this->connect();       
-			$result = @$this->db->prepare($query);
+			$result = self::connect();       
+			$result = self::$db->prepare($query);
 			$result ->execute();
 			if($fetch)
 				return $result->fetchAll(PDO::FETCH_ASSOC);
@@ -68,16 +62,16 @@ class FQuery {
 				$cons = true;
 			}
 		}
-                $this->last_query = $query;
+              self::$last_query = $query;
 	}
 	
     /*
     * Cek apakah tabel setting ada
 	* Sebelum melakukan query lanjutan
     */
-    public function tableExists($table)
+    public static function tableExists($table)
     {
-		$result = $this->query('SHOW TABLES FROM '.$this->db_name.' LIKE "'.$table.'"');
+		$result = self::query('SHOW TABLES FROM '.self::$db_name.' LIKE "'.$table.'"');
         if($result)
         {
             if(count($result))
@@ -93,7 +87,7 @@ class FQuery {
     /*
     * Query select sederhana
     */	
-	public function select($table, $rows = '*', $where = null, $order = null, $limit = null){	
+	public static function select($table, $rows = '*', $where = null, $order = null, $limit = null){	
 		$sql = 'SELECT '.$rows.' FROM '.$table;
 		
         if($where != null)
@@ -102,11 +96,11 @@ class FQuery {
             $sql .= ' ORDER BY '.$order;	
         if($limit != null)
             $sql .= ' LIMIT '.$limit;	
-		$this->last_query = $sql;
+		self::$last_query = $sql;
 		static $cons = false;
 		try{
-			$result = $this->connect();       
-			$result = @$this->db->prepare($sql);
+			$result = self::connect();       
+			$result = self::$db->prepare($sql);
 			$result ->execute();
 			return $result->fetchAll(PDO::FETCH_ASSOC);
 		}
@@ -126,7 +120,7 @@ class FQuery {
     * Optional: rows (if values don't match the number of rows)
     */
         
-    public function insert($table,$values,$rows = null)
+    public static function insert($table,$values,$rows = null)
     {
         $insert = 'INSERT INTO '.$table;
         
@@ -143,13 +137,17 @@ class FQuery {
             $rows = implode(',',$rows);
             $insert .= ' ('.$rows. ')';
         }
+        foreach ($values as $k => $r)  
+           if(strpos('"',$r) === 0  AND strpos("'",$r) === 0)
+               $values[$k] = "'".$r."'";
+        
         $values = implode(',',$values);
         $insert .= ' VALUES ('.$values.')';
-		  $this->last_query = $insert;	
+		self::$last_query = $insert;	
 		static $cons = false;
 		try{
-			$result = $this->connect();       
-			$result = $this->db->prepare($insert);
+			$result = self::connect();       
+			$result = self::$db->prepare($insert);
 			$query = $result ->execute();
         }
 		catch(PDOException $e){
@@ -173,7 +171,7 @@ class FQuery {
     * Required: table (the name of the table)
     * Optional: where (condition [column =  value])
     */
-    public function delete($table,$where = null)
+    public static function delete($table,$where = null)
     {
         if($where == null)
             {
@@ -184,11 +182,11 @@ class FQuery {
             $delete = 'DELETE FROM '.$table.' WHERE '.$where;
         }
 			
-		  $this->last_query =  $delete ;	
+		self::$last_query =  $delete ;	
 		static $cons = false;
 		try{
-			$result = $this->connect();       
-			$result = $this->db->prepare($delete);
+			$result = self::connect();       
+			$result = self::$db->prepare($delete);
 			$query = $result ->execute();
         }
 		catch(PDOException $e){
@@ -214,7 +212,7 @@ class FQuery {
      *           rows (the rows/values in a key/value array
      *           where (the row/condition in an array (row,condition) )
      */
-    public function update($table,$rows,$where)
+    public static function update($table,$rows,$where)
     {
         $update = 'UPDATE '.$table.' SET ';
         $keys = array_keys($rows);
@@ -222,12 +220,12 @@ class FQuery {
         for($i = 0; $i < count($rows); $i++){
             if(is_string($rows[$keys[$i]]) AND $rows[$keys[$i]] !== '+hits')
             {
-                $update .= $keys[$i].'="'.$rows[$keys[$i]].'"';
+                $update .= '`'.$keys[$i].'`="'.$rows[$keys[$i]].'"';
             }
             else
             {
 				if($rows[$keys[$i]] == '+hits') $rows[$keys[$i]] = $keys[$i] . '+'. 1;
-                 $update .= $keys[$i].'='.$rows[$keys[$i]];
+                 $update .= '`'.$keys[$i].'`='.$rows[$keys[$i]];
             }
 
             // Parse to add commas
@@ -238,12 +236,12 @@ class FQuery {
         }
 			
             $update .= ' WHERE '.$where;
-            $this->last_query =   $update ;
+          self::$last_query =   $update ;
             
 	static $cons = false;
 	try{
-			$result = $this->connect();       
-			$result = $this->db->prepare($update);
+			$result = self::connect();       
+			$result = self::$db->prepare($update);
 			$query = $result ->execute();
         }
 	catch(PDOException $e){
@@ -263,3 +261,7 @@ class FQuery {
         }
     }
 }
+
+class DB extends \FQuery {   
+}
+

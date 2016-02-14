@@ -89,23 +89,22 @@ class Contact {
 		}	
 	}
 
-	function category($id,$fp = null) {	
+	function category($id,$fp = null) {
 		$db = new FQuery();  
 		$db->connect(); 
-		$param 		= menuInfo('parameter',getLink());
 		
-		$show_panel	= mod_param('show_name',$param);
-		$read_more  = mod_param('read_more',$param);
-		$per_page	= mod_param('per_page',$param);
+		$show_panel	= menu_param('show_name');
+		$read_more  = menu_param('read_more');
+		$per_page	= menu_param('per_page');
 		$this -> sname		= 1;
-		$this -> sgroup		= mod_param('show_group',$param);
-		$this -> sgender	= mod_param('show_gender',$param);
-		$this -> saddress	= mod_param('show_address',$param);
-		$this -> semail		= mod_param('show_email',$param);
-		$this -> sjob		= mod_param('show_job',$param);
-		$this -> slinks		= mod_param('show_links',$param);
-		$this -> sphone		= mod_param('show_phone',$param);
-		$this -> sphoto		= $sphoto= mod_param('show_photo',$param);
+		$this -> sgroup		= menu_param('show_group');
+		$this -> sgender	= menu_param('show_gender');
+		$this -> saddress	= menu_param('show_address');
+		$this -> semail		= menu_param('show_email');
+		$this -> sjob		= menu_param('show_job');
+		$this -> slinks		= menu_param('show_links');
+		$this -> sphone		= menu_param('show_phone');
+		$this -> sphoto		= $sphoto = menu_param('show_photo');
 
 		
 		$groupId = app_param('id');

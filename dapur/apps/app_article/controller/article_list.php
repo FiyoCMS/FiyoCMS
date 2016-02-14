@@ -11,6 +11,7 @@ if(@$_SESSION['USER_LEVEL'] > 5 or !isset($_GET['iSortCol_0'])) die ('Access Den
 define('_FINDEX_','BACK');
 require('../../../system/jscore.php');
 header('Content-Type: application/json');
+    $db = new DB;
 
 
 	/* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -119,7 +120,7 @@ header('Content-Type: application/json');
 	$sQuery = "
 		SELECT FOUND_ROWS()
 	";
-	$rResultFilterTotal = $db->db->query( $sQuery)->fetchColumn();
+	$rResultFilterTotal = $db->query( $sQuery)->fetchColumn();
 	$iFilteredTotal = $rResultFilterTotal;
 	
 	/* Total data set length */
@@ -128,7 +129,7 @@ header('Content-Type: application/json');
 		FROM   $sTable
 	";
 	
-	$rResultTotal = $db->db->query( $sQuery)->fetchColumn();
+	$rResultTotal = $db->query($sQuery)->fetchColumn();
 	$iTotal = $rResultTotal;
 	
 	

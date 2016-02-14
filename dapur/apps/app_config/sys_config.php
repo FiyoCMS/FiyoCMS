@@ -206,11 +206,11 @@ if(isset($_POST['config_save'])) {
 		{				
 			notice('success',Status_Applied);
 			refresh();
+                        die();
 		}
 		$_SESSION['media_theme'] = $_POST['media_theme'];
 	}		
 }
-
 
 function insert_new_apps($name, $folder, $author, $type, $icon = null, $style = null) {
 	$db = new FQuery();  

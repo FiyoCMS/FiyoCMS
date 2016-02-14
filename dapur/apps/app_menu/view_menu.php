@@ -152,7 +152,7 @@ $(function() {
 					<label class='cb-enable tips $stat1' data-placement='right' title='".Disable."'><span>
 					<i class='icon-remove-sign'></i></span></label>
 					<label class='cb-disable tips $stat2' data-placement='right' title='".Enable."'><span>
-					<i class='icon-ok-sign'></i></span></label>
+					<i class='icon-check-circle'></i></span></label>
 					<input type='hidden' value='$row[id]' id='id' class='invisible'>
 					<input type='hidden' value='$row[status]' id='type' class='invisible'>
 				</div>";					
@@ -172,7 +172,7 @@ $(function() {
 					<input type='hidden' value='stat' id='type' class='invisible'>
 				</div>";		
 				/* change default page */				
-				if($row['global']==1)
+				if($row['layout']==1)
 				{ $dm = "selected"; $dms = ""; }							
 				else
 				{ $dm = ""; $dms = "selected"; }		
@@ -214,7 +214,7 @@ $(function() {
 					$home = $default = null;
 				}
 				echo "<tr>";
-				echo "<td align='center'>$checkbox</td><td>$name $tools</td><td align='center' class=''><div class='switch-group'>$home$default$status</div></td><td class='hidden-xs'>$row[category]</td><td class='hidden-xs'>$row[app]</td><td align='center' class='hidden-xs hidden-sm'>$row[short]</td><td align='center'class='hidden-xs'>$level</td><td align='center' class='hidden-xs'>$row[id]</td>";
+				echo "<td align='center'>$checkbox</td><td>$name $tools</td><td align='center' class=''><div class='switch-group'>$home$status</div></td><td class='hidden-xs'>$row[category]</td><td class='hidden-xs'>$row[app]</td><td align='center' class='hidden-xs hidden-sm'>$row[short]</td><td align='center'class='hidden-xs'>$level</td><td align='center' class='hidden-xs'>$row[id]</td>";
 				echo "</tr>";
 				sub_menu($row['id'],'',$no);
 			$no++;	

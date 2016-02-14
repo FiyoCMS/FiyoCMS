@@ -16,7 +16,7 @@ if(!empty($_SESSION['USER_ID']) AND $_SESSION['USER_LEVEL'] <= 3) {
 
 	$c =  dirname(dirname(dirname($_SERVER["PHP_SELF"])));
 	if($c == '\\') $c = str_ireplace("\\","",$c);
-	$_SERVER["HTTP_HOST"] = "//".$c;
+	$_SERVER["HTTP_HOST"] = $_SERVER["HTTP_HOST"].$c;
 	if(strlen($c) > 1) $c = "$c/"; 
 	$_SESSION['media_root'] = $c;
 

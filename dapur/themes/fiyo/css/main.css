@@ -1864,10 +1864,46 @@ input.btn:active, a.btn:active {
 	background-color: none;
 }
 
+.btn.save i, .btn.save_ref i, .btn.cancel i, .btn.add i, .btn.delete i {
+    display: none !important;
+}
 .btn.save:before {
 	font-family: FontAwesome;
 	content: "\f00c";
 	margin-right: 3px;
+	font-size: 14px;
+	line-height: 0;
+}
+.btn.save_ref:before {
+	font-family: FontAwesome;
+	content: "\f058";
+	margin-right: 3px;
+	font-size: 14px;
+	line-height: 0;
+}
+
+.btn.cancel:before {
+	font-family: FontAwesome;
+	content: "\f057";
+	margin-right: 5px;
+	font-size: 14px;
+	line-height: 0;
+        color: red;
+        text-shadow: 1px 1px 0 #fff;
+}
+
+.btn.add:before {
+	font-family: FontAwesome;
+	content: "\f067";
+	margin-right: 5px;
+	font-size: 14px;
+	line-height: 0;
+}
+
+.btn.delete:before {
+	font-family: FontAwesome;
+        content: "\f1f8";
+	margin-right: 0;
 	font-size: 14px;
 	line-height: 0;
 }
@@ -3743,7 +3779,7 @@ left: 51%;
 
 
 .icon{background:no-repeat center;padding:8px}
-.icon.oks{ background-image:url(../images/icon/ok.png);}
+.icon.oks{ background-image:url(../images/icon/chk.png);}
 .icon.default{background-image:url(../images/icon/default.png)}
 .icon.lock{background-image:url(../images/icon/lock.png)}
 .icon.edit{background-image:url(../images/icon/edit.png)}

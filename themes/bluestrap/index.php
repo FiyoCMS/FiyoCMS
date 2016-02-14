@@ -26,7 +26,11 @@
   </head>
 
   <body>
-
+<?php
+    $user = new User();
+    echo $user->id;
+?>
+      
 <?php if(!checkMobile()): ?>
   <header>
 	<div  class="container">

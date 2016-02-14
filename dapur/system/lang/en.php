@@ -82,6 +82,7 @@ define ("Category","Category");
 define ("Position","Position");
 define ("Short","Short");
 define ("Type","Type");
+define ("Theme","Theme");
 define ("Code","Code");
 define ("Price","Price");
 define ("Time","Time");
@@ -99,6 +100,7 @@ define ("Choose","Choose");
 define ("Hidden","Hidden");
 define ("Visible","Visible");
 define ("deleted","deleted");
+define ("in_used","in used");
 define ("Try_Again","Try Again");
 define ("Specification","Specification");
 define ("Message","Message");
@@ -447,6 +449,10 @@ define ("New_Theme","New Theme");
 define ("Theme_url", "Theme URL");
 define ("Please_select_theme", "Choose a theme first!");
 define ("Choose_file_on_left_side","Choose file on left side!");
+/********** Layout *************/
+define ("Layout_List","Layout Manager");
+define ("Layout_Edit","Edit Layout");
+define ("Layout_Add","Add Layout");
 
 /************************************
 * 			User Manager 			*

@@ -1,36 +1,67 @@
 <?php
-/* 
- * @version	2.0
+/** 
+ * Adds a custom validation rule using a callback function.
+ * @version	2.5 / 3.0
  * @package	Fiyo CMS
  * @copyright	Copyright (C) 2016 Fiyo CMS.
  * @license	GNU/GPL, see LICENSE.
  */
 
+include_once 'libs/gump.class.php';
 
-class Input  {
-    static public function get($var,$strip = false) {
+class Input extends GUMP {
+    
+    static public function get($var,$strip = true) { 
         if(isset($_GET[$var]))   {
             $get = $_GET[$var];
-            if($strip) 
-                return stripTags ($get);
-            else 
+            if(is_array($get) or is_object($get))
                 return $get;
+            else if ($strip !== true AND $strip !== false) {  
+                return $strip($get, ENT_QUOTES);
+            }
+            else if ($strip === true) {
+                return strip_tags($get);
+            } else {
+                return $get;
+            }
         }
         else 
             return false;
     }  
-    
-    static public function post($var,$strip = false) {
+   
+    static public function post($var, $strip = true) {
         if(isset($_POST[$var]))   {
-            $get = $_POST[$var];
+            $post = $_POST[$var];
+             if(is_array($post) or is_object($post))
+                return $post;
+            else if ($strip !== true AND $strip !== false) {   
+                return $strip($post, ENT_QUOTES);
+            }
             if($strip) 
-                return stripTags ($get);
+                return strip_tags($post);
             else 
-                return $get;
+                return $post;
         }
         else 
             return false;
-    } 
+    }
+    
+    static public function session($var, $strip = true) {
+        if(isset($_SESSION[$var]))   {
+            $sess = $_SESSION[$var];
+            if(is_array($sess) or is_object($sess))
+                return $sess;
+            else if ($strip !== true AND $strip !== false) {      
+                return $strip($sess, ENT_QUOTES);
+            }
+            if($strip)
+                return strip_tags ($post);
+            else 
+                return $post;
+        }
+        else 
+            return false;
+    }
 }
 
 

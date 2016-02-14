@@ -8,7 +8,7 @@
  */
 
 (function() {
-	var saveCmd = {
+	var saveCmd = 
 			$.ajax({			
 				url: "<?php echo FUrl; ?>apps/app_article/controller/ajaxquery.php",
 				data: "article="+data+"&id="+id,
@@ -23,7 +23,7 @@
 					}, 3000);
 				}
 			});	
-	};
+	
 
 	var pluginName = 'saveinline';
 

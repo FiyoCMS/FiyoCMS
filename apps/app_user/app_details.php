@@ -9,16 +9,13 @@
 
 defined('_FINDEX_') or die('Access Denied');
 
-if(siteConfig('lang') == 'id')
-	$app_desc 			= 'Halaman untuk kelola akun';
-else
-	$app_desc 			= 'Manage member user';
-
+loadLang(__DIR__);
 $app_name			= 'App User';
 $app_version		= '1.5.0';
 $app_date			= '18 December 2011';
 $app_author			= 'Fiyo CMS';
 $app_author_url		= 'http://www.fiyo.org';
 $app_author_email	= 'info@fiyo.org';
+$app_desc 			= User_desc;
 
 ?>

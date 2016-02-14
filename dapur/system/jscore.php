@@ -6,7 +6,7 @@
 * @license		GNU/GPL, see LICENSE.txt
 **/
 
-
+if(!isset($_SERVER['HTTP_REFERER']) or !defined('_FINDEX_')) die('Access Denied!');
 
 //memuat file pendukung query dan fungsi lainya
 require_once ('../../../../config.php');
@@ -20,8 +20,7 @@ $api = siteConfig('apikey');
 
 
 //check table setting
-$db = new FQuery();  
-if(!$db->tableExists(FDBPrefix."setting")) die("Table setting not found!");
+if(!DB::tableExists(FDBPrefix."setting")) die("Table setting not found!");
 
 //set timezone
 $time = siteConfig('timezone');

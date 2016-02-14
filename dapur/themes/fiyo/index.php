@@ -39,7 +39,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 					<i class="icon-reorder"></i>
 				</a>
 				<a data-placement="bottom" class="side-bar right userSideBar">
-					<i class="icon-user"></i>
+					<i class="icon-ellipsis-horizontal"></i>
 				</a>
 				<span class="navbar-logo" href="index.php"></span>
 			</header>
@@ -103,7 +103,7 @@ if(!isset($_SESSION['THEME_WIDTH']) or checkMobile()) $_SESSION['THEME_WIDTH'] =
 </div> 
 <?php include('module/modal.php'); ?>
 <!-- /#wrap -->
-<?php if(!checkMobile() AND !isset($_SESSION['PLATFORM'])) : ?>	
+<?php if(!checkMobile() or !isset($_SESSION['PLATFORM'])) : ?>	
 <script src="<?php echo AdminPath; ?>/js/loader.js"></script>
 <?php else : ?>
 <script src="<?php echo AdminPath; ?>/js/loader.min.js"></script>

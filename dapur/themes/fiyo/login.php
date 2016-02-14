@@ -155,10 +155,10 @@ defined('_FINDEX_') or die('Access Denied');
                 <fieldset class="step">
                     <div class="legend"><img src="<?php echo $PARAM['logo'];?>" width="190"></div>
                     <div><input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" /><input type="password" name="password_fake" id="password_fake" value="" style="display:none;" />
-                        <input name="user" autocomplete="OFF" type="text" class="name" placeholder="Username" />                    
+                        <input name="user"  type="text" class="name" placeholder="Username" />                    
                         <input name="email" autocomplete="OFF" type="email" class="email femail" placeholder="Email" style="display: none" />
                     </div>
-                    <div>
+                    <div><input autocomplete="OFF" type="password" class="pass_fake" type="password" name="pass" id="password_fake" value="" style="display:none;" />
                         <input name="pass" autocomplete="OFF" type="password" class="pass"  placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" />
                         <input name="url" type="hidden" class="url"/>
                     </div>

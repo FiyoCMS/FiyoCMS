@@ -7,7 +7,6 @@
 **/
 
 defined('_FINDEX_') or die('Access Denied');
-
 $db = @new FQuery() or die; 
 ?>
 <form method="post" action="?app=config">

@@ -76,7 +76,7 @@ function openKCFinder(div) {
 }
 </script>
 <div class="col-lg-6 box-left">
-	<div class="box"> 		
+	<div class="panel box"> 		
 		<header>
 			<h5>Personal</h5>
 		</header>
@@ -112,7 +112,7 @@ function openKCFinder(div) {
 				</tr>			
 				<tr>
 					<td><?php echo Address; ?></td>
-					<td><textarea tabindex="4" rows="3" cols="30"  name="address" required><?php echo $qr['address'];?></textarea></td>
+					<td><textarea tabindex="4" rows="3" cols="45"  name="address" required><?php echo $qr['address'];?></textarea></td>
 				</tr>
 				
 				<tr>
@@ -139,7 +139,7 @@ function openKCFinder(div) {
 				
 				<tr>
 					<td><?php echo Description; ?></td>
-					<td><textarea tabindex="10" rows="4" cols="30"  name="desc"><?php echo $qr['description'];?></textarea></td>
+					<td><textarea tabindex="10" rows="4" cols="40"style="margin-right:-30px;" name="desc"><?php echo $qr['description'];?></textarea></td>
 				</tr>
 				
 			</table>

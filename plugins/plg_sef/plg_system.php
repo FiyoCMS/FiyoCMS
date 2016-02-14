@@ -309,7 +309,8 @@ function add_permalink($title, $cat = NULL, $pid = null, $ext = null, $next = nu
 				$ext = str_replace(".","",$ext);
 				$permalink = "$permalink.$ext";
 			}
-					
+				
+                        $link = str_replace("&amp;","&",$link);	
 			if($pml = check_permalink('link',$link,'permalink')) {
 				redirect(FUrl.$pml);
                         }
@@ -328,8 +329,9 @@ function add_permalink($title, $cat = NULL, $pid = null, $ext = null, $next = nu
 						$permalink = $p.SEF_EXT;
 					}
 				}
-				if(!empty($permalink) AND $permalink != "-" AND !empty($link))
-					$qr=$db->insert(FDBPrefix.'permalink',array("","$link","$permalink",$pid,1,0)); 
+				if(!empty($permalink) AND $permalink != "-" AND !empty($link)) {
+                                    $qr=$db->insert(FDBPrefix.'permalink',array("","$link","$permalink",$pid,1,0)); 
+                                }
 				if(isset($qr))
 					redirect(FUrl.$permalink);
 			}			

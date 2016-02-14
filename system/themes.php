@@ -48,9 +48,10 @@ else if(TitleType==0)
 
 	
 /********************************************/
-/*  		Define Type & Site Title	  	*/
+/*         Define Type & Site Title         */
 /********************************************/
-$themes = siteConfig('site_theme');
+$themes = FLayout("theme");
+if(empty($themes)) $themes = siteConfig('site_theme');
 define("FThemeFolder", $themes); 
 define("FThemePath",FUrl."themes/".FThemeFolder."");
 define("FThemes","themes/".FThemeFolder."/index.php");

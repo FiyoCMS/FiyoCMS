@@ -20,13 +20,13 @@ function crawl_page($url, $ex = null, $depth = 5)
     static $hurl = null;
 	
 	if(!$hurl)
-    $hurl = str_replace(array("http://","https://"),"",$url);
+    $hurl = str_replace("http://","",$url);
     if (isset($seen[$url]) || $depth === 0) {
         return;
     }
 
     $seen[$url] = true;
-       
+
     $dom = new DOMDocument('1.0');
     @$dom->loadHTMLFile($url);
     $anchors = $dom->getElementsByTagName('a');
@@ -63,8 +63,8 @@ function crawl_page($url, $ex = null, $depth = 5)
 			}			
 		}
 		
-		if(!array_search($href,$curl) AND strpos($href,"$hurl") AND !strpos($href,"?page=") AND !strpos($href,".rss") AND !strpos($href,"=") AND !strpos($href,"javascript:")AND !strpos($href,"@") AND !strpos($href,".zip") AND !strpos($href,"#") AND !strpos($href,"'") AND !strpos($href,'"') AND !strpos($href,'http') AND $href != $home AND !$n) {
-			if(strpos($c = str_replace(array("http://","https://"),$href,"//"))){
+		if(!array_search($href,$curl) AND strpos($href,"$hurl") AND !strpos($href,"?page=") AND !strpos($href,".rss") AND !strpos($href,"=") AND !strpos($href,"javascript:")AND !strpos($href,"@") AND !strpos($href,".zip") AND !strpos($href,"#") AND $href != $home AND !$n) {
+			if(strpos($c = str_replace("http://","",$href),"//")) {
 				while(strpos($c,"//")) {					
 					$c = str_replace("//","/",$c);
 				}

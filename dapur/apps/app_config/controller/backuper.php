@@ -12,9 +12,9 @@ if(!isset($_SESSION['USER_LEVEL']) AND $_SESSION['USER_LEVEL'] > 2) die ();
 
 require_once ('../../../system/jscore.php');
 
-if(isset($_GET['type'])) {		
-	if($_GET['type'] == 'database') {		
-		@unlink("../../../../.backup/$_GET[file]");		
+if(isset($_POST['type'])) {		
+	if($_POST['type'] == 'database') {		
+		@unlink("../../../../.backup/$_POST[file]");		
 		if(!file_exists('../../../../.backup'))
 			mkdir('../../../../.backup');			
 		$date = md5(date("Ymd:His"));
@@ -28,15 +28,15 @@ if(isset($_GET['type'])) {
 			
 		}
 	}	
-	if($_GET['type'] == 'table') {		
-		@unlink("../../../../.backup/.table/$_GET[file]");		
+	if($_POST['type'] == 'table') {		
+		@unlink("../../../../.backup/.table/$_POST[file]");		
 		if(!file_exists('../../../../.backup'))
 			mkdir('../../../../.backup');		
 		if(!file_exists('../../../../.backup/.table'))
 			mkdir('../../../../.backup/.table');		
 		$date = md5(date("Ymd:His"));
 		$file = "tbl-backup-$date";
-		$c = backup_tables("$_GET[table]",'../../../../.backup/.table',"$file",true);
+		$c = backup_tables("$_POST[table]",'../../../../.backup/.table',"$file",true);
 		if($c) 		{
 			$size = format_size(filesize("../../../../.backup/.table/$file.sql"));
 			$time = date("Y/m/d H:i:s",filemtime("../../../../.backup/.table/$file.sql"));	
@@ -45,8 +45,8 @@ if(isset($_GET['type'])) {
 			
 		}
 	}
-	if($_GET['type'] == 'installer') {		
-		@unlink("../../../../.backup/$_GET[file]");
+	if($_POST['type'] == 'installer') {		
+		@unlink("../../../../.backup/$_POST[file]");
 		$file = '../../../../system/installer.zip';
 		$cfile = '../../../../config.php';
 		$cfile2 = '../../../../_config.php';
@@ -68,12 +68,12 @@ if(isset($_GET['type'])) {
 		}
 	}
 
-	if($_GET['type'] == 'delete') {
-		if($_GET['act'] == 'installer' || $_GET['act'] == 'db')	
-		@unlink("../../../../.backup/$_GET[file]");
+	if($_POST['type'] == 'delete') {
+		if($_POST['act'] == 'installer' || $_POST['act'] == 'db')	
+		@unlink("../../../../.backup/$_POST[file]");
 		
-		if($_GET['act'] == 'tables')	
-		@unlink("../../../../.backup/.table/$_GET[file]");		
+		if($_POST['act'] == 'tables')	
+		@unlink("../../../../.backup/.table/$_POST[file]");		
 	}
 }
 

@@ -23,7 +23,7 @@ function loadModule($position, $echo = false) {
 				$page = explode(",",$qr['page']);
 				foreach($page as $val)
 				{
-					if(Page_ID == $val)
+					if(FLayout == $val)
 					{ 	
 						$qr['show_title']== 1 ? $title="<h3>$qr[name]</h3>" : $title = "";						
 						echo "<div class=\"modules $qr[class]\">$title<div class=\"mod-inner\" style=\"$qr[style]\">";
@@ -48,7 +48,7 @@ function loadModule($position, $echo = false) {
 				}
 			}
 			
-			else if($qr['page']==Page_ID AND FUrl==$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']){
+			else if($qr['page']==FLayout AND FUrl==$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']){
 				if($qr['show_title']==1){$title="<h3>$qr[name]</h3>";}
 				else {$title="";}
 				echo "<div class=\"modules $qr[class]\">$title<div class=\"mod-inner\" style=\"$qr[style]\">";
@@ -86,13 +86,13 @@ function checkModule($position) {
 	else {
 		$db = new FQuery();  
 		$db ->connect();	
-		if(!defined('Page_ID') AND $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']==FUrl){
+		if(!defined('FLayout') AND $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']==FUrl){
 			$sql=$db->select(FDBPrefix.'menu','*','home=1'); 
 			$qr = mysql_fetch_array($sql);
 			$pid= $qr['id'];
 		}
 		else{	
-			$pid = Page_ID;
+			$pid = FLayout;
 			if(empty($pid)) $pid = 0;
 		}
 		$val = false;
@@ -103,7 +103,7 @@ function checkModule($position) {
 			if(!empty($qr['page'])) {
 				$pid = explode(",",$qr['page']);
 				foreach($pid as $a) {
-					if($a == Page_ID )
+					if($a == FLayout )
 					$val = true;
 				}
 			}		
@@ -134,12 +134,12 @@ function loadModuleCss() {
 	else {
 		$db = new FQuery();  
 		$db ->connect();	
-		if(!defined('Page_ID') AND $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']==FUrl){
+		if(!defined('FLayout') AND $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']==FUrl){
 			$qr = $db->select(FDBPrefix.'menu','*','home=1'); 
 			$pid= $qr['id'];
 		}
 		else{	
-			$pid = Page_ID;
+			$pid = FLayout;
 			if(empty($pid)) $pid = 0;
 		}
 		$val = false;
@@ -149,7 +149,7 @@ function loadModuleCss() {
 			if(!empty($qr['page'])) {
 				$pid = explode(",",$qr['page']);
 				foreach($pid as $a) { 
-					if($a == Page_ID ) {
+					if($a == FLayout ) {
 						$file	= "modules/$qr[folder]/mod_style.php";
 						if(file_exists($file)) {
 							require_once ($file);

@@ -207,9 +207,9 @@ $(document).ready(function(){
 						$db->connect(); 
 						$sql = $db->select(FDBPrefix.'article_category','*','parent_id=0'); 
 						foreach($sql as $qrs){
-							if("?app=article&view=category&id=$qrs[id]"== $qr['link'])$s="selected";else$s="";
+							if("?app=article&view=category&id=$qrs[id]"== $menuLink)$s="selected";else$s="";
 							echo "<option value='$qrs[id]' $s>$qrs[name]</option>";
-							option_sub_cat($qrs['id'],'',$qr['link']);
+							option_sub_cat($qrs['id'],'',$menuLink);
 						}	
 					?>
 					</select>

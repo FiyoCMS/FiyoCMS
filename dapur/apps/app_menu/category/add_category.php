@@ -18,7 +18,7 @@ $db->connect();
 			<div class="app_title"><?php echo New_Category; ?></div>
 			<div class="app_link">
 				<button class="btn save" title="<?php echo Save; ?>" name="add_category" type="submit" value="Save" ><?php echo Save; ?></button>					
-				<button type="submit" class="save_quit btn btn-metis-2" title="<?php echo Save_and_Quit; ?>" value="<?php echo Save_and_Quit; ?>" name="save_category"><i class="icon-ok-sign"></i> <?php echo Save_and_Quit; ?></button>
+				<button type="submit" class="save_quit btn btn-metis-2" title="<?php echo Save_and_Quit; ?>" value="<?php echo Save_and_Quit; ?>" name="save_category"><i class="icon-check-circle"></i> <?php echo Save_and_Quit; ?></button>
 				<a class="danger btn btn-default btn-sm btn-grad" href="?app=menu&view=category" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 			</div><?php printAlert(); ?>
 		</div>

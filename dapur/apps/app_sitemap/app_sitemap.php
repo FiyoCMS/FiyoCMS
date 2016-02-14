@@ -48,8 +48,8 @@ else {
 	</div>
 <div class="app_link tabs">		
 	<div class="app_link">		
-		<a class="add btn btn-default <?php echo $a; ?>" href="?app=sitemap"><i class="icon-link"></i> Links</a>		
-		<a class="add btn btn-default <?php echo $b; ?>" href="?app=sitemap&view=setup"><i class="icon-cogs"></i> Setup</a>		
-		<a class="add btn btn-default <?php echo $c; ?>" href="?app=sitemap&view=setup&action=search"><i class="icon-search"></i> Search</a>
+		<a class="btn btn-default <?php echo $a; ?>" href="?app=sitemap"><i class="icon-link"></i> Links</a>		
+		<a class="btn btn-default <?php echo $b; ?>" href="?app=sitemap&view=setup"><i class="icon-cogs"></i> Setup</a>		
+		<a class="btn btn-default <?php echo $c; ?>" href="?app=sitemap&view=setup&action=search"><i class="icon-search"></i> Search</a>
 	</div>		
 </div>	

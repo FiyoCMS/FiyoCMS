@@ -251,6 +251,12 @@ if(_FINDEX_ != 'BACK') {
 }
 
 /********************************************/
+/*             Set Layout Menu              */
+/********************************************/
+define("FLayout",FLayout("id"));
+define("FLayoutName", preg_replace('/\s+/', '', strtolower(FLayout("name"))));
+
+/********************************************/
 /*  	  	  Delete Installer  			*/
 /********************************************/
 if(file_exists('system/installer/index.php'))
@@ -259,3 +265,4 @@ if(file_exists('installer.php'))
 	unlink('installer.php');
 if(_FINDEX_ == 'BACK' AND file_exists('../system/installer/index.php'))
 	delete_directory('../system/installer');
+

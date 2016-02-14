@@ -54,7 +54,7 @@ $_CONFIG = array(
         'images'  =>  "*img",
         'files'   =>  "",
         'flash'   =>  "swf",
-        'videos'   =>  "swf flv avi mpg mpeg webm mov wmv mp4",
+        'videos'   =>  "flv avi mpg mpeg mov wmv webm mp4",
 
         // TinyMCE types
         'file'    =>  "",

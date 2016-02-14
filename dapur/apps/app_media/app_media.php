@@ -31,8 +31,8 @@ else {
 
 <div class="app_link tabs">		
 	<div class="app_link">		
-		<a class="add btn btn-default <?php echo $a; ?>" href="?app=media"><i class="icon-image"></i> Images</a>		
-		<a class="add btn btn-default <?php echo $b; ?>" href="?app=media&type=video"><i class="icon-video-camera"></i> Video</a>		
-		<a class="add btn btn-default <?php echo $c; ?>" href="?app=media&type=files"><i class="icon-file-text-o"></i> Files</a>			
+		<a class="btn btn-default <?php echo $a; ?>" href="?app=media"><i class="icon-image"></i> Images</a>		
+		<a class="btn btn-default <?php echo $b; ?>" href="?app=media&type=videos"><i class="icon-video-camera"></i> Video</a>		
+		<a class="btn btn-default <?php echo $c; ?>" href="?app=media&type=files"><i class="icon-file-text-o"></i> Files</a>			
 	</div>		
 </div>	

@@ -364,3 +364,5 @@ else if($view == 'profile') {
 else  {
 	define('PageTitle','User Profile');
 }
+
+loadLang(__dir__);

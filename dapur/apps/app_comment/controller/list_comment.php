@@ -171,7 +171,7 @@ require('../../../system/jscore.php');
 					<label class='cb-enable $stat1 tips' data-placement='right' title='".Disable."'><span>
 					<i class='icon-remove-sign'></i></span></label>
 					<label class='cb-disable $stat2 tips' data-placement='right' title='".Enable."'><span>
-					<i class='icon-ok-sign'></i></span></label>
+					<i class='icon-check-circle'></i></span></label>
 					<input type='hidden' value='$aRow[id]' class='number invisible'>
 					<input type='hidden' value='$aRow[status]'  class='type invisible'>
 				</div>";

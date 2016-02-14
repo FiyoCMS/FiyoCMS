@@ -11,6 +11,8 @@ defined('_FINDEX_') or die('Access Denied');
 /*			 Query Function 			*/
 /****************************************/
 /* basic query function */
+
+
 function FQuery($table, $where = null, $output = null, $hide = null, $order = null, $select = null, $limit = null) {	
 	$db = new FQuery();  
 	if(empty($select)) $select = "*";
@@ -90,16 +92,29 @@ function userInfo($value = null,$id = null) {
 function menuInfo($value, $url = null, $id = null, $match = false) {
 	if(empty($id)) {
 		if(empty($url)) $url = getLink();
-		
-		if(_FINDEX_ !== 'BACK') $back = " AND category != 'adminpanel'"; else $back = "AND category = 'adminpanel'";
-		if(!$match)
-			return FQuery('menu',"link LIKE '%$url%' AND status=1 $back","$value",'',"LENGTH(`link`)");	
+		if(_FINDEX_ !== 'BACK') 
+                    $back = " AND category != 'adminpanel' AND app != 'sperator'"; 
+                else 
+                    $back = "AND category = 'adminpanel'";
+                if(checkHomePage())
+                    return FQuery('menu',"home = 1 AND status=1 AND app != 'sperator' $back","$value",'',"LENGTH(`link`)");
+		else if(!$match)
+			return FQuery('menu',"link LIKE '%$url%' AND status=1 AND app != 'sperator' $back","$value",'',"LENGTH(`link`)");	
 		else
-			return FQuery('menu',"link LIKE '$url' AND status=1 $back","$value",'',"LENGTH(`link`)");
+			return FQuery('menu',"link LIKE '$url' AND status=1 AND app != 'sperator' $back","$value",'',"LENGTH(`link`)");
 	}
 	else {
+           
 		return FQuery('menu',"id = '$id' AND status=1","$value");
 	}
+}
+
+
+// mengambil informasi menu
+function FLayout($value) {
+    $layout = menuInfo('layout');
+    if(empty($layout)) $layout = 1;
+    return oneQuery("theme_layout","id",$layout,"$value");
 }
 
 // mengambil data halaman
@@ -974,25 +989,30 @@ function backup_tables($tables = '*', $directory = null, $file = null, $installe
 class FConfig extends FQuery {
     private function conf()
     {
-		$sql = $this -> select(FDBPrefix."setting","name, value");				
-		$val = null;
-		if(!$sql) die(alert("error","Table <b>setting</b> error or invalid <b>DBPrefix</b>!",true, true));
-		foreach($sql as $row ) {
-			$val[$row['name']] = $row['value'];
-		}
-		if(!empty($type))
-		return $val[$type];
-		else
-		return $val;
+        $sql = $this -> select(FDBPrefix."setting","name, value");				
+        $val = null;
+        if(!$sql) 
+            die(alert("error","Table <b>setting</b> error or invalid <b>DBPrefix</b>!",true, true));
+        foreach($sql as $row ) {
+                $val[$row['name']] = $row['value'];
+        }
+        if(!empty($type))
+        return $val[$type];
+        else
+        return $val;
     }
 	
-	public function getConfig() {
-		static $flag ;
-		static $result ;
-		if ( $flag === null ) {
-			$flag = true;
-			$result = $this -> conf();		
-		}
-		return $result;
-	}	
+    public function getConfig() {
+        static $flag ;
+        static $result ;
+        if ( $flag === null ) {
+                $flag = true;
+                $result = $this -> conf();		
+        }
+        return $result;
+    }	
+    
+    public function get($name = null) {
+        return siteConfig($name);
+    }	
 }

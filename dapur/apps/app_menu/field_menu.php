@@ -173,6 +173,25 @@ $(function() {
 					?>
 					</select></td>
 				</tr>
+                                <tr>
+                                    <td>
+                                        Layout Menu
+                                    </td>
+                                    <td>
+                                        <select name="layout" data-placeholder="<?php echo Choose_tags; ?>"  required="">
+                                    <option value=""></option>
+                                            <?php	
+                                                    $_GET['id']=0;
+                                                    $sql = $db->select(FDBPrefix.'theme_layout'); 
+                                                    foreach($sql as $rowt){
+                                                           
+						if($row['layout']==$rowt['id'] or !$edit) $s="selected";else $s="";
+                                                            echo "<option value='$rowt[id]' $s>$rowt[name]</option>";
+                                                    }						
+                                            ?>
+                                    </select>
+                                    </td>
+                                </tr>
 			</table>
 		</div>
 	</div>

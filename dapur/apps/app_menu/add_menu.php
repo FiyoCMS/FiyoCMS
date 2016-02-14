@@ -55,7 +55,7 @@ $(function() {
 		<div class="warp_app_header">
 			<div class="app_title"><?php echo New_Menu; ?></div>			
 			<div class="app_link">
-				<a class="delete btn btn-default btn-sm btn-grad" href="?app=menu" title="<?php echo Back; ?>"><i class="icon-arrow-left"></i>&nbsp;<?php echo Prev; ?></a>
+				<a class="btn btn-default btn-sm btn-grad" href="?app=menu" title="<?php echo Back; ?>"><i class="icon-arrow-left"></i>&nbsp;<?php echo Prev; ?></a>
 				<button type="submit" class="btn btn-success  btn-sm btn-grad" title="<?php echo Delete; ?>" value="Next" name="next"><?php echo Next; ?> &nbsp;<i class="icon-arrow-right"></i></button>
 			</div>
 		</div>			 
@@ -64,9 +64,9 @@ $(function() {
 		<thead>
 			<tr>
 				<th style="width:1%; text-align:center" class="no" ></th>
-				<th style="width:18% !important;"><?php echo Menu_Type_or_Apps_Name; ?></th>
+				<th style="width:20% !important;"><?php echo Menu_Type_or_Apps_Name; ?></th>
 				<th style="width:18% !important;"><?php echo AddOns_Author; ?></th>
-				<th style="width:65% !important;"><?php echo Description; ?></th>
+				<th style="width:61% !important;"><?php echo Description; ?></th>
 			</tr>
 		</thead>
 		</thead>
@@ -108,12 +108,12 @@ function addappstep2() {
 		<div class="warp_app_header">
 			<div class="app_title"><?php echo New_Menu; ?></div>	
 			<div class="app_link">				
-				<a class="delete btn btn-default btn-sm btn-grad" href="?app=menu&view=add" title="<?php echo Back; ?>"><i class="icon-arrow-left"></i> <?php echo Prev; ?></a>				
+				<a class="btn btn-default btn-sm btn-grad" href="?app=menu&view=add" title="<?php echo Back; ?>"><i class="icon-arrow-left"></i> <?php echo Prev; ?></a>				
 				<span class="lbt sparator"></span>
 								
-				<button type="submit" class="btn btn-success btn-sm btn-grad" title="<?php echo Delete; ?>" value="Next" name="apply_add"><i class="icon-ok"></i> <?php echo Save; ?></button>
+				<button type="submit" class="btn btn-success btn-sm btn-grad" title="<?php echo Delete; ?>" value="Next" name="apply_add"><i class="icon-check"></i> <?php echo Save; ?></button>
 				
-				<button type="submit" class="btn btn-metis-2 btn-sm btn-grad" title="<?php echo Delete; ?>" value="Next" name="save_add"><i class="icon-ok-sign"></i>  <?php echo Save_and_Quit; ?></button>
+				<button type="submit" class="btn btn-metis-2 btn-sm btn-grad" title="<?php echo Delete; ?>" value="Next" name="save_add"><i class="icon-check-circle"></i>  <?php echo Save_and_Quit; ?></button>
 				</button>				
 				<a class="danger btn btn-default btn-sm btn-grad" href="?app=menu" title="<?php echo Cancel; ?>"><i class="icon-remove-sign"></i> <?php echo Cancel; ?></a>
 				<span class="lbt sparator"></span>

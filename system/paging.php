@@ -60,7 +60,7 @@ class Paging extends FQuery {
 		static $cons = false;
 		try{
 			$pdo = $this-> connect();       
-			$pdo = $this->db->prepare($sql);
+			$pdo = self::$db->prepare($sql);
 			$pdo->bindParam(':id', $id);
 			$pdo->execute();
 		}
@@ -95,7 +95,7 @@ class Paging extends FQuery {
 		static $cons = false;
 		try{
 			$pdo = $this-> connect();       
-			$pdo = $this->db->prepare($sql);
+			$pdo = self::$db->prepare($sql);
 			$pdo->bindParam(':id', $id);
 			$pdo->execute();
 		}

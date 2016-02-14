@@ -21,7 +21,7 @@ if(isset($_POST['add_category']) or isset($_POST['save_category'])){
 	$db = new FQuery();  
 	$db->connect();				
 	if(!empty($_POST['title']) AND !empty($_POST['cat']) AND !empty($_POST['level'])) {
-		$cat=strtolower(str_replace(" ","","$_POST[cat]"));	
+		$cat=  stripTags(strtolower(str_replace(" ","","$_POST[cat]")));	
 		$row=$db->insert(FDBPrefix.'menu_category',array("","$cat","$_POST[title]","$_POST[desc]","$_POST[level]")); 
 		if(isset($_POST['add_category']) AND $row ){	
 			$sql = $db->select(FDBPrefix.'menu_category','id','','id DESC' ); 	  
@@ -72,7 +72,7 @@ if(isset($_POST['delete_category']) or isset($_POST['check'])){
 if(isset($_POST['edit_category']) or isset($_POST['apply_category'])){
 	$db = new FQuery();  
 	$db->connect();
-	$cat=strtolower(str_replace(" ","","$_POST[cat]"));	
+	$cat=stripTags(strtolower(str_replace(" ","","$_POST[cat]")));	
 	if(!empty($_POST['title']) AND !empty($_POST['cat'])){
 		$row=$db->update(FDBPrefix.'menu_category',array("title"=>"$_POST[title]",
 		'category'=>"$cat",
@@ -130,7 +130,7 @@ if(isset($_POST['save_add']) or isset($_POST['apply_add'])){
 		@$param = str_replace('"',"'","$_POST[editor]");
 		@$parameter .= $param;	
 		$param = str_replace('"',"'",$param);	
-		$row=$db->insert(FDBPrefix.'menu',array("","$_POST[cat]","$_POST[name]","$_POST[link]","$_POST[apps]","$_POST[parent_id]","$_POST[status]","$_POST[short]", "$_POST[level]","0", "$_POST[title]","$_POST[show_title]","$_POST[sub_name]","$_POST[class]","$_POST[style]","$parameter",""));
+		$row=$db->insert(FDBPrefix.'menu',array("","$_POST[cat]",stripTags("$_POST[name]"),"$_POST[link]","$_POST[apps]","$_POST[parent_id]","$_POST[status]","$_POST[short]", "$_POST[level]","0", "$_POST[title]","$_POST[show_title]","$_POST[sub_name]","$_POST[class]","$_POST[style]","$parameter","$_POST[layout]"));$c = $db->last_query;
 		if($row AND isset($_POST['apply_add'])){
 			$sql = $db->select(FDBPrefix.'menu','id','','id DESC' ); 	  
 			$row = $sql[0];
@@ -172,7 +172,7 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 		$cat=$_POST['cat'];
 		$row=$db->update(FDBPrefix.'menu',array(				
 		"category"=>"$_POST[cat]",
-		"name"=>"$_POST[name]",
+		"name"=>stripTags("$_POST[name]"),
 		"link"=>"$_POST[link]",
 		"app"=>"$_POST[apps]",
 		"parent_id"=>"$_POST[parent_id]",
@@ -184,6 +184,7 @@ if(isset($_POST['save_edit']) or isset($_POST['apply_edit'])){
 		"class"=>"$_POST[class]",
 		"style"=>"$_POST[style]",
 		"short"=>"$_POST[short]",
+		"layout"=>"$_POST[layout]",
 		"parameter"=>"$parameter"),
 		"id=$_POST[id]");
 		if($row AND isset($_POST['save_edit'])){	
@@ -268,7 +269,7 @@ function sub_menu($parent_id,$pre,$nos) {
 					<label class='cb-enable $stat1 tips' data-placement='right' title='".Disable."'><span>
 					<i class='icon-remove-sign'></i></span></label>
 					<label class='cb-disable $stat2 tips' data-placement='right' title='".Enable."'><span>
-					<i class='icon-ok-sign'></i></span></label>
+					<i class='icon-check-circle'></i></span></label>
 					<input type='text' value='$row[id]' id='id' class='invisible'>
 					<input type='text' value='$row[status]' id='type' class='invisible'>
 				</div>";					
@@ -281,16 +282,16 @@ function sub_menu($parent_id,$pre,$nos) {
 				$home ="
 				<div class='switch s-icon home'>
 					<label class='cb-enable $hm tips' data-placement='left' title='".Set_as_home_page."'>
-					<span style='padding-right:11px '>
+					<span>
 					<i class='icon-home'></i></span></label>
 					<label class='cb-disable $hms tips' data-placement='left' title='".As_home_page."'>
-					<span style='padding-right: 11px '>
+					<span>
 					<i class='icon-home'></i></span></label>
 					<input type='text' value='$row[id]' data-category='$row[category]' id='id' class='invisible'><input type='text' value='stat' id='type' class='invisible'>
 				</div>";
 				
 		/* auto change default page */			
-		if($row['global']==1)
+		if($row['layout']==1)
 		{ $dm = "selected"; $dms = ""; }							
 		else
 		{ $dm = ""; $dms = "selected";  }		
@@ -319,7 +320,7 @@ function sub_menu($parent_id,$pre,$nos) {
 			$home = $default = null;
 		}
 		echo "<tr>";
-		echo "<td align='center'>$checkbox</td><td>$name</td><td class='' align='center'><div class='switch-group'>$home$default$status</div></td><td class='hidden-xs'>$row[category]</td><td class='hidden-xs'>$row[app]</td><td class='hidden-xs hidden-sm' align='center'>$row[short]</td><td align='center' class='hidden-xs'>$level</td><td align='center' class='hidden-xs'>$row[id]</td>";
+		echo "<td align='center'>$checkbox</td><td>$name</td><td class='' align='center'><div class='switch-group'>$home$status</div></td><td class='hidden-xs'>$row[category]</td><td class='hidden-xs'>$row[app]</td><td class='hidden-xs hidden-sm' align='center'>$row[short]</td><td align='center' class='hidden-xs'>$level</td><td align='center' class='hidden-xs'>$row[id]</td>";
 		echo "</tr>";
 		sub_menu($row['id'],$pre."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;","$nos.$no");
 		$no++;	

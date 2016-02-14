@@ -82,6 +82,7 @@ define ("Category","Kategori");
 define ("Position","Posisi");
 define ("Short","Urutan");
 define ("Type","Tipe");
+define ("Theme","Tema");
 define ("Code","Kode");
 define ("Price","Harga");
 define ("Time","Waktu");
@@ -99,6 +100,7 @@ define ("Choose","Pilih");
 define ("Hidden","Tersembunyi");
 define ("Visible","Terlihat");
 define ("deleted","terhapus");
+define ("in_used","sedang digunakan");
 define ("Try_Again","Coba Lagi");
 define ("Specification","Spesifikasi");
 define ("Message","Pesan");
@@ -447,6 +449,10 @@ define ("New_Theme","Tema Baru");
 define ("Theme_url","URL Tema");
 define ("Please_select_theme","Pilih tema terlebih dahulu!");
 define ("Choose_file_on_left_side","Pilih file dibagian kiri!");
+/******* Layout ***********/
+define ("Layout_List","Daftar Layout");
+define ("Layout_Edit","Edit Layout");
+define ("Layout_Add","Tambah Layout");
 
 /************************************
 *			User Manager	 		*

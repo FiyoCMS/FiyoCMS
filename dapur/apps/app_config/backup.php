@@ -8,7 +8,7 @@
 **/
 
 defined('_FINDEX_') or die('Access Denied');		
-	if(isset($_POST['upload'])) {		
+	if(isset($_POST['restore'])) {		
 		$path_file = $_FILES['sql']['tmp_name'];
 		$type_file = $_FILES['sql']['type'];
 		$name_file = $_FILES['sql']['name'];
@@ -33,10 +33,11 @@ defined('_FINDEX_') or die('Access Denied');
 				}
 				fclose($open_file);
 			}
-			alert('success',Restore_Database_Successfully,true);
+			notice('success',Restore_Database_Successfully);
+			refresh();
 		}
 		else {
-			alert('error',Please_choose_file,true);
+			alert('error',Please_choose_file, true);
 		}	
 		delete_directory('tmp');
 	}
@@ -102,6 +103,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: "apps/app_config/controller/backuper.php",
 			data: "type=database&file="+fl,
+			type: "POST",
 			timeout: 600000, 
 			error:function(){ 
 				$(".update-info-backup").html("Error, connection time out.") ;
@@ -147,6 +149,7 @@ $(document).ready(function() {
 			$.ajax({
 				url: "apps/app_config/controller/backuper.php",
 				data: "type=table&file="+fl+"&table="+c,
+				type: "POST",
 				timeout: 10000, 
 				error:function(){ 
 					$(".update-info-backup").html("Error, connection time out.") ;
@@ -190,6 +193,7 @@ $(document).ready(function() {
 		b.html('Loading...');
 		$.ajax({
 			url: "apps/app_config/controller/backuper.php",
+			type: "POST",
 			data: "type=installer&file="+fl,
 			timeout: 600000, 
 			error:function(){ 
@@ -219,6 +223,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: "apps/app_config/controller/backuper.php",
 			data: "type=delete&act=installer&file="+fl,
+			type: "POST",
 			timeout: 10000, 
 			error:function(){ 
 				$(".modal-footer-backup").show();
@@ -242,6 +247,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: "apps/app_config/controller/backuper.php",
 			data: "type=delete&act=tables&file="+fl,
+			type: "POST",
 			timeout: 10000, 
 			error:function(){ 
 				$(".modal-footer-backup").show();
@@ -265,6 +271,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: "apps/app_config/controller/backuper.php",
 			data: "type=delete&act=db&file="+fl,
+			type: "POST",
 			timeout: 10000, 
 			error:function(){ 
 				$(".modal-footer-backup").show();
@@ -352,10 +359,9 @@ $(document).ready(function() {
 		if(file_exists($file)) {
 			$delete = "<div class='switch s-icon uninstall activator' id='delete-tables' file='$tfile'>
 			<label class='cb-default red tips' data-placement='top' title='".Delete_file."'><span><b class='icon-remove-sign'></b></span></label></div>";
-			$cfile = "<b><a target='_parent' href='$file' data-placement='top' title='Download File' class='tips'>$tfile</a></b> <small><i>(".format_size(filesize($file))." - ".date("Y/m/d H:i:s",filemtime($file)).")</i></small> $delete";
-			
+			$cfile = "<b><a target='_parent' href='$file' data-placement='top' title='Download File' class='tips'>$tfile</a></b> <small><i>(".format_size(filesize($file))." - ".date("Y/m/d H:i:s",filemtime($file)).")</i></small> $delete";			
 		} 
-	}	
+	}
 	
 	?>
 	
@@ -443,7 +449,7 @@ $(document).ready(function() {
 					<td><div><span class="form-file form-control" style="width:50%">
 					<input type="file" name="sql" style="width:150%" title="Choose file installer" class="form-control filesql">
 					<label for="sql" class="error invisible sql_error"><?php echo Please_chose_sql_file; ?></label></span>
-					<button class="btn btn-primary btn-sm btn-grad restore" name="upload">Restore</button></div></td>
+					<button class="btn btn-primary btn-sm btn-grad restore" name="restore">Restore</button></div></td>
 				</tr>
 			</table>
 		</div> 

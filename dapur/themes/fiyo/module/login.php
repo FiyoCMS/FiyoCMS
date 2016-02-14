@@ -25,7 +25,8 @@ require('../../../system/jscore.php');
 			$db->update(FDBPrefix.'user',array("time_log"=>"$time_log"),"id=$qr[id]"); 
 			
 			$db->delete(FDBPrefix."session_login","user_id=$qr[id]");			
-			$qr = $db->insert(FDBPrefix."session_login",array("$qr[id]","$qr[user]","$qr[level]",date('Y-m-d H:i:s')));
+			$qr = $db->insert(FDBPrefix."session_login",
+                                array("$qr[id]","$qr[user]","$qr[level]",date('Y-m-d H:i:s')));
 		}		
 		if(isset($qr) or !empty($_SESSION['USER_ID']) AND $_SESSION['USER_LEVEL'] <= 3 AND userInfo()){
 			echo "{ \"status\":\"1\" , \"alert\":\"".alert('success',Login_Success)."\"}";	
